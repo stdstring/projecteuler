@@ -1,0 +1,2 @@
+{'src/numerical_task_executor', [warnings_as_errors, {i, "include"}, {outdir, "ebin"}]}.
+{'src/numerical_task_list_executor', [warnings_as_errors, {i, "include"}, {outdir, "ebin"}]}.

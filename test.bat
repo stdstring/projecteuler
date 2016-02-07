@@ -1,0 +1,1 @@
+erl -noshell -pa numerical_task/ebin common/ebin -run numerical_task_list_executor process test.config -run init stop

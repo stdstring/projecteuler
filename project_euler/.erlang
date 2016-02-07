@@ -1,0 +1,3 @@
+io:format("project euler customization ~n").
+code:add_patha(".").
+code:add_patha("../common/.").
