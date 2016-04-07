@@ -65,6 +65,7 @@
 {'src/problem_083', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
 {'src/problem_089', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_092', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_096', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_097', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_098', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_099', [warnings_as_errors, {outdir, "ebin"}]}.
