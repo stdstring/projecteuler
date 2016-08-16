@@ -3,9 +3,9 @@
 -module(problem_096).
 -export([get_check_data/0, prepare_data/2, solve/1]).
 -export([get_element/3, set_element/4, occupy_digit/2]).
--export([generate_row/2, generate_column/2, generate_square/2]).
+-export([generate_row/1, generate_column/1, generate_square/2]).
 -export([scan_row/2, scan_column/2, scan_square/3]).
--export([append_row_digits/4, append_column_digits/4, append_square_digits/4]).
+-export([append_row_digits/3, append_column_digits/3, append_square_digits/4]).
 -export([merge_cells_info/1]).
 -export([choose_cell/1, strikeout_cell/3]).
 -export([process_row/2, process_column/2, process_square/3]).
@@ -86,12 +86,10 @@ set_element(Row, Column, Value, Grid) ->
 occupy_digit(Digits, Digit) -> Digits band bnot(1 bsl (Digit - 1)).
 
 %% return coordinates of row which contains the current cell
-%% TODO (std_string) : think about generate_row/1 instead of generate_row/2
-generate_row(Row, _Column) -> lists:map(fun(Column) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
+generate_row(Row) -> lists:map(fun(Column) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
 
 %% return coordinates of column which contains the current cell
-%% TODO (std_string) : think about generate_column/1 instead of generate_column/2
-generate_column(_Row, Column) -> lists:map(fun(Row) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
+generate_column(Column) -> lists:map(fun(Row) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
 
 %% return coordinates of square which contains the current cell
 generate_square(Row, Column) ->
@@ -108,9 +106,9 @@ generate_square(Row, Column) ->
      {RowTop + 2, ColumnLeft + 1},
      {RowTop + 2, ColumnLeft + 2}].
 
-scan_row(Row, Grid) -> scan_cells(Grid, generate_row(Row, -1)).
+scan_row(Row, Grid) -> scan_cells(Grid, generate_row(Row)).
 
-scan_column(Column, Grid) -> scan_cells(Grid, generate_column(-1, Column)).
+scan_column(Column, Grid) -> scan_cells(Grid, generate_column(Column)).
 
 scan_square(CellRow, CellColumn, Grid) -> scan_cells(Grid, generate_square(CellRow, CellColumn)).
 
@@ -123,11 +121,9 @@ scan_cells(Grid, Cells) ->
         end
     end, {[], ?ALL_NUMBERS}, Cells).
 
-%% TODO (std_string) : think about append_row_digits/3 instead of append_row_digits/4
-append_row_digits(CellRow, _CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_row(CellRow, -1)).
+append_row_digits(CellRow, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_row(CellRow)).
 
-%% TODO (std_string) : think about append_column_digits/3 instead of append_column_digits/4
-append_column_digits(_CellRow, CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_column(-1, CellColumn)).
+append_column_digits(CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_column(CellColumn)).
 
 append_square_digits(CellRow, CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_square(CellRow, CellColumn)).
 
@@ -176,7 +172,7 @@ strikeout_cell(Row, Column, DigitsInfo) ->
 process_row(SourceRow, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_row(SourceRow, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_column_digits(Row, Column, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, InitCellDigits))} end, FreeCells),
     DigitsInfo = merge_cells_info(CellsInfo),
     process_cells(DigitsInfo, Context).
 
@@ -184,7 +180,7 @@ process_row(SourceRow, Context) ->
 process_column(SourceColumn, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_column(SourceColumn, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_row_digits(Row, Column, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_row_digits(Row, Grid, InitCellDigits))} end, FreeCells),
     DigitsInfo = merge_cells_info(CellsInfo),
     process_cells(DigitsInfo, Context).
 
@@ -192,7 +188,7 @@ process_column(SourceColumn, Context) ->
 process_square(CellRow, CellColumn, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_square(CellRow, CellColumn, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_column_digits(Row, Column, Grid, append_row_digits(Row, Column, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_column_digits(Column, Grid, append_row_digits(Row, Grid, InitCellDigits))} end, FreeCells),
     DigitsInfo = merge_cells_info(CellsInfo),
     process_cells(DigitsInfo, Context).
 
@@ -240,10 +236,10 @@ check_grid(Grid) ->
     lists:foldl(fun({Row, Column}, Result) -> Result and (lists:sort(get_square(Grid, Row, Column)) == Expected) end, CheckColumnResult, Squares).
 
 %% array:array(integer()), Row -> [integer()]
-get_row(Grid, SourceRow) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_row(SourceRow, -1)).
+get_row(Grid, SourceRow) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_row(SourceRow)).
 
 %% array:array(integer()), Column -> [integer()]
-get_column(Grid, SourceColumn) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_column(-1, SourceColumn)).
+get_column(Grid, SourceColumn) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_column(SourceColumn)).
 
 %% array:array(integer()), Row, Column -> [integer()]
 get_square(Grid, RowTop, ColumnLeft) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_square(RowTop, ColumnLeft)).
