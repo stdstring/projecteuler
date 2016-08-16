@@ -46,12 +46,6 @@ solve_case(Name, Grid)->
     show_grid(ContextAfter#context.grid),
     io:format("~n", []).
 
-%%show_grid(Grid) ->
-%%    ShowRowFun= fun(Row)->
-%%        lists:foreach(fun(Column) -> io:format("~p ", [get_element(Column, Row, Grid)]) end, lists:seq(1, ?GRID_SIDE)),
-%%        io:format("~n", [])
-%%    end,
-%%    lists:foreach(ShowRowFun, lists:seq(1, ?GRID_SIDE)).
 show_grid(Grid) ->
     ShowRowFun= fun(Row)->
         lists:foreach(fun(Column) -> io:format("~p ", [get_element(Row, Column, Grid)]) end, lists:seq(1, ?GRID_SIDE)),
@@ -74,16 +68,11 @@ convert_data([Description, Str1, Str2, Str3, Str4, Str5, Str6, Str7, Str8, Str9 
     convert_data(Rest, [#grid_case{name = Description, grid = Grid}] ++ Dest).
 
 %% TODO (std_string) : use such approach in all other cases
-%%get_element(X, Y, Grid) ->
-%%    Index = (Y - 1) * ?GRID_SIDE + (X - 1),
-%%    array:get(Index, Grid).
 get_element(Row, Column, Grid) ->
     Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
     array:get(Index, Grid).
 
-%%set_element(X, Y, Value, Grid) ->
-%%    Index = (Y - 1) * ?GRID_SIDE + (X - 1),
-%%    array:set(Index, Value, Grid).
+%% TODO (std_string) : use such approach in all other cases
 set_element(Row, Column, Value, Grid) ->
     Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
     array:set(Index, Value, Grid).
@@ -92,20 +81,13 @@ occupy_digit(Digits, Digit) -> Digits band bnot(1 bsl (Digit - 1)).
 
 %% return coordinates of row which contains the current cell
 %% TODO (std_string) : think about generate_row/1 instead of generate_row/2
-%%generate_row(_X, Y) -> lists:map(fun(X) -> {X, Y} end, lists:seq(1, ?GRID_SIDE)).
 generate_row(Row, _Column) -> lists:map(fun(Column) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
 
 %% return coordinates of column which contains the current cell
 %% TODO (std_string) : think about generate_column/1 instead of generate_column/2
-%%generate_column(X, _Y) -> lists:map(fun(Y) -> {X, Y} end, lists:seq(1, ?GRID_SIDE)).
 generate_column(_Row, Column) -> lists:map(fun(Row) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
 
 %% return coordinates of square which contains the current cell
-%%generate_square(X, Y) ->
-%%    XLeft = ?SQUARE_SIDE * ((X - 1) div ?SQUARE_SIDE) + 1,
-%%    YTop = ?SQUARE_SIDE * ((Y - 1) div ?SQUARE_SIDE) + 1,
-%%    %%  TODO (std_string) : probably use more smart approach
-%%    [{XLeft, YTop}, {XLeft + 1, YTop}, {XLeft + 2, YTop}, {XLeft, YTop + 1}, {XLeft + 1, YTop + 1}, {XLeft + 2, YTop + 1}, {XLeft, YTop + 2}, {XLeft + 1, YTop + 2}, {XLeft + 2, YTop + 2}].
 generate_square(Row, Column) ->
     RowTop = ?SQUARE_SIDE * ((Row - 1) div ?SQUARE_SIDE) + 1,
     ColumnLeft = ?SQUARE_SIDE * ((Column - 1) div ?SQUARE_SIDE) + 1,
@@ -120,23 +102,12 @@ generate_square(Row, Column) ->
      {RowTop + 2, ColumnLeft + 1},
      {RowTop + 2, ColumnLeft + 2}].
 
-%%scan_row(RowY, Grid) -> scan_cells(Grid, generate_row(-1, RowY)).
 scan_row(Row, Grid) -> scan_cells(Grid, generate_row(Row, -1)).
 
-%%scan_column(ColumnX, Grid) -> scan_cells(Grid, generate_column(ColumnX, -1)).
 scan_column(Column, Grid) -> scan_cells(Grid, generate_column(-1, Column)).
 
-%%scan_square(CellX, CellY, Grid) -> scan_cells(Grid, generate_square(CellX, CellY)).
 scan_square(CellRow, CellColumn, Grid) -> scan_cells(Grid, generate_square(CellRow, CellColumn)).
 
-%%scan_cells(Grid, Cells) ->
-%%    lists:foldl(fun ({X, Y}, {FreeCells, Digits}) ->
-%%        CellValue = get_element(X, Y, Grid),
-%%        if
-%%            CellValue == 0 -> {[{X, Y}] ++ FreeCells, Digits};
-%%            CellValue /= 0 -> {FreeCells, occupy_digit(Digits, CellValue)}
-%%        end
-%%    end, {[], ?ALL_NUMBERS}, Cells).
 scan_cells(Grid, Cells) ->
     lists:foldl(fun ({Row, Column}, {FreeCells, Digits}) ->
         CellValue = get_element(Row, Column, Grid),
@@ -147,24 +118,13 @@ scan_cells(Grid, Cells) ->
     end, {[], ?ALL_NUMBERS}, Cells).
 
 %% TODO (std_string) : think about append_row_digits/3 instead of append_row_digits/4
-%%append_row_digits(_CellX, CellY, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_row(-1, CellY)).
 append_row_digits(CellRow, _CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_row(CellRow, -1)).
 
 %% TODO (std_string) : think about append_column_digits/3 instead of append_column_digits/4
-%%append_column_digits(CellX, _CellY, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_column(CellX, -1)).
 append_column_digits(_CellRow, CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_column(-1, CellColumn)).
 
-%%append_square_digits(CellX, CellY, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_square(CellX, CellY)).
 append_square_digits(CellRow, CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_square(CellRow, CellColumn)).
 
-%%append_cells_digits(Grid, SourceDigits, Cells) ->
-%%    lists:foldl(fun ({X, Y}, Digits) ->
-%%        CellValue = get_element(X, Y, Grid),
-%%        if
-%%            CellValue == 0 -> Digits;
-%%            CellValue /= 0 -> occupy_digit(Digits, CellValue)
-%%        end
-%%    end, SourceDigits, Cells).
 append_cells_digits(Grid, SourceDigits, Cells) ->
     lists:foldl(fun ({Row, Column}, Digits) ->
         CellValue = get_element(Row, Column, Grid),
@@ -175,16 +135,10 @@ append_cells_digits(Grid, SourceDigits, Cells) ->
     end, SourceDigits, Cells).
 
 %% CellsInfo = [{Row, Column, DigitsBinray}]
-%%merge_cells_info(CellsInfo) ->
-%%    DestInit = array:new([{size, ?GRID_SIDE}, {fixed, true}, {default, []}]),
-%%    lists:foldl(fun({X, Y, DigitsBinary}, Dest) -> merge_cell_info(X, Y, DigitsBinary, Dest) end, DestInit, CellsInfo).
 merge_cells_info(CellsInfo) ->
     DestInit = array:new([{size, ?GRID_SIDE}, {fixed, true}, {default, []}]),
     lists:foldl(fun({Row, Column, DigitsBinary}, Dest) -> merge_cell_info(Row, Column, DigitsBinary, Dest) end, DestInit, CellsInfo).
 
-%%merge_cell_info(X, Y, DigitsBinary, MergedInfo) ->
-%%    DigitsList = get_free_digits_list(DigitsBinary),
-%%    lists:foldl(fun(Digit, Dest) -> array:set(Digit - 1, [{X, Y}] ++ array:get(Digit - 1, Dest), Dest) end, MergedInfo, DigitsList).
 merge_cell_info(Row, Column, DigitsBinary, MergedInfo) ->
     DigitsList = get_free_digits_list(DigitsBinary),
     lists:foldl(fun(Digit, Dest) -> array:set(Digit - 1, [{Row, Column}] ++ array:get(Digit - 1, Dest), Dest) end, MergedInfo, DigitsList).
@@ -201,12 +155,6 @@ get_free_digits_list(DigitsBinary) ->
 choose_cell(DigitsInfo) -> choose_cell(DigitsInfo, 0).
 
 %% ... -> {true, Digit, {Row, Column}} | false
-%%choose_cell(_DigitsInfo, ?GRID_SIDE) -> false;
-%%choose_cell(DigitsInfo, Index) ->
-%%    case array:get(Index, DigitsInfo) of
-%%        [{X, Y}] -> {true, Index + 1, {X, Y}};
-%%        _Other -> choose_cell(DigitsInfo, Index + 1)
-%%    end.
 choose_cell(_DigitsInfo, ?GRID_SIDE) -> false;
 choose_cell(DigitsInfo, Index) ->
     case array:get(Index, DigitsInfo) of
@@ -215,18 +163,10 @@ choose_cell(DigitsInfo, Index) ->
     end.
 
 %% array:array([{Row, Column}]) -> array:array([{Row, Column}])
-%%strikeout_cell(X, Y, DigitsInfo) ->
-%%    array:map(fun(_Index, Cells) -> lists:delete({X, Y}, Cells) end, DigitsInfo).
 strikeout_cell(Row, Column, DigitsInfo) ->
     array:map(fun(_Index, Cells) -> lists:delete({Row, Column}, Cells) end, DigitsInfo).
 
 %% Row, #context{} -> #context{}
-%%process_row(RowY, Context) ->
-%%    Grid = Context#context.grid,
-%%    {FreeCells, InitCellDigits} = scan_row(RowY, Grid),
-%%    CellsInfo = lists:map(fun({X, Y}) -> {X, Y, append_square_digits(X, Y, Grid, append_column_digits(X, Y, Grid, InitCellDigits))} end, FreeCells),
-%%    DigitsInfo = merge_cells_info(CellsInfo),
-%%    process_cells(DigitsInfo, Context).
 process_row(SourceRow, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_row(SourceRow, Grid),
@@ -235,12 +175,6 @@ process_row(SourceRow, Context) ->
     process_cells(DigitsInfo, Context).
 
 %% Column, #context{} -> #context{}
-%%process_column(ColumnX, Context) ->
-%%    Grid = Context#context.grid,
-%%    {FreeCells, InitCellDigits} = scan_column(ColumnX, Grid),
-%%    CellsInfo = lists:map(fun({X, Y}) -> {X, Y, append_square_digits(X, Y, Grid, append_row_digits(X, Y, Grid, InitCellDigits))} end, FreeCells),
-%%    DigitsInfo = merge_cells_info(CellsInfo),
-%%    process_cells(DigitsInfo, Context).
 process_column(SourceColumn, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_column(SourceColumn, Grid),
@@ -249,12 +183,6 @@ process_column(SourceColumn, Context) ->
     process_cells(DigitsInfo, Context).
 
 %% Row, Column, #context{} -> #context{}
-%%process_square(CellX, CellY, Context) ->
-%%    Grid = Context#context.grid,
-%%    {FreeCells, InitCellDigits} = scan_square(CellX, CellY, Grid),
-%%    CellsInfo = lists:map(fun({X, Y}) -> {X, Y, append_column_digits(X, Y, Grid, append_row_digits(X, Y, Grid, InitCellDigits))} end, FreeCells),
-%%    DigitsInfo = merge_cells_info(CellsInfo),
-%%    process_cells(DigitsInfo, Context).
 process_square(CellRow, CellColumn, Context) ->
     Grid = Context#context.grid,
     {FreeCells, InitCellDigits} = scan_square(CellRow, CellColumn, Grid),
@@ -263,15 +191,6 @@ process_square(CellRow, CellColumn, Context) ->
     process_cells(DigitsInfo, Context).
 
 %% array:array([{Row, Column}]), #context{} -> #context{}
-%%process_cells(DigitsInfo, Context) ->
-%%    case choose_cell(DigitsInfo) of
-%%        {true, Digit, {X, Y}} ->
-%%            EmptyCount = Context#context.empty_count,
-%%            UpdatedGrid = set_element(X, Y, Digit, Context#context.grid),
-%%            UpdatedContext = #context{empty_count = EmptyCount - 1, grid = UpdatedGrid},
-%%            process_cells(strikeout_cell(X, Y, DigitsInfo), UpdatedContext);
-%%        false -> Context
-%%    end.
 process_cells(DigitsInfo, Context) ->
     case choose_cell(DigitsInfo) of
         {true, Digit, {Row, Column}} ->
@@ -283,17 +202,6 @@ process_cells(DigitsInfo, Context) ->
     end.
 
 %% #context{} -> {bool(), #context{}}
-%%process_calculation(Context) when Context#context.empty_count == 0 -> {true, Context};
-%%process_calculation(ContextBefore) ->
-%%    ContextAfterRows = lists:foldl(fun(RowY, Context) -> process_row(RowY, Context) end, ContextBefore, lists:seq(1, ?GRID_SIDE)),
-%%    ContextAfterColumns = lists:foldl(fun(ColumnX, Context) -> process_column(ColumnX, Context) end, ContextAfterRows, lists:seq(1, ?GRID_SIDE)),
-%%    %% TODO (std_string) : think about generation
-%%    Squares = [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}],
-%%    ContextAfter = lists:foldl(fun({CellX, CellY}, Context) -> process_square(CellX, CellY, Context) end, ContextAfterColumns, Squares),
-%%    if
-%%        ContextAfter#context.empty_count < ContextBefore#context.empty_count -> process_calculation(ContextAfter);
-%%        ContextAfter#context.empty_count == ContextBefore#context.empty_count -> {false, ContextAfter}
-%%    end.
 process_calculation(Context) when Context#context.empty_count == 0 -> {true, Context};
 process_calculation(ContextBefore) ->
     ContextAfterRows = lists:foldl(fun(Row, Context) -> process_row(Row, Context) end, ContextBefore, lists:seq(1, ?GRID_SIDE)),
