@@ -11,6 +11,7 @@
 -export([process_row/2, process_column/2, process_square/3]).
 -export([process_calculation/1]).
 -export([create_context/1]).
+-export([check_grid/1, get_row/2, get_column/2, get_square/3]).
 
 -behaviour(numerical_task_behaviour).
 
@@ -39,7 +40,12 @@ solve_case(Name, Grid)->
     ContextBefore = create_context(Grid),
     {Result, ContextAfter} = process_calculation(ContextBefore),
     if
-        Result == true -> io:format("solved~n", []);
+        Result == true ->
+            io:format("solved~n", []),
+            case check_grid(ContextAfter#context.grid) of
+                true -> io:format("solution checked~n", []);
+                false -> throw(bad_solution)
+            end;
         Result == false -> io:format("can't be solved~n", [])
     end,
     io:format("grid after:~n", []),
@@ -223,3 +229,21 @@ create_context(Grid) ->
         end
     end, 0, Grid),
     #context{empty_count = EmptyCount, grid = Grid}.
+
+%% array:array(integer()) -> bool()
+check_grid(Grid) ->
+    Expected = [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    CheckRowResult = lists:foldl(fun(Row, Result) -> Result and (lists:sort(get_row(Grid, Row)) == Expected) end, true, lists:seq(1, ?GRID_SIDE)),
+    CheckColumnResult = lists:foldl(fun(Column, Result) -> Result and (lists:sort(get_column(Grid, Column)) == Expected) end, CheckRowResult, lists:seq(1, ?GRID_SIDE)),
+    %% TODO (std_string) : think about generation
+    Squares = [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}],
+    lists:foldl(fun({Row, Column}, Result) -> Result and (lists:sort(get_square(Grid, Row, Column)) == Expected) end, CheckColumnResult, Squares).
+
+%% array:array(integer()), Row -> [integer()]
+get_row(Grid, SourceRow) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_row(SourceRow, -1)).
+
+%% array:array(integer()), Column -> [integer()]
+get_column(Grid, SourceColumn) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_column(-1, SourceColumn)).
+
+%% array:array(integer()), Row, Column -> [integer()]
+get_square(Grid, RowTop, ColumnLeft) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_square(RowTop, ColumnLeft)).
