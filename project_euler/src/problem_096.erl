@@ -21,7 +21,9 @@
 
 -record(grid_case, {name :: string(), grid :: array:array(integer())}).
 
--record(context, {empty_count :: integer(), grid :: array:array(integer())}).
+-record(cell_info, {row :: 1 .. ?GRID_SIDE, column :: 1 .. ?GRID_SIDE, constraint :: integer()}).
+-record(calc_context, {empty_count :: integer(), grid :: array:array(integer())}).
+%%-record(predict_context, {cells :: [#cell_info{}], digits :: [1 .. ?GRID_SIDE], permutation :: integer(), grid :: array:array(integer())}).
 
 get_check_data() ->
     [{"problem_096.dat", none}].
@@ -43,14 +45,14 @@ solve_case(Name, Grid)->
 process_calculation_result(stop) -> throw(bad_solution);
 process_calculation_result({true, Context}) ->
     io:format("solved~n", []),
-    case check_grid(Context#context.grid) of
+    case check_grid(Context#calc_context.grid) of
         true -> io:format("solution checked~n", []);
         false -> throw(bad_solution)
     end,
-    show_grid_after(Context#context.grid);
+    show_grid_after(Context#calc_context.grid);
 process_calculation_result({false, Context}) ->
     io:format("can't be solved~n", []),
-    show_grid_after(Context#context.grid).
+    show_grid_after(Context#calc_context.grid).
 
 show_grid_after(Grid) ->
     io:format("grid after:~n", []),
@@ -141,13 +143,12 @@ append_cells_digits(Grid, SourceDigits, Cells) ->
         end
     end, SourceDigits, Cells).
 
-%% CellsInfo = [{Row, Column, DigitsBinray}] -> array:array([{X, Y}] | undefined)
 merge_cells_info(CellsInfo) ->
     DestInit = array:new([{size, ?GRID_SIDE}, {fixed, true}, {default, undefined}]),
-    lists:foldl(fun({Row, Column, DigitsBinary}, Dest) -> merge_cell_info(Row, Column, DigitsBinary, Dest) end, DestInit, CellsInfo).
+    lists:foldl(fun(CellInfo, Dest) -> merge_cell_info(CellInfo, Dest) end, DestInit, CellsInfo).
 
-%% Row, Column, int, array:array([{X, Y}] | undefined) -> array:array([{X, Y}] | undefined)
-merge_cell_info(Row, Column, DigitsBinary, MergedInfo) ->
+%% #cell_info{}, array:array([{X, Y}] | undefined) -> array:array([{X, Y}] | undefined)
+merge_cell_info(#cell_info{row = Row, column = Column, constraint = DigitsBinary}, MergedInfo) ->
     DigitsList = get_free_digits_list(DigitsBinary),
     FoldlFun = fun(Digit, Dest) ->
         case array:get(Digit - 1, Dest) of
@@ -188,31 +189,37 @@ check_digits_info(DigitsInfo) ->
                   (_Index, _Value, Result) -> (Result and true) end,
     array:foldl(FoldlFun, true, DigitsInfo).
 
-%% Row, #context{} | stop -> #context{} | stop
+%% Row, #calc_context{} | stop -> #calc_context{} | stop
 process_row(_SourceRow, stop) -> stop;
 process_row(SourceRow, Context) ->
-    Grid = Context#context.grid,
+    Grid = Context#calc_context.grid,
     {FreeCells, InitCellDigits} = scan_row(SourceRow, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) ->
+        #cell_info{row = Row, column = Column, constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, InitCellDigits))}
+    end, FreeCells),
     process_cells(CellsInfo, Context).
 
-%% Column, #context{} | stop -> #context{} | stop
+%% Column, #calc_context{} | stop -> #calc_context{} | stop
 process_column(_SourceColumn, stop) -> stop;
 process_column(SourceColumn, Context) ->
-    Grid = Context#context.grid,
+    Grid = Context#calc_context.grid,
     {FreeCells, InitCellDigits} = scan_column(SourceColumn, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_square_digits(Row, Column, Grid, append_row_digits(Row, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) ->
+        #cell_info{row = Row, column = Column, constraint = append_square_digits(Row, Column, Grid, append_row_digits(Row, Grid, InitCellDigits))}
+    end, FreeCells),
     process_cells(CellsInfo, Context).
 
-%% Row, Column, #context{} | stop -> #context{} | stop
+%% Row, Column, #calc_context{} | stop -> #calc_context{} | stop
 process_square(_CellRow, _CellColumn, stop) -> stop;
 process_square(CellRow, CellColumn, Context) ->
-    Grid = Context#context.grid,
+    Grid = Context#calc_context.grid,
     {FreeCells, InitCellDigits} = scan_square(CellRow, CellColumn, Grid),
-    CellsInfo = lists:map(fun({Row, Column}) -> {Row, Column, append_column_digits(Column, Grid, append_row_digits(Row, Grid, InitCellDigits))} end, FreeCells),
+    CellsInfo = lists:map(fun({Row, Column}) ->
+        #cell_info{row = Row, column = Column, constraint = append_column_digits(Column, Grid, append_row_digits(Row, Grid, InitCellDigits))}
+    end, FreeCells),
     process_cells(CellsInfo, Context).
 
-%% [{Row, Column, DigitsBinray}], #context{} | stop -> #context{} | stop
+%% [#cell_info{}], #calc_context{} | stop -> #calc_context{} | stop
 process_cells(_CellsInfo, stop) -> stop;
 process_cells(CellsInfo, Context) ->
     DigitsInfo = merge_cells_info(CellsInfo),
@@ -221,26 +228,25 @@ process_cells(CellsInfo, Context) ->
         false -> stop
     end.
 
-%% array:array([{Row, Column}]), #context{} | stop -> #context{} | stop
+%% array:array([{Row, Column}]), #calc_context{} | stop -> #calc_context{} | stop
 process_digits(_DigitsInfo, stop) -> stop;
 process_digits(DigitsInfo, Context) ->
     case choose_cell(DigitsInfo) of
         {true, Digit, {Row, Column}} ->
-            EmptyCount = Context#context.empty_count,
-            UpdatedGrid = set_element(Row, Column, Digit, Context#context.grid),
-            UpdatedContext = #context{empty_count = EmptyCount - 1, grid = UpdatedGrid},
+            EmptyCount = Context#calc_context.empty_count,
+            UpdatedGrid = set_element(Row, Column, Digit, Context#calc_context.grid),
+            UpdatedContext = #calc_context{empty_count = EmptyCount - 1, grid = UpdatedGrid},
             UpdatedDigitsInfo = strikeout_cell(Row, Column, Digit, DigitsInfo),
             case check_digits_info(UpdatedDigitsInfo) of
                 true -> process_digits(UpdatedDigitsInfo, UpdatedContext);
                 false -> stop
             end;
-            %%process_digits(strikeout_cell(Row, Column, Digit, DigitsInfo), UpdatedContext);
         false -> Context
     end.
 
-%% #context{} | stop -> {bool(), #context{}} | stop
+%% #calc_context{} | stop -> {bool(), #calc_context{}} | stop
 process_calculation(stop) -> stop;
-process_calculation(Context) when Context#context.empty_count == 0 -> {true, Context};
+process_calculation(Context) when Context#calc_context.empty_count == 0 -> {true, Context};
 process_calculation(ContextBefore) ->
     ContextAfterRows = lists:foldl(fun(Row, Context) -> process_row(Row, Context) end, ContextBefore, lists:seq(1, ?GRID_SIDE)),
     ContextAfterColumns = lists:foldl(fun(Column, Context) -> process_column(Column, Context) end, ContextAfterRows, lists:seq(1, ?GRID_SIDE)),
@@ -249,11 +255,11 @@ process_calculation(ContextBefore) ->
     ContextAfter = lists:foldl(fun({CellRow, CellColumn}, Context) -> process_square(CellRow, CellColumn, Context) end, ContextAfterColumns, Squares),
     if
         ContextAfter == stop -> stop;
-        ContextAfter#context.empty_count < ContextBefore#context.empty_count -> process_calculation(ContextAfter);
-        ContextAfter#context.empty_count == ContextBefore#context.empty_count -> {false, ContextAfter}
+        ContextAfter#calc_context.empty_count < ContextBefore#calc_context.empty_count -> process_calculation(ContextAfter);
+        ContextAfter#calc_context.empty_count == ContextBefore#calc_context.empty_count -> {false, ContextAfter}
     end.
 
-%% array:array(integer()) -> #context{}
+%% array:array(integer()) -> #calc_context{}
 create_context(Grid) ->
     EmptyCount = array:foldl(fun(_Index, Value, Result) ->
         if
@@ -261,7 +267,7 @@ create_context(Grid) ->
             Value > 0 -> Result
         end
     end, 0, Grid),
-    #context{empty_count = EmptyCount, grid = Grid}.
+    #calc_context{empty_count = EmptyCount, grid = Grid}.
 
 %% array:array(integer()) -> bool()
 check_grid(Grid) ->
