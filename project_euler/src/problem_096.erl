@@ -12,7 +12,7 @@
 -export([process_calculation/1, check_calculation/1]).
 -export([create_context/1]).
 -export([check_grid/1, get_row/2, get_column/2, get_square/3]).
-%%-export([find_predict_object/1, create_predict_context/1, select_next_combination/1, create_prediction/2, apply_prediction/3]).
+-export([find_predict_object/1, create_predict_context/1, select_next_combination/1, create_prediction/2, apply_prediction/3]).
 
 -behaviour(numerical_task_behaviour).
 
@@ -33,23 +33,24 @@
 
 -record(cell_info, {row :: 1 .. ?GRID_SIDE, column :: 1 .. ?GRID_SIDE, constraint :: integer()}).
 -record(calc_context, {empty_count :: integer(), grid :: array:array(integer())}).
-%%-record(predict_context, {cells :: [#cell_info{}], digits :: [1 .. ?GRID_SIDE], lex_number :: integer(), sup_lex_number :: integer(), grid :: array:array(integer())}).
+-record(predict_context, {cells :: [#cell_info{}], digits :: [1 .. ?GRID_SIDE], lex_number :: integer(), sup_lex_number :: integer(), grid :: array:array(integer())}).
 
 get_check_data() ->
-    [{"problem_096.dat", none}].
+    [{"problem_096.dat", 24702}].
 
 prepare_data(ModuleSourceDir, Filename) ->
     Strings = load_utils:read_strings(filename:join(ModuleSourceDir, Filename)),
     convert_data(Strings, []).
 
 solve(Data) ->
+    lists:foldl(fun(#grid_case{name = Name, grid = Grid}, Sum) -> Sum + solve_case(Name, Grid) end, 0, Data).
     %%lists:foreach(fun(#grid_case{name = Name, grid = Grid}) -> solve_case(Name, Grid) end, Data).
-    solve_impl(Data).
+    %%solve_impl(Data).
 
-solve_impl([]) -> ok;
-solve_impl([#grid_case{name = Name, grid = Grid} | Rest]) ->
-    solve_case(Name, Grid),
-    solve_impl(Rest).
+%%solve_impl([]) -> ok;
+%%solve_impl([#grid_case{name = Name, grid = Grid} | Rest]) ->
+%%    solve_case(Name, Grid),
+%%    solve_impl(Rest).
 
 %%solve_case(Name, InitGrid)->
 %%    io:format("solve ~p~n", [Name]),
@@ -66,6 +67,14 @@ solve_impl([#grid_case{name = Name, grid = Grid} | Rest]) ->
 %%    io:format("grid after:~n", []),
 %%    show_grid(SolvedGrid),
 %%    io:format("~n", []).
+solve_case(_Name, InitGrid)->
+    SolvedGrid = process_grid([], create_context(InitGrid)),
+    case check_grid(SolvedGrid) of
+        true -> get_element(1, 1, SolvedGrid) * 100 + get_element(1, 2, SolvedGrid) * 10 + get_element(1, 3, SolvedGrid);
+        false ->
+            io:format("bad_solution~n", []),
+            error(bad_solution)
+    end.
 
 %%process_grid(PredictionStack, CalcContextBefore) ->
 %%    case process_calculation(CalcContextBefore) of
@@ -81,6 +90,18 @@ solve_impl([#grid_case{name = Name, grid = Grid} | Rest]) ->
 %%            process_grid(UpdatedPredictionStack, create_context(UpdatedGrid));
 %%        {true, CalcContextAfter} -> CalcContextAfter#calc_context.grid
 %%    end.
+process_grid(PredictionStack, CalcContextBefore) ->
+    case process_calculation(CalcContextBefore) of
+        stop_calc ->
+            {DigitCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, stop_calc),
+            UpdatedGrid = apply_prediction(DigitCombination, PredictContext, PredictContext#predict_context.grid),
+            process_grid(UpdatedPredictionStack, create_context(UpdatedGrid));
+        {false, CalcContextAfter} ->
+            {DigitCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, CalcContextAfter),
+            UpdatedGrid = apply_prediction(DigitCombination, PredictContext, CalcContextAfter#calc_context.grid),
+            process_grid(UpdatedPredictionStack, create_context(UpdatedGrid));
+        {true, CalcContextAfter} -> CalcContextAfter#calc_context.grid
+    end.
 
 %%show_info(Grid) ->
 %%    {FreeCells, InitCellDigits} = scan_square(1, 7, Grid),
@@ -90,36 +111,36 @@ solve_impl([#grid_case{name = Name, grid = Grid} | Rest]) ->
 %%    AfterAppendColumn = append_column_digits(8, Grid, AfterAppendRow),
 %%    io:format("after append column: ~p~n", [AfterAppendColumn]).
 
-solve_case(Name, Grid)->
-    io:format("solve ~p~n", [Name]),
-    io:format("grid before:~n", []),
-    show_grid(Grid),
-    ContextBefore = create_context(Grid),
-    process_calculation_result(process_calculation(ContextBefore)).
+%%solve_case(Name, Grid)->
+%%    io:format("solve ~p~n", [Name]),
+%%    io:format("grid before:~n", []),
+%%    show_grid(Grid),
+%%    ContextBefore = create_context(Grid),
+%%    process_calculation_result(process_calculation(ContextBefore)).
 
-process_calculation_result(stop_calc) -> throw(bad_solution);
-process_calculation_result({true, Context}) ->
-    io:format("solved~n", []),
-    case check_grid(Context#calc_context.grid) of
-        true -> io:format("solution checked~n", []);
-        false -> throw(bad_solution)
-    end,
-    show_grid_after(Context#calc_context.grid);
-process_calculation_result({false, Context}) ->
-    io:format("can't be solved~n", []),
-    show_grid_after(Context#calc_context.grid).
+%%process_calculation_result(stop_calc) -> throw(bad_solution);
+%%process_calculation_result({true, Context}) ->
+%%    io:format("solved~n", []),
+%%    case check_grid(Context#calc_context.grid) of
+%%        true -> io:format("solution checked~n", []);
+%%        false -> throw(bad_solution)
+%%    end,
+%%    show_grid_after(Context#calc_context.grid);
+%%process_calculation_result({false, Context}) ->
+%%    io:format("can't be solved~n", []),
+%%    show_grid_after(Context#calc_context.grid).
 
-show_grid_after(Grid) ->
-    io:format("grid after:~n", []),
-    show_grid(Grid),
-    io:format("~n", []).
+%%show_grid_after(Grid) ->
+%%    io:format("grid after:~n", []),
+%%    show_grid(Grid),
+%%    io:format("~n", []).
 
-show_grid(Grid) ->
-    ShowRowFun= fun(Row)->
-        lists:foreach(fun(Column) -> io:format("~p ", [get_element(Row, Column, Grid)]) end, lists:seq(1, ?GRID_SIDE)),
-        io:format("~n", [])
-    end,
-    lists:foreach(ShowRowFun, lists:seq(1, ?GRID_SIDE)).
+%%show_grid(Grid) ->
+%%    ShowRowFun= fun(Row)->
+%%        lists:foreach(fun(Column) -> io:format("~p ", [get_element(Row, Column, Grid)]) end, lists:seq(1, ?GRID_SIDE)),
+%%        io:format("~n", [])
+%%    end,
+%%    lists:foreach(ShowRowFun, lists:seq(1, ?GRID_SIDE)).
 
 convert_data([], Dest) -> lists:reverse(Dest);
 convert_data([Description, Str1, Str2, Str3, Str4, Str5, Str6, Str7, Str8, Str9 | Rest], Dest) ->
@@ -380,79 +401,78 @@ get_column(Grid, SourceColumn) -> lists:map(fun({Row, Column}) -> get_element(Ro
 get_square(Grid, RowTop, ColumnLeft) -> lists:map(fun({Row, Column}) -> get_element(Row, Column, Grid) end, generate_square(RowTop, ColumnLeft)).
 
 %% array:array(integer()) -> FoundObject
-%%find_predict_object(Grid) ->
-%%    FoundRow = lists:foldl(fun(Row, Result) -> merge_predict_object(Result, scan_row(Row, Grid)) end, {[], 0}, lists:seq(1, ?GRID_SIDE)),
-%%    FoundColumn = lists:foldl(fun(Column, Result) -> merge_predict_object(Result, scan_column(Column, Grid)) end, FoundRow, lists:seq(1, ?GRID_SIDE)),
-%%    %% TODO (std_string) : think about generation
-%%    Squares = [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}],
-%%    lists:foldl(fun({Row, Column}, Result) -> merge_predict_object(Result, scan_square(Row, Column, Grid)) end, FoundColumn, Squares).
+find_predict_object(Grid) ->
+    FoundRow = lists:foldl(fun(Row, Result) -> merge_predict_object(Result, scan_row(Row, Grid)) end, {[], 0}, lists:seq(1, ?GRID_SIDE)),
+    FoundColumn = lists:foldl(fun(Column, Result) -> merge_predict_object(Result, scan_column(Column, Grid)) end, FoundRow, lists:seq(1, ?GRID_SIDE)),
+    %% TODO (std_string) : think about generation
+    Squares = [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}],
+    lists:foldl(fun({Row, Column}, Result) -> merge_predict_object(Result, scan_square(Row, Column, Grid)) end, FoundColumn, Squares).
 
 %% OldFoundObject, NewFoundObject -> FoundObject
-%%merge_predict_object({[], 0}, {[], 0}) -> {[], 0};
-%%merge_predict_object({[], 0}, NewFoundObject) -> NewFoundObject;
-%%merge_predict_object(OldFoundObject, {[], 0}) -> OldFoundObject;
-%%merge_predict_object({OldCells, OldDigits}, {NewCells, _NewDigits}) when length(OldCells) =< length(NewCells) -> {OldCells, OldDigits};
-%%merge_predict_object(_OldFoundObject, NewFoundObject) -> NewFoundObject.
+merge_predict_object({[], 0}, {[], 0}) -> {[], 0};
+merge_predict_object({[], 0}, NewFoundObject) -> NewFoundObject;
+merge_predict_object(OldFoundObject, {[], 0}) -> OldFoundObject;
+merge_predict_object({OldCells, OldDigits}, {NewCells, _NewDigits}) when length(OldCells) =< length(NewCells) -> {OldCells, OldDigits};
+merge_predict_object(_OldFoundObject, NewFoundObject) -> NewFoundObject.
 
 %% array:array(integer()) -> #predict_context{}
-%%create_predict_context(Grid) ->
-%%    {Cells, DigitsBinary} = find_predict_object(Grid),
-%%    create_predict_context(Cells, DigitsBinary, Grid).
+create_predict_context(Grid) ->
+    {Cells, DigitsBinary} = find_predict_object(Grid),
+    create_predict_context(Cells, DigitsBinary, Grid).
 
 %% {Row, Column}, DigitsBinary, array:array(integer()) -> #predict_context{}
-%%create_predict_context(Cells, DigitsBinary, Grid) ->
-%%    Digits = get_free_digits_list(DigitsBinary),
-%%    CellsInfo = lists:map(fun({Row, Column}) ->
-%%        Constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, append_row_digits(Row, Grid, DigitsBinary))),
-%%        #cell_info{row = Row, column = Column, constraint = Constraint}
-%%    end, Cells),
-%%    %% TODO (std_string) : move this into permutations module
-%%    SupLexNumber = numbers:factorial(length(Digits)),
-%%    io:format("cells = ~p, cells_info = ~p, digits_binary = ~p, digits = ~p~n", [Cells, CellsInfo, DigitsBinary, Digits]),
-%%    #predict_context{cells = CellsInfo, digits = Digits, lex_number = -1, sup_lex_number = SupLexNumber - 1, grid = Grid}.
+create_predict_context(Cells, DigitsBinary, Grid) ->
+    Digits = get_free_digits_list(DigitsBinary),
+    CellsInfo = lists:map(fun({Row, Column}) ->
+        Constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, append_row_digits(Row, Grid, DigitsBinary))),
+        #cell_info{row = Row, column = Column, constraint = Constraint}
+    end, Cells),
+    %% TODO (std_string) : move this into permutations module
+    SupLexNumber = numbers:factorial(length(Digits)),
+    #predict_context{cells = CellsInfo, digits = Digits, lex_number = -1, sup_lex_number = SupLexNumber - 1, grid = Grid}.
 
 %% #predict_context{} -> {[1..9], #predict_context{}} | finish
-%%select_next_combination(#predict_context{lex_number = Number, sup_lex_number = Number}) -> finish;
-%%select_next_combination(Context) ->
-%%    NextLexNumber = Context#predict_context.lex_number + 1,
-%%    NextDigitCombination = permutations:get_permutation(NextLexNumber, array:fix(array:from_list(Context#predict_context.digits))),
-%%    UpdatedContext = Context#predict_context{lex_number = NextLexNumber},
-%%    case check_digit_combination(Context#predict_context.cells, NextDigitCombination) of
-%%        true -> {NextDigitCombination, UpdatedContext};
-%%        false -> select_next_combination(UpdatedContext)
-%%    end.
+select_next_combination(#predict_context{lex_number = Number, sup_lex_number = Number}) -> finish;
+select_next_combination(Context) ->
+    NextLexNumber = Context#predict_context.lex_number + 1,
+    NextDigitCombination = permutations:get_permutation(NextLexNumber, array:fix(array:from_list(Context#predict_context.digits))),
+    UpdatedContext = Context#predict_context{lex_number = NextLexNumber},
+    case check_digit_combination(Context#predict_context.cells, NextDigitCombination) of
+        true -> {NextDigitCombination, UpdatedContext};
+        false -> select_next_combination(UpdatedContext)
+    end.
 
 %% [#cell_info{}], [1..9] -> bool()
-%%check_digit_combination([], []) -> true;
-%%check_digit_combination([], _Digits) -> false;
-%%check_digit_combination([#cell_info{constraint = Constraint} | CellsInfoRest], [Digit | DigitsRest]) ->
-%%    CheckDigit = Constraint band (1 bsl (Digit - 1)),
-%%    if
-%%        CheckDigit == 0 -> false;
-%%        CheckDigit /= 0 -> check_digit_combination(CellsInfoRest, DigitsRest)
-%%    end.
+check_digit_combination([], []) -> true;
+check_digit_combination([], _Digits) -> false;
+check_digit_combination([#cell_info{constraint = Constraint} | CellsInfoRest], [Digit | DigitsRest]) ->
+    CheckDigit = Constraint band (1 bsl (Digit - 1)),
+    if
+        CheckDigit == 0 -> false;
+        CheckDigit /= 0 -> check_digit_combination(CellsInfoRest, DigitsRest)
+    end.
 
 %% [#predict_context{}], #calc_context{} | stop_calc -> {[1..9], #predict_context{}, [#predict_context{}]} | no_return()
 %% TODO (std_string) : add details to exception
-%%create_prediction([], stop_calc) -> error(invalid_operation);
-%%create_prediction([PredictContext | PredictionStackRest], stop_calc) ->
-%%    case select_next_combination(PredictContext) of
-%%        finish -> create_prediction(PredictionStackRest, stop_calc);
-%%        {DigitCombination, UpdatedPredictContext} -> {DigitCombination, UpdatedPredictContext, [UpdatedPredictContext] ++ PredictionStackRest}
-%%    end;
-%%create_prediction([], CalcContext) ->
-%%    {DigitCombination, PredictContext} = select_next_combination(create_predict_context(CalcContext#calc_context.grid)),
-%%    {DigitCombination, PredictContext, [PredictContext]};
-%%create_prediction(PredictionStack, CalcContext) ->
-%%    case select_next_combination(create_predict_context(CalcContext#calc_context.grid)) of
-%%        finish -> create_prediction(PredictionStack, stop_calc);
-%%        {DigitCombination, NewPredictContext} -> {DigitCombination, NewPredictContext, [NewPredictContext] ++ PredictionStack}
-%%    end.
+create_prediction([], stop_calc) -> error(invalid_operation);
+create_prediction([PredictContext | PredictionStackRest], stop_calc) ->
+    case select_next_combination(PredictContext) of
+        finish -> create_prediction(PredictionStackRest, stop_calc);
+        {DigitCombination, UpdatedPredictContext} -> {DigitCombination, UpdatedPredictContext, [UpdatedPredictContext] ++ PredictionStackRest}
+    end;
+create_prediction([], CalcContext) ->
+    {DigitCombination, PredictContext} = select_next_combination(create_predict_context(CalcContext#calc_context.grid)),
+    {DigitCombination, PredictContext, [PredictContext]};
+create_prediction(PredictionStack, CalcContext) ->
+    case select_next_combination(create_predict_context(CalcContext#calc_context.grid)) of
+        finish -> create_prediction(PredictionStack, stop_calc);
+        {DigitCombination, NewPredictContext} -> {DigitCombination, NewPredictContext, [NewPredictContext] ++ PredictionStack}
+    end.
 
 %% [1..9], #predict_context{}, array:array(integer()) -> array:array(integer())
-%%apply_prediction(DigitCombination, PredictContext, Grid) -> apply_prediction_impl(DigitCombination, PredictContext#predict_context.cells, Grid).
+apply_prediction(DigitCombination, PredictContext, Grid) -> apply_prediction_impl(DigitCombination, PredictContext#predict_context.cells, Grid).
 
 %% [1..9], [#cell_info{}], array:array(integer()) -> array:array(integer())
-%%apply_prediction_impl([], [], Grid) -> Grid;
-%%apply_prediction_impl([Digit | DigitsRest], [#cell_info{row = Row, column = Column} | CellsInfoRest], Grid) ->
-%%    apply_prediction_impl(DigitsRest, CellsInfoRest, set_element(Row, Column, Digit, Grid)).
+apply_prediction_impl([], [], Grid) -> Grid;
+apply_prediction_impl([Digit | DigitsRest], [#cell_info{row = Row, column = Column} | CellsInfoRest], Grid) ->
+    apply_prediction_impl(DigitsRest, CellsInfoRest, set_element(Row, Column, Digit, Grid)).
