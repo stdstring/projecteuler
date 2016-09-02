@@ -68,6 +68,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 83. Path sum: four ways](https://projecteuler.net/problem=83)
 * [Problem 89. Roman numerals](https://projecteuler.net/problem=89)
 * [Problem 92. Square digit chains](https://projecteuler.net/problem=92)
+* [Problem 96. Su Doku](https://projecteuler.net/problem=96)
 * [Problem 97. Large non-Mersenne prime](https://projecteuler.net/problem=97)
 * [Problem 98. Anagramic squares](https://projecteuler.net/problem=98)
 * [Problem 99. Largest exponential](https://projecteuler.net/problem=99)
