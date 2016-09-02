@@ -1,12 +1,21 @@
--define(DEFAULT_MAX_TIME, 5 * 1000 * 1000).
+%% @author std-string
+
+%% in milliseconds
+-define(CALC_WARN_TIME, 5 * 1000).
+%% in milliseconds
+-define(CALC_MAX_TIME, 60 * 1000).
+
+-type success_status() :: 'success' | 'warning'.
 
 -record(success_result, {task_name = undefined :: 'undefined' | atom(),
                          input = undefined :: 'undefined' | term(),
-                         current_time = 0 :: pos_integer(),
+                         status = success :: success_status(),
+                         time = 0 :: pos_integer(),
+                         warn_time =  0 :: pos_integer(),
                          max_time =  0 :: pos_integer()}).
 -record(fail_time_result, {task_name = undefined :: 'undefined' | atom(),
                            input = undefined :: 'undefined' | term(),
-                           current_time = 0 :: pos_integer(),
+                           time = 0 :: pos_integer(),
                            max_time =  0 :: pos_integer()}).
 -record(fail_value_result, {task_name = undefined :: 'undefined' | atom(),
                             input = undefined :: 'undefined' | term(),
@@ -15,3 +24,5 @@
 -record(fail_exec_result, {task_name = undefined :: 'undefined' | atom(),
                            input = undefined :: 'undefined' | term(),
                            reason = undefined :: 'undefined' | term()}).
+
+-type result_type() :: #success_result{} | #fail_time_result{} | #fail_value_result{} | #fail_exec_result{}.
