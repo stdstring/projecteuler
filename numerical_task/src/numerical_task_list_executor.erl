@@ -18,13 +18,16 @@ process(ConfigFilename) ->
     code:add_patha(filename:absname(ModulePath)),
     lists:foreach(fun(Path) -> code:add_patha(filename:absname(Path)) end, AdditionalPathList),
     Results = process_tasks(ModulePath, ModuleDefList),
-    ResultSplitFun = fun(#success_result{}) -> true;
-                        (_Other) -> false end,
-    case lists:splitwith(ResultSplitFun, Results) of
-        {SuccessResults, []} ->
+    SuccessFilterFun = fun(#success_result{}) -> true;
+                          (_Other) -> false end,
+    NonSuccessFilterFun = fun(#success_result{}) -> false;
+                             (_Other) -> true end,
+    SuccessResults = lists:filter(SuccessFilterFun, Results),
+    case lists:filter(NonSuccessFilterFun, Results) of
+        [] ->
             io:format("~nExecution successfully completed~n~n", []),
             process_results(SuccessResults);
-        {SuccessResults, NonSuccessResults} ->
+        NonSuccessResults ->
             io:format("~nExecution finished with some errors~n~n", []),
             process_results(SuccessResults),
             io:format("~nErrors:~n~n", []),
