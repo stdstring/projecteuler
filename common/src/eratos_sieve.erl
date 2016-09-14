@@ -2,7 +2,7 @@
 
 -module(eratos_sieve).
 
--export([get_primes/1, make_sieve/1, is_prime/2]).
+-export([get_primes/1, calc_primes/1, get_sieve/1, calc_sieve/1, is_prime/2]).
 
 -include("primes_def.hrl").
 
@@ -15,15 +15,21 @@
 -spec get_primes(MaxNumber :: pos_integer()) -> [pos_integer()].
 get_primes(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
     lists:takewhile(fun(Number) -> Number =< MaxNumber end, ?KNOWN_PRIMES);
-get_primes(MaxNumber) -> get_primes_impl(calc_sieve_size(MaxNumber)).
+get_primes(MaxNumber) -> calc_primes(MaxNumber).
 
--spec make_sieve(MaxNumber :: pos_integer()) -> sieve().
-make_sieve(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
+-spec calc_primes(MaxNumber :: pos_integer()) -> [pos_integer()].
+calc_primes(MaxNumber) -> calc_primes_impl(calc_sieve_size(MaxNumber)).
+
+-spec get_sieve(MaxNumber :: pos_integer()) -> sieve().
+get_sieve(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
     SieveSize = calc_sieve_size(MaxNumber),
     Primes = lists:takewhile(fun(Number) -> Number =< MaxNumber end, ?KNOWN_PRIMES),
     InitSieve = array:new([{size, SieveSize}, {fixed, true}, {default, false}]),
     lists:folds(fun(Prime, Sieve) -> array:set(calc_index(Prime), true, Sieve) end, InitSieve, Primes);
-make_sieve(MaxNumber) -> create_sieve(calc_sieve_size(MaxNumber)).
+get_sieve(MaxNumber) -> calc_sieve(MaxNumber).
+
+-spec calc_sieve(MaxNumber :: pos_integer()) -> sieve().
+calc_sieve(MaxNumber) -> create_sieve(calc_sieve_size(MaxNumber)).
 
 %%-spec is_prime(Number :: 2.., Sieve :: sieve()) -> boolean(). - not compiled
 -spec is_prime(Number :: pos_integer(), Sieve :: sieve()) -> boolean().
@@ -46,8 +52,8 @@ calc_number(Index) -> (Index * 2) + 3.
 -spec calc_index(Number :: pos_integer()) -> non_neg_integer().
 calc_index(Number) -> (Number - 3) div 2.
 
--spec get_primes_impl(SieveSize :: pos_integer()) -> [pos_integer()].
-get_primes_impl(SieveSize) -> create_number_list(create_sieve(SieveSize), 0, SieveSize, [2]).
+-spec calc_primes_impl(SieveSize :: pos_integer()) -> [pos_integer()].
+calc_primes_impl(SieveSize) -> create_number_list(create_sieve(SieveSize), 0, SieveSize, [2]).
 
 -spec create_number_list(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer(), Dest :: [pos_integer()]) -> [pos_integer()].
 create_number_list(_Sieve, SieveSize, SieveSize, Dest) -> lists:reverse(Dest);
