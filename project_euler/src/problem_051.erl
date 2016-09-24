@@ -13,16 +13,25 @@
 
 -type digit_type() :: 0..9.
 
+-define(MAX_NUMBER, 100000000-1).
+-define(RANGE_START, 10).
+-define(DIGITS_COUNT, 2).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 get_check_data() ->
-    [{none, none}].
+    [{7, 56003}, {8, 121313}].
 
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(_Data) -> ok.
+solve(FamilySize) ->
+    Primes = eratos_sieve:get_sieve(?MAX_NUMBER),
+    case process_numbers(?RANGE_START, ?DIGITS_COUNT, FamilySize, Primes) of
+        {true, Prime} -> Prime;
+        false -> error(solution_not_found)
+    end.
 
 %% ====================================================================
 %% Internal functions
@@ -93,7 +102,7 @@ create_number(DigitsInfo) ->
 -spec check_family(DigitsInfo :: array:array([non_neg_integer()]),
                    Digit :: digit_type(),
                    FamilySize :: pos_integer(),
-                   Primes :: eratos_sieve:sieve()) -> boolean()
+                   Primes :: eratos_sieve:sieve()) -> boolean().
 check_family(DigitsInfo, Digit, FamilySize, Primes) ->
     PosList = array:get(Digit, DigitsInfo),
     InvDigitsInfo = array:set(Digit, [], DigitsInfo),
@@ -121,4 +130,45 @@ check_family_impl(InvNumberPart, [Digit | DigitsRest], PosList, FamilySizeRest, 
     case eratos_sieve:is_prime(Number, Primes) of
         true -> check_family_impl(InvNumberPart, DigitsRest, PosList, FamilySizeRest - 1, Primes);
         false -> check_family_impl(InvNumberPart, DigitsRest, PosList, FamilySizeRest, Primes)
+    end.
+
+-spec check_possible_families(DigitsInfo :: array:array([non_neg_integer()]),
+                              Variants :: [digit_type()],
+                              FamilySize :: pos_integer(),
+                              Primes :: eratos_sieve:sieve()) -> boolean().
+check_possible_families(_DigitsInfo, [], _FamilySize, _Primes) -> false;
+check_possible_families(DigitsInfo, [Variant | VariantsRest], FamilySize, Primes) ->
+    case check_family(DigitsInfo, Variant, FamilySize, Primes) of
+        false -> check_possible_families(DigitsInfo, VariantsRest, FamilySize, Primes);
+        true -> true
+    end.
+
+-spec process_range(Current :: pos_integer(),
+                    Max :: pos_integer(),
+                    DigitsCount :: pos_integer(),
+                    FamilySize :: pos_integer(),
+                    Primes :: eratos_sieve:sieve()) -> {'true', Number :: pos_integer()} | 'false'.
+process_range(Current, Max, _DigitsCount, _FamilySize, _Primes) when Current > Max -> false;
+process_range(Current, Max, DigitsCount, FamilySize, Primes) ->
+    case eratos_sieve:is_prime(Current, Primes) of
+        true ->
+            DigitsInfo = create_digits_info(Current, DigitsCount),
+            PossibleVariants = select_possible_variants(DigitsInfo, FamilySize),
+            case check_possible_families(DigitsInfo, PossibleVariants, FamilySize, Primes) of
+                false -> process_range(Current + 2, Max, DigitsCount, FamilySize, Primes);
+                true -> {true, Current}
+            end;
+        false -> process_range(Current + 2, Max, DigitsCount, FamilySize, Primes)
+    end.
+
+-spec process_numbers(RangeStart :: pos_integer(),
+                      DigitsCount :: pos_integer(),
+                      FamilySize :: pos_integer(),
+                      Primes :: eratos_sieve:sieve()) -> {'true', Number :: pos_integer()} | 'false'.
+process_numbers(RangeStart, _DigitsCount, _FamilySize, _Primes) when RangeStart > ?MAX_NUMBER -> false;
+process_numbers(RangeStart, DigitsCount, FamilySize, Primes) ->
+    RangeFinish = 10 * RangeStart - 3,
+    case process_range(RangeStart + 1, RangeFinish, DigitsCount, FamilySize, Primes) of
+        false -> process_numbers(10 * RangeStart, DigitsCount + 1, FamilySize, Primes);
+        {true, Prime} -> {true, Prime}
     end.
