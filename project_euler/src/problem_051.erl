@@ -13,7 +13,8 @@
 
 -type digit_type() :: 0..9.
 
--define(MAX_NUMBER, 100000000-1).
+%%-define(MAX_NUMBER, 100000000-1).
+-define(MAX_NUMBER, 10000000-1).
 -define(RANGE_START, 10).
 -define(DIGITS_COUNT, 2).
 
@@ -22,7 +23,7 @@
 %% ====================================================================
 
 get_check_data() ->
-    [{7, 56003}, {8, 121313}].
+    [{6, 13}, {7, 56003}, {8, 121313}].
 
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
@@ -45,23 +46,6 @@ create_digits_info(Number, DigitsCount) ->
     {InfoFinal, _} = lists:foldl(fun(Digit, {Info, Pos}) -> {array:set(Digit, [Pos] ++ array:get(Digit, Info), Info), Pos - 1} end, AccInit, Digits),
     InfoFinal.
 
-%%-spec select_possible_variants(DigitsInfo :: array:array([non_neg_integer()]), FamilySize :: pos_integer()) ->
-%%    [{Digit :: digit_type(), PosList :: [non_neg_integer()]}].
-%%select_possible_variants(DigitsInfo, FamilySize) -> select_possible_variants(DigitsInfo, FamilySize, 0, []).
-
-%%-spec select_possible_variants(DigitsInfo :: array:array([non_neg_integer()]),
-%%                               FamilySize :: pos_integer(),
-%%                               Digit :: digit_type(),
-%%                               Storage :: [{Digit :: digit_type(), PosList :: [non_neg_integer()]}]) ->
-%%    [{Digit :: digit_type(), PosList :: [non_neg_integer()]}].
-%%select_possible_variants(_DigitsInfo, _FamilySize, Digit, Storage) when Digit > 9 -> Storage;
-%%select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
-%%    PosList = array:get(Digit, DigitsInfo),
-%%    case check_possible_variant(PosList, Digit, FamilySize) of
-%%        false -> select_possible_variants(DigitsInfo, FamilySize, Digit + 1, Storage);
-%%        true -> select_possible_variants(DigitsInfo, FamilySize, Digit + 1, [{Digit, PosList}] ++ Storage)
-%%    end.
-
 -spec select_possible_variants(DigitsInfo :: array:array([non_neg_integer()]), FamilySize :: pos_integer()) -> [digit_type()].
 select_possible_variants(DigitsInfo, FamilySize) -> select_possible_variants(DigitsInfo, FamilySize, 0, []).
 
@@ -79,8 +63,8 @@ select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
 
 -spec check_possible_variant(PosList :: [non_neg_integer()], Digit :: digit_type(), FamilySize :: pos_integer()) -> boolean().
 check_possible_variant([], _Digit, _FamilySize) -> false;
-%% we don't process 1-digit family
-check_possible_variant([_Pos], _Digit, _FamilySize) -> false;
+%%%% we don't process 1-digit family
+%%check_possible_variant([_Pos], _Digit, _FamilySize) -> false;
 %% last (younger) digit must be 1, 3, 7, 9
 check_possible_variant([0 | _Rest], 1, FamilySize) -> FamilySize =< 4;
 check_possible_variant([0 | _Rest], 3, FamilySize) -> FamilySize =< 3;
