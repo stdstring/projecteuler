@@ -22,10 +22,10 @@ calc_primes(MaxNumber) -> calc_primes_impl(calc_sieve_size(MaxNumber)).
 
 -spec get_sieve(MaxNumber :: pos_integer()) -> sieve().
 get_sieve(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
+    [2 | Primes] = ?KNOWN_PRIMES,
     SieveSize = calc_sieve_size(MaxNumber),
-    Primes = lists:takewhile(fun(Number) -> Number =< MaxNumber end, ?KNOWN_PRIMES),
-    InitSieve = array:new([{size, SieveSize}, {fixed, true}, {default, false}]),
-    lists:folds(fun(Prime, Sieve) -> array:set(calc_index(Prime), true, Sieve) end, InitSieve, Primes);
+    InitSieve = array:new([{size, SieveSize}, {fixed, true}, {default, true}]),
+    fill_sieve_from_primes(0, InitSieve, MaxNumber, Primes);
 get_sieve(MaxNumber) -> calc_sieve(MaxNumber).
 
 -spec calc_sieve(MaxNumber :: pos_integer()) -> sieve().
@@ -61,6 +61,19 @@ create_number_list(Sieve, Index, SieveSize, Dest) ->
     case array:get(Index, Sieve) of
         true -> create_number_list(Sieve, Index + 1, SieveSize, [calc_number(Index)] ++ Dest);
         false -> create_number_list(Sieve, Index + 1, SieveSize, Dest)
+    end.
+
+-spec fill_sieve_from_primes(Index :: non_neg_integer(), Sieve :: sieve(), MaxNumber :: pos_integer(), Primes :: [pos_integer()]) -> sieve().
+fill_sieve_from_primes(Index, Sieve, MaxNumber, Primes) ->
+    Number = calc_number(Index),
+    if
+        Number > MaxNumber -> Sieve;
+        Number =< MaxNumber ->
+            case Primes of
+                [] -> fill_sieve_from_primes(Index + 1, array:set(Index, false, Sieve), MaxNumber, []);
+                [Number | PrimesRest] -> fill_sieve_from_primes(Index + 1, Sieve, MaxNumber, PrimesRest);
+                _ -> fill_sieve_from_primes(Index + 1, array:set(Index, false, Sieve), MaxNumber, Primes)
+            end
     end.
 
 -spec create_sieve(SieveSize :: pos_integer()) -> sieve().
