@@ -46,6 +46,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 47. Distinct primes factors](https://projecteuler.net/problem=47)
 * [Problem 48. Self powers](https://projecteuler.net/problem=48)
 * [Problem 49. Prime permutations](https://projecteuler.net/problem=49)
+* [Problem 51. Prime digit replacements](https://projecteuler.net/problem=51)
 * [Problem 52. Permuted multiples](https://projecteuler.net/problem=52)
 * [Problem 53. Combinatoric selections](https://projecteuler.net/problem=53)
 * [Problem 54. Poker hands](https://projecteuler.net/problem=54)
