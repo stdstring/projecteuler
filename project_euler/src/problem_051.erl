@@ -13,10 +13,10 @@
 
 -type digit_type() :: 0..9.
 
-%%-define(MAX_NUMBER, 100000000-1).
 -define(MAX_NUMBER, 10000000-1).
 -define(RANGE_START, 10).
 -define(DIGITS_COUNT, 2).
+-define(YOUNG_POSSIBLE_DIGITS, [1, 3, 7, 9]).
 
 %% ====================================================================
 %% API functions
@@ -63,8 +63,6 @@ select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
 
 -spec check_possible_variant(PosList :: [non_neg_integer()], Digit :: digit_type(), FamilySize :: pos_integer()) -> boolean().
 check_possible_variant([], _Digit, _FamilySize) -> false;
-%%%% we don't process 1-digit family
-%%check_possible_variant([_Pos], _Digit, _FamilySize) -> false;
 %% last (younger) digit must be 1, 3, 7, 9
 check_possible_variant([0 | _Rest], 1, FamilySize) -> FamilySize =< 4;
 check_possible_variant([0 | _Rest], 3, FamilySize) -> FamilySize =< 3;
@@ -76,7 +74,6 @@ check_possible_variant(_PosList, Digit, FamilySize) -> FamilySize =< 10 - Digit.
 calc_number_part(0, _PosList) -> 0;
 calc_number_part(_Digit, []) -> 0;
 calc_number_part(Digit, PosList) ->
-    %% TODO (std_string) : probably optimize this place
     Digit * lists:sum(lists:map(fun(Pos) -> numbers:power(10, Pos) end, PosList)).
 
 -spec create_number(DigitsInfo :: array:array([non_neg_integer()])) -> non_neg_integer().
@@ -93,8 +90,7 @@ check_family(DigitsInfo, Digit, FamilySize, Primes) ->
     InvNumberPart = create_number(InvDigitsInfo),
     case PosList of
         [0 | _Rest] ->
-            %% TODO (std_string) : move [1, 3, 7, 9] into definitions
-            Digits = lists:dropwhile(fun(Number) -> Number =< Digit end, [1, 3, 7, 9]),
+            Digits = lists:dropwhile(fun(Number) -> Number =< Digit end, ?YOUNG_POSSIBLE_DIGITS),
             check_family_impl(InvNumberPart, Digits, PosList, FamilySize - 1, Primes);
         _ ->
             Digits = lists:seq(Digit + 1, 9),
@@ -107,7 +103,6 @@ check_family(DigitsInfo, Digit, FamilySize, Primes) ->
                         FamilySizeRest :: integer(),
                         Primes :: eratos_sieve:sieve()) -> boolean().
 check_family_impl(_InvNumberPart, Digits, _PosList, FamilySizeRest, _Primes) when length(Digits) < FamilySizeRest -> false;
-%%check_family_impl(_InvNumberPart, [], _PosList, FamilySizeRest, _Primes) when FamilySizeRest <= 0 -> true;
 check_family_impl(_InvNumberPart, [], _PosList, 0, _Primes) -> true;
 check_family_impl(InvNumberPart, [Digit | DigitsRest], PosList, FamilySizeRest, Primes) ->
     Number = InvNumberPart + calc_number_part(Digit, PosList),
