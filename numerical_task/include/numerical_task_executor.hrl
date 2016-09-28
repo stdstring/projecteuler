@@ -1,7 +1,7 @@
 %% @author std-string
 
 %% in milliseconds
--define(CALC_WARN_TIME, 5 * 1000).
+-define(CALC_WARN_TIME, 30 * 1000).
 %% in milliseconds
 -define(CALC_MAX_TIME, 60 * 1000).
 
