@@ -52,6 +52,7 @@
 {'src/problem_056', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_058', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_059', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_060', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_061', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_062', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_064', [warnings_as_errors, {outdir, "ebin"}]}.
