@@ -54,6 +54,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 56. Powerful digit sum](https://projecteuler.net/problem=56)
 * [Problem 58. Spiral primes](https://projecteuler.net/problem=58)
 * [Problem 59. XOR decryption](https://projecteuler.net/problem=59)
+* [Problem 60. Prime pair sets](https://projecteuler.net/problem=60)
 * [Problem 61. Cyclical figurate numbers](https://projecteuler.net/problem=61)
 * [Problem 62. Cubic permutations](https://projecteuler.net/problem=62)
 * [Problem 64. Odd period square roots](https://projecteuler.net/problem=64)

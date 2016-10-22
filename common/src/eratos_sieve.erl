@@ -2,7 +2,7 @@
 
 -module(eratos_sieve).
 
--export([get_primes/1, calc_primes/1, get_sieve/1, calc_sieve/1, is_prime/2]).
+-export([get_primes/1, calc_primes/1, get_sieve/1, calc_sieve/1, is_prime/2, get_next_prime/2]).
 
 -include("primes_def.hrl").
 
@@ -37,6 +37,13 @@ is_prime(Number, _Sieve) when Number < 2 -> error(badarg);
 is_prime(2, _Sieve) -> true;
 is_prime(Number, _Sieve) when Number rem 2 == 0 -> false;
 is_prime(Number, Sieve) when Number rem 2 /= 0 -> array:get(calc_index(Number), Sieve).
+
+%%-spec get_next_prime(Prime :: 2.., Sieve :: sieve()) -> 2.. | 'undef'.
+-spec get_next_prime(Prime :: pos_integer(), Sieve :: sieve()) -> pos_integer() | 'undef'.
+get_next_prime(2, _Sieve) -> 3;
+get_next_prime(Prime, Sieve) ->
+    Index = calc_index(Prime),
+    get_next_prime(Sieve, Index + 1, array:size(Sieve)).
 
 %% ====================================================================
 %% Internal functions
@@ -97,4 +104,13 @@ find_next_prime(Sieve, Index, SieveSize) ->
     case array:get(Index, Sieve) of
         true -> Index;
         false -> find_next_prime(Sieve, Index + 1, SieveSize)
+    end.
+
+%%-spec get_next_prime(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer()) -> 2.. | 'undef'.
+-spec get_next_prime(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer()) -> pos_integer() | 'undef'.
+get_next_prime(_Sieve, Index, SieveSize) when Index >= SieveSize -> undef;
+get_next_prime(Sieve, Index, SieveSize) ->
+    case array:get(Index, Sieve) of
+        true -> calc_number(Index);
+        false -> get_next_prime(Sieve, Index + 1, SieveSize)
     end.
