@@ -44,6 +44,20 @@ is_prime_test_() ->
      {"check that 15 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(15, Sieve))},
      {"check processing of bad arguments", ?_assertError(badarg, eratos_sieve:is_prime(1, Sieve))}].
 
+get_next_prime_test_() ->
+    Sieve = eratos_sieve:get_sieve(30),
+    [{"next prime number for 2", ?_assertEqual(3, eratos_sieve:get_next_prime(2, Sieve))},
+     {"next prime number for 3", ?_assertEqual(5, eratos_sieve:get_next_prime(3, Sieve))},
+     {"next prime number for 4", ?_assertEqual(5, eratos_sieve:get_next_prime(4, Sieve))},
+     {"next prime number for 5", ?_assertEqual(7, eratos_sieve:get_next_prime(5, Sieve))},
+     {"next prime number for 7", ?_assertEqual(11, eratos_sieve:get_next_prime(7, Sieve))},
+     {"next prime number for 8", ?_assertEqual(11, eratos_sieve:get_next_prime(8, Sieve))},
+     {"next prime number for 9", ?_assertEqual(11, eratos_sieve:get_next_prime(9, Sieve))},
+     {"next prime number for 28", ?_assertEqual(29, eratos_sieve:get_next_prime(28, Sieve))},
+     {"next prime number for 29", ?_assertEqual(undef, eratos_sieve:get_next_prime(29, Sieve))},
+     {"next prime number for 30", ?_assertEqual(undef, eratos_sieve:get_next_prime(30, Sieve))},
+     {"next prime number for 100", ?_assertEqual(undef, eratos_sieve:get_next_prime(100, Sieve))}].
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
