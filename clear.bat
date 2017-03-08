@@ -1,3 +1,9 @@
-del common\ebin\*.* /Q
-del numerical_task\ebin\*.* /Q
-del project_euler\ebin\*.* /Q
+rmdir nif\bin /S /Q
+REM del common\ebin\*.* /Q
+rmdir common\ebin /S /Q
+REM del common_tests\ebin\*.* /Q
+rmdir common_tests\ebin /S /Q
+REM del numerical_task\ebin\*.* /Q
+rmdir numerical_task\ebin /S /Q
+REM del project_euler\ebin\*.* /Q
+rmdir project_euler\ebin /S /Q

@@ -2,4 +2,5 @@ common/ebin/*
 common_tests/ebin/*
 numerical_task/ebin/*
 project_euler/ebin/*
+nif/bin/*
 erl_crash.dump
