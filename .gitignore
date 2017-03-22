@@ -3,4 +3,5 @@ common_tests/ebin/*
 numerical_task/ebin/*
 project_euler/ebin/*
 nif/bin/*
+nif/make/*
 erl_crash.dump
