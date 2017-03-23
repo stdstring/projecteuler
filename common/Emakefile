@@ -4,6 +4,7 @@
 {'src/grid_helper', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/grid_path_searcher', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/load_utils', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/mutable_array', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/numbers', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/number_dividers', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/numerical_task_behaviour', [warnings_as_errors, {outdir, "ebin"}]}.
