@@ -7,4 +7,4 @@ cmake --build . --config Debug
 cd ..
 rmdir bin /S /Q
 mkdir bin
-copy make\bin\MutableArrayNif\Debug\*.dll bin\
+copy make\bin\MutableArrayNif\Debug\*.dll bin\ /Y

@@ -9,7 +9,10 @@
 %% ====================================================================
 
 -spec init() -> 'ok' | {'error', {Reason :: 'load_failed' | 'bad_lib' | 'load' | 'reload' | 'upgrade' | 'old_code', Text :: string()}}.
-init() -> erlang:load_nif("MutableArrayNif", 0).
+init() ->
+    ModulePath = code:which(?MODULE),
+    ModuleDir = filename:dirname(ModulePath),
+    erlang:load_nif(filename:join(ModuleDir, "MutableArrayNif"), 0).
 
 -spec create(Size :: integer(), DefaultValue :: binary()) -> binary().
 create(_Size, _DefaultValue) -> error(not_loaded).
