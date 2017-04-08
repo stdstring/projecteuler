@@ -20,20 +20,26 @@ get_primes_test_() ->
      create_get_primes_entry(?KNOWN_PRIME_TOP_BOUND),
      create_get_primes_entry(2 * ?KNOWN_PRIME_TOP_BOUND)].
 
-calc_sieve_test_() ->
-    [create_calc_sieve_entry(10, [2, 3, 5, 7]),
-     create_calc_sieve_entry(20, [2, 3, 5, 7, 11, 13, 17, 19]),
-     create_calc_sieve_entry(30, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29])].
+get_sieve_is_prime_test_() ->
+    create_is_prime_entries(eratos_sieve:get_sieve(100)).
 
-get_sieve_test_() ->
-    [create_get_sieve_entry(10),
-     create_get_sieve_entry(20),
-     create_get_sieve_entry(30),
-     create_get_sieve_entry(?KNOWN_PRIME_TOP_BOUND),
-     create_get_sieve_entry(2 * ?KNOWN_PRIME_TOP_BOUND)].
+calc_sieve_is_prime_test_() ->
+    create_is_prime_entries(eratos_sieve:calc_sieve(100)).
 
-is_prime_test_() ->
-    Sieve = eratos_sieve:get_sieve(100),
+get_sieve_get_next_prime_test_() ->
+    create_get_next_prime_entries(eratos_sieve:get_sieve(30)).
+
+calc_sieve_get_next_prime_test_() ->
+    create_get_next_prime_entries(eratos_sieve:calc_sieve(30)).
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+create_get_primes_entry(MaxNumber) ->
+    {lists:flatten(io_lib:format("primes below ~p", [MaxNumber])), ?_assertEqual(eratos_sieve:calc_primes(MaxNumber), eratos_sieve:get_primes(MaxNumber))}.
+
+create_is_prime_entries(Sieve) ->
     [{"check that 2 is prime number", ?_assertEqual(true, eratos_sieve:is_prime(2, Sieve))},
      {"check that 3 is prime number", ?_assertEqual(true, eratos_sieve:is_prime(3, Sieve))},
      {"check that 4 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(4, Sieve))},
@@ -44,8 +50,7 @@ is_prime_test_() ->
      {"check that 15 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(15, Sieve))},
      {"check processing of bad arguments", ?_assertError(badarg, eratos_sieve:is_prime(1, Sieve))}].
 
-get_next_prime_test_() ->
-    Sieve = eratos_sieve:get_sieve(30),
+create_get_next_prime_entries(Sieve) ->
     [{"next prime number for 2", ?_assertEqual(3, eratos_sieve:get_next_prime(2, Sieve))},
      {"next prime number for 3", ?_assertEqual(5, eratos_sieve:get_next_prime(3, Sieve))},
      {"next prime number for 4", ?_assertEqual(5, eratos_sieve:get_next_prime(4, Sieve))},
@@ -57,22 +62,3 @@ get_next_prime_test_() ->
      {"next prime number for 29", ?_assertEqual(undef, eratos_sieve:get_next_prime(29, Sieve))},
      {"next prime number for 30", ?_assertEqual(undef, eratos_sieve:get_next_prime(30, Sieve))},
      {"next prime number for 100", ?_assertEqual(undef, eratos_sieve:get_next_prime(100, Sieve))}].
-
-%% ====================================================================
-%% Internal functions
-%% ====================================================================
-
-create_get_primes_entry(MaxNumber) ->
-    {lists:flatten(io_lib:format("primes below ~p", [MaxNumber])), ?_assertEqual(eratos_sieve:calc_primes(MaxNumber), eratos_sieve:get_primes(MaxNumber))}.
-
-create_calc_sieve_entry(MaxNumber, [2 | Primes]) ->
-    SieveSize = case (MaxNumber rem 2) of
-        0 -> (MaxNumber div 2) - 1;
-        1 -> MaxNumber div 2
-    end,
-    SieveTemplate = array:map(fun(_Index, true) -> false end, array:new([{size, SieveSize}, {fixed, true}, {default, true}])),
-    ExpectedSieve = lists:foldl(fun(Prime, Sieve) -> array:set((Prime - 3) div 2, true, Sieve) end, SieveTemplate, Primes),
-    {lists:flatten(io_lib:format("sieve below ~p", [MaxNumber])), ?_assertEqual(ExpectedSieve, eratos_sieve:calc_sieve(MaxNumber))}.
-
-create_get_sieve_entry(MaxNumber) ->
-    {lists:flatten(io_lib:format("sieve below ~p", [MaxNumber])), ?_assertEqual(eratos_sieve:calc_sieve(MaxNumber), eratos_sieve:get_sieve(MaxNumber))}.

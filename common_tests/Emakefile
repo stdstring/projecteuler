@@ -4,7 +4,7 @@
 {'src/grid_helper_tests', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
 {'src/grid_path_searcher_tests', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
 {'src/load_utils_tests', [warnings_as_errors, {outdir, "ebin"}]}.
-{'src/mutable_array_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/mutable_uint8_array_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/number_dividers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pandigital_numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.

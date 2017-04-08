@@ -6,7 +6,7 @@
 
 -include("primes_def.hrl").
 
--type sieve() :: array:array(boolean()).
+-type sieve() :: mutable_uint8_array:mutable_uint8_array().
 
 %% ====================================================================
 %% API functions
@@ -18,32 +18,34 @@ get_primes(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
 get_primes(MaxNumber) -> calc_primes(MaxNumber).
 
 -spec calc_primes(MaxNumber :: pos_integer()) -> [pos_integer()].
-calc_primes(MaxNumber) -> calc_primes_impl(calc_sieve_size(MaxNumber)).
+calc_primes(MaxNumber) -> create_number_list(calc_sieve(MaxNumber)).
 
 -spec get_sieve(MaxNumber :: pos_integer()) -> sieve().
 get_sieve(MaxNumber) when MaxNumber =< ?KNOWN_PRIME_TOP_BOUND ->
-    [2 | Primes] = ?KNOWN_PRIMES,
+    [2 | Primes] = lists:takewhile(fun(Prime) -> Prime =< MaxNumber end, ?KNOWN_PRIMES),
     SieveSize = calc_sieve_size(MaxNumber),
-    InitSieve = array:new([{size, SieveSize}, {fixed, true}, {default, true}]),
-    fill_sieve_from_primes(0, InitSieve, MaxNumber, Primes);
+    InitSieve = mutable_uint8_array:create(SieveSize, 0),
+    lists:foldl(fun(Prime, Sieve) -> mutable_uint8_array:set(calc_index(Prime), 1, Sieve) end, InitSieve, Primes);
 get_sieve(MaxNumber) -> calc_sieve(MaxNumber).
 
 -spec calc_sieve(MaxNumber :: pos_integer()) -> sieve().
 calc_sieve(MaxNumber) -> create_sieve(calc_sieve_size(MaxNumber)).
 
-%%-spec is_prime(Number :: 2.., Sieve :: sieve()) -> boolean(). - not compiled
 -spec is_prime(Number :: pos_integer(), Sieve :: sieve()) -> boolean().
 is_prime(Number, _Sieve) when Number < 2 -> error(badarg);
 is_prime(2, _Sieve) -> true;
 is_prime(Number, _Sieve) when Number rem 2 == 0 -> false;
-is_prime(Number, Sieve) when Number rem 2 /= 0 -> array:get(calc_index(Number), Sieve).
+is_prime(Number, Sieve) when Number rem 2 /= 0 ->
+    case mutable_uint8_array:get(calc_index(Number), Sieve) of
+        0 -> false;
+        1 -> true
+    end.
 
-%%-spec get_next_prime(Prime :: 2.., Sieve :: sieve()) -> 2.. | 'undef'.
 -spec get_next_prime(Prime :: pos_integer(), Sieve :: sieve()) -> pos_integer() | 'undef'.
 get_next_prime(2, _Sieve) -> 3;
 get_next_prime(Prime, Sieve) ->
     Index = calc_index(Prime),
-    get_next_prime(Sieve, Index + 1, array:size(Sieve)).
+    get_next_prime(Index + 1, mutable_uint8_array:size(Sieve), Sieve).
 
 %% ====================================================================
 %% Internal functions
@@ -59,58 +61,47 @@ calc_number(Index) -> (Index * 2) + 3.
 -spec calc_index(Number :: pos_integer()) -> non_neg_integer().
 calc_index(Number) -> (Number - 3) div 2.
 
--spec calc_primes_impl(SieveSize :: pos_integer()) -> [pos_integer()].
-calc_primes_impl(SieveSize) -> create_number_list(create_sieve(SieveSize), 0, SieveSize, [2]).
+-spec create_number_list(Sieve :: sieve()) -> [pos_integer()].
+create_number_list(Sieve) -> create_number_list(0, mutable_uint8_array:size(Sieve), Sieve, [2]).
 
--spec create_number_list(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer(), Dest :: [pos_integer()]) -> [pos_integer()].
-create_number_list(_Sieve, SieveSize, SieveSize, Dest) -> lists:reverse(Dest);
-create_number_list(Sieve, Index, SieveSize, Dest) ->
-    case array:get(Index, Sieve) of
-        true -> create_number_list(Sieve, Index + 1, SieveSize, [calc_number(Index)] ++ Dest);
-        false -> create_number_list(Sieve, Index + 1, SieveSize, Dest)
-    end.
-
--spec fill_sieve_from_primes(Index :: non_neg_integer(), Sieve :: sieve(), MaxNumber :: pos_integer(), Primes :: [pos_integer()]) -> sieve().
-fill_sieve_from_primes(Index, Sieve, MaxNumber, Primes) ->
-    Number = calc_number(Index),
-    if
-        Number > MaxNumber -> Sieve;
-        Number =< MaxNumber ->
-            case Primes of
-                [] -> fill_sieve_from_primes(Index + 1, array:set(Index, false, Sieve), MaxNumber, []);
-                [Number | PrimesRest] -> fill_sieve_from_primes(Index + 1, Sieve, MaxNumber, PrimesRest);
-                _ -> fill_sieve_from_primes(Index + 1, array:set(Index, false, Sieve), MaxNumber, Primes)
-            end
+-spec create_number_list(Index :: non_neg_integer(), SieveSize :: pos_integer(), Sieve :: sieve(), Dest :: [pos_integer()]) -> [pos_integer()].
+create_number_list(SieveSize, SieveSize, _Sieve, Dest) -> lists:reverse(Dest);
+create_number_list(Index, SieveSize, Sieve, Dest) ->
+    case mutable_uint8_array:get(Index, Sieve) of
+        0 -> create_number_list(Index + 1, SieveSize, Sieve, Dest);
+        1 -> create_number_list(Index + 1, SieveSize, Sieve, [calc_number(Index)] ++ Dest)
     end.
 
 -spec create_sieve(SieveSize :: pos_integer()) -> sieve().
-create_sieve(SieveSize) -> process_iteration(array:new([{size, SieveSize}, {fixed, true}, {default, true}]), 0, SieveSize).
+create_sieve(SieveSize) ->
+    ok = mutable_uint8_array:init(),
+    Sieve = mutable_uint8_array:create(SieveSize, 1),
+    process_iteration(0, SieveSize, Sieve).
 
--spec process_iteration(Sieve :: sieve(), Index :: non_neg_integer() | 'not_found', SieveSize :: pos_integer()) -> sieve().
-process_iteration(Sieve, not_found, _SieveSize) -> Sieve;
-process_iteration(Sieve, Index, SieveSize) ->
+-spec process_iteration(Index :: non_neg_integer() | 'undef', SieveSize :: pos_integer(), Sieve :: sieve()) -> sieve().
+process_iteration(undef, _SieveSize, Sieve) -> Sieve;
+process_iteration(Index, SieveSize, Sieve) ->
     Number = calc_number(Index),
-    NewSieve = erase_multiple(Sieve, Number * Number, 2 * Number, SieveSize),
-    process_iteration(NewSieve, find_next_prime(Sieve, Index + 1, SieveSize), SieveSize).
+    NewSieve = erase_multiple(Number * Number, 2 * Number, SieveSize, Sieve),
+    process_iteration(find_next_prime_index(Index + 1, SieveSize, Sieve), SieveSize, NewSieve).
 
--spec erase_multiple(Sieve :: sieve(), Number :: pos_integer(), Delta :: pos_integer(), SieveSize :: pos_integer()) -> sieve().
-erase_multiple(Sieve, Number, _Delta, SieveSize) when Number >= (2 * SieveSize + 3) -> Sieve;
-erase_multiple(Sieve, Number, Delta, SieveSize) ->
-    erase_multiple(array:set(calc_index(Number), false, Sieve), Number + Delta, Delta, SieveSize).
+-spec erase_multiple(Number :: pos_integer(), Delta :: pos_integer(), SieveSize :: pos_integer(), Sieve :: sieve()) -> sieve().
+erase_multiple(Number, _Delta, SieveSize, Sieve) when Number >= (2 * SieveSize + 3) -> Sieve;
+erase_multiple(Number, Delta, SieveSize, Sieve) ->
+    erase_multiple(Number + Delta, Delta, SieveSize, mutable_uint8_array:set(calc_index(Number), 0, Sieve)).
 
--spec find_next_prime(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer()) -> non_neg_integer() | 'not_found'.
-find_next_prime(_Sieve, SieveSize, SieveSize) -> not_found;
-find_next_prime(Sieve, Index, SieveSize) ->
-    case array:get(Index, Sieve) of
-        true -> Index;
-        false -> find_next_prime(Sieve, Index + 1, SieveSize)
+-spec find_next_prime_index(Index :: non_neg_integer(), SieveSize :: pos_integer(), Sieve :: sieve()) -> non_neg_integer() | 'undef'.
+find_next_prime_index(SieveSize, SieveSize, _Sieve) -> undef;
+find_next_prime_index(Index, SieveSize, Sieve) ->
+    case mutable_uint8_array:get(Index, Sieve) of
+        0 -> find_next_prime_index(Index + 1, SieveSize, Sieve);
+        1 -> Index
     end.
 
-%%-spec get_next_prime(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer()) -> 2.. | 'undef'.
--spec get_next_prime(Sieve :: sieve(), Index :: non_neg_integer(), SieveSize :: pos_integer()) -> pos_integer() | 'undef'.
-get_next_prime(_Sieve, Index, SieveSize) when Index >= SieveSize -> undef;
-get_next_prime(Sieve, Index, SieveSize) ->
-    case array:get(Index, Sieve) of
-        true -> calc_number(Index);
-        false -> get_next_prime(Sieve, Index + 1, SieveSize)
+-spec get_next_prime(Index :: non_neg_integer(), SieveSize :: pos_integer(), Sieve :: sieve()) -> pos_integer() | 'undef'.
+get_next_prime(Index, SieveSize, _Sieve) when Index >= SieveSize -> undef;
+get_next_prime(Index, SieveSize, Sieve) ->
+    case mutable_uint8_array:get(Index, Sieve) of
+        0 -> get_next_prime(Index + 1, SieveSize, Sieve);
+        1 -> calc_number(Index)
     end.
