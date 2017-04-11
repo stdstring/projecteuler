@@ -11,8 +11,8 @@
 
 -behaviour(numerical_task_behaviour).
 
--define(XXX, 100000000).
--define(YYY, 1000000000).
+-define(BOTTOM_BORDER, 100000000).
+-define(TOP_BORDER, 1000000000).
 
 %% ====================================================================
 %% API functions
@@ -23,28 +23,40 @@ get_check_data() ->
 
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(none) -> process({1, 1, 2}, {?YYY, 1}).
+solve(none) -> process(1, 1, 2, {?TOP_BORDER, 1}).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
-process({Current, Prev, K}, {Base, Divider}) when Current =< ?XXX ->
-    Next = gen_next_fibonacci(Current, Prev),
-    process({Next, Current, K + 1}, {Base, Divider});
-process({Current, Prev, K}, {Base, Divider}) ->
-    Left = Current div Divider,
-    Right = Current rem ?YYY,
-    IsLeftPandigital = pandigital_numbers:is_pandigital(numbers:get_digits(Left)),
-    IsRightPandigital = pandigital_numbers:is_pandigital(numbers:get_digits(Right)),
-    if
-        IsLeftPandigital and IsRightPandigital -> K;
-        true ->
-            Next = gen_next_fibonacci(Current, Prev),
-            process({Next, Current, K + 1}, calc_base(Next, {Base, Divider}))
+-spec process(CurrentFib :: pos_integer(),
+              PrevFib :: pos_integer(),
+              FibNumber :: pos_integer(),
+              BorderData :: {TopBorder :: pos_integer(), Divider :: pos_integer()}) -> pos_integer().
+process(CurrentFib, PrevFib, FibNumber, {TopBorder, Divider}) when CurrentFib =< ?BOTTOM_BORDER ->
+    NextFib = gen_next_fibonacci(CurrentFib, PrevFib),
+    process(NextFib, CurrentFib, FibNumber + 1, {TopBorder, Divider});
+process(CurrentFib, PrevFib, FibNumber, {TopBorder, Divider}) ->
+    case check_number(CurrentFib, Divider) of
+        true -> FibNumber;
+        false ->
+            NextFib = gen_next_fibonacci(CurrentFib, PrevFib),
+            process(NextFib, CurrentFib, FibNumber + 1, calc_border_data(NextFib, TopBorder, Divider))
     end.
 
+-spec check_number(Number ::pos_integer(), Divider :: pos_integer()) -> boolean().
+check_number(Number, Divider) ->
+    Right = Number rem ?TOP_BORDER,
+    case pandigital_numbers:is_pandigital(numbers:get_digits(Right)) of
+        false -> false;
+        true ->
+            Left = Number div Divider,
+            pandigital_numbers:is_pandigital(numbers:get_digits(Left))
+    end.
+
+-spec gen_next_fibonacci(Current :: pos_integer(), Prev :: pos_integer()) -> pos_integer().
 gen_next_fibonacci(Current, Prev) -> Current + Prev.
 
-calc_base(Number, {Base, Divider}) when Number >= Base -> {Base * 10, Divider * 10};
-calc_base(_Number, {Base, Divider}) -> {Base, Divider}.
+-spec calc_border_data(Number :: pos_integer(), TopBorder :: pos_integer(), Divider :: pos_integer()) -> {TopBorder :: pos_integer(), Divider :: pos_integer()}.
+calc_border_data(Number, TopBorder, Divider) when Number >= TopBorder -> {TopBorder * 10, Divider * 10};
+calc_border_data(_Number, TopBorder, Divider) -> {TopBorder, Divider}.
