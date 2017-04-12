@@ -33,7 +33,7 @@
 {'src/problem_035', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_036', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_037', [warnings_as_errors, {outdir, "ebin"}]}.
-{'src/problem_038', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_038', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
 {'src/problem_039', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_040', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_041', [warnings_as_errors, {outdir, "ebin"}]}.

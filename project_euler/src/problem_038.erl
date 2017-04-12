@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% Take the number 192 and multiply it by each of 1, 2, and 3:
 %% 192 * 1 = 192
 %% 192 * 2 = 384
@@ -9,40 +11,55 @@
 -module(problem_038).
 -export([get_check_data/0, prepare_data/2, solve/1]).
 
+-include("pandigital_def.hrl").
+
 -behaviour(numerical_task_behaviour).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{none, 932718654}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(none) -> process_number(9, []).
+-spec solve(PreparedInput :: term()) -> term().
+solve(none) -> process_number(9, 0).
 
--spec process_number(Number :: pos_integer(), SavedDigits :: [0..9]) -> pos_integer().
-process_number(10000, SavedDigits) -> numbers:get_number(SavedDigits);
-process_number(1000, SavedDigits) -> process_number(9000, SavedDigits);
-process_number(100, SavedDigits) -> process_number(900, SavedDigits);
-process_number(10, SavedDigits) -> process_number(90, SavedDigits);
-process_number(Number, SavedDigits) ->
-    case process_number(Number, 1, [], 0) of
-        false -> process_number(Number + 1, SavedDigits);
-        {true, Digits} ->
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec process_number(Number :: pos_integer(), SavedResult :: non_neg_integer()) -> pos_integer().
+process_number(10000, SavedResult) -> SavedResult;
+process_number(1000, SavedResult) -> process_number(9000, SavedResult);
+process_number(100, SavedResult) -> process_number(900, SavedResult);
+process_number(10, SavedResult) -> process_number(90, SavedResult);
+process_number(Number, SavedResult) ->
+    case process_number(Number, 1, 0) of
+        false -> process_number(Number + 1, SavedResult);
+        {true, Result} ->
             if
-                SavedDigits < Digits -> process_number(Number + 1, Digits);
-                true -> process_number(Number + 1, SavedDigits)
+                SavedResult < Result ->  process_number(Number + 1, Result);
+                true -> process_number(Number + 1, SavedResult)
             end
     end.
 
--spec process_number(Number :: pos_integer(), Factor :: pos_integer(), Digits :: [0..9], DigitsCount :: non_neg_integer()) ->
-    {'true', Digits :: [0..9]} | 'false'.
-process_number(_Number, _Factor, _Digits, DigitsCount) when DigitsCount > 9 -> false;
-process_number(_Number, _Factor, Digits, DigitsCount) when DigitsCount == 9 ->
-    case pandigital_numbers:is_pandigital(Digits) of
-        true -> {true, Digits};
+-spec process_number(Number :: pos_integer(), Factor :: 1..9, Result :: non_neg_integer()) -> {'true', Result :: pos_integer()} | 'false'.
+process_number(_Number, _Factor, Result) when Result > ?PANDIGITAL9_MAX -> false;
+process_number(_Number, _Factor, Result) when (Result >= ?PANDIGITAL9_MIN) and (Result =< ?PANDIGITAL9_MAX) ->
+    case pandigital_numbers:is_pandigital(Result) of
+        true -> {true, Result};
         false -> false
     end;
-process_number(Number, Factor, Digits, DigitsCount) ->
-    Result = Number * Factor,
-    ResultDigits = numbers:get_digits(Result),
-    ResultDigitsCount = length(ResultDigits),
-    process_number(Number, Factor + 1, Digits ++ ResultDigits, DigitsCount + ResultDigitsCount).
+process_number(Number, Factor, Result) ->
+    Value = Number * Factor,
+    Multiplier = calc_multiplier(Value, 1),
+    process_number(Number, Factor + 1, Result * Multiplier + Value).
+
+-spec calc_multiplier(Value :: pos_integer(), Multiplier :: pos_integer()) -> pos_integer().
+calc_multiplier(Value, Multiplier) when Value < Multiplier -> Multiplier;
+calc_multiplier(Value, Multiplier) -> calc_multiplier(Value, Multiplier * 10).
