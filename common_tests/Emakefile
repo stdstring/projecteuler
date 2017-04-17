@@ -8,4 +8,5 @@
 {'src/number_dividers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pandigital_numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/pell_equation_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/permutations_tests', [warnings_as_errors, {outdir, "ebin"}]}.

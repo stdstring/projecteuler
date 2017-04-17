@@ -41,8 +41,49 @@
 %% x = p(r) and y = q(r) for r is even, no solution for r is odd
 -spec find_first_solution(D :: integer(), C :: integer()) -> solution() | 'undef' | no_return().
 find_first_solution(_D, C) when (C /= 1) and (C /= -1) -> error(not_supported);
+find_first_solution(D, _C) when D < 0 -> error(badarg);
 find_first_solution(D, C) ->
-    check_d_value(D),
+    case is_perfect_square(D) of
+        true -> undef;
+        false -> find_first_solution_impl(D, C)
+    end.
+
+%% Algorithm (from http://mathworld.wolfram.com/PellEquation.html):
+%% Given one solution (x,y)=(p,q) (which can be found as above), a whole family of solutions can be found by taking each side to the n-th power,
+%% x^2 - D * y^2= (p^2 - D * q^2)^n = 1.
+%% Factoring gives the following:
+%% (x + sqrt(D) * y) * (x - sqrt(D) * y) = (p + sqrt(D) * q)^n * (p - sqrt(D) * q)^n
+%% and
+%% x + sqrt(D) * y  = (p + sqrt(D) * q)^n
+%% x - sqrt(D) * y  = (p - sqrt(D) * q)^n,
+%% which gives the family of solutions
+%% x = ((p + q * sqrt(D))^n + (p - q * sqrt(D))^n) / 2
+%% y = ((p + q * sqrt(D))^n - (p - q * sqrt(D))^n) / (2 * sqrt(D)).
+%% These solutions also hold for x^2 - D * y^2 = -1, except that n can take on only odd values.
+-spec find_n_solution(FirstSolution :: solution(), D :: pos_integer(), C :: integer(), N :: pos_integer()) -> solution() | 'undef' | no_return().
+find_n_solution(_FirstSolution, _D, C, _N) when (C /= 1) and (C /= -1) -> error(not_supported);
+find_n_solution(_FirstSolution, _D, C, N) when (C == -1) and (N rem 2 /= 1) -> error(badarg);
+find_n_solution(_FirstSolution, D, _C, _N) when D < 0 -> error(badarg);
+find_n_solution(FirstSolution, D, _C, N) ->
+    case is_perfect_square(D) of
+        true -> undef;
+        false -> {find_x(FirstSolution, D, N), find_y(FirstSolution, D, N)}
+    end.
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+%% TODO (std_string) : move to another module
+-spec is_perfect_square(D :: integer()) -> boolean().
+is_perfect_square(D) ->
+    SqrtValue = math:sqrt(D),
+    BottomValue = trunc(SqrtValue),
+    TopValue = round(SqrtValue),
+    (BottomValue * BottomValue == D) or (TopValue * TopValue == D).
+
+-spec find_first_solution_impl(D :: integer(), C :: integer()) -> solution() | 'undef'.
+find_first_solution_impl(D, C) ->
     A0 = trunc(math:sqrt(D)),
     P0 = A0,
     Q0 = 1,
@@ -60,40 +101,6 @@ find_first_solution(D, C) ->
         (PrevIteration rem 2 == 0) and (C == -1) -> {PNPrev, QNPrev};
         (PrevIteration rem 2 == 1) and (C == 1) -> {PNPrev, QNPrev};
         (PrevIteration rem 2 == 0) and (C == 1) -> find_even_solution(D, A0, AN, {PN, PNPrev}, {QN, QNPrev}, PBigN, QBigN, Iteration, 2 * PrevIteration + 1)
-    end.
-
-%% Algorithm (from http://mathworld.wolfram.com/PellEquation.html):
-%% Given one solution (x,y)=(p,q) (which can be found as above), a whole family of solutions can be found by taking each side to the n-th power,
-%% x^2 - D * y^2= (p^2 - D * q^2)^n = 1.
-%% Factoring gives the following:
-%% (x + sqrt(D) * y) * (x - sqrt(D) * y) = (p + sqrt(D) * q)^n * (p - sqrt(D) * q)^n
-%% and
-%% x + sqrt(D) * y  = (p + sqrt(D) * q)^n
-%% x - sqrt(D) * y  = (p - sqrt(D) * q)^n,
-%% which gives the family of solutions
-%% x = ((p + q * sqrt(D))^n + (p - q * sqrt(D))^n) / 2
-%% y = ((p + q * sqrt(D))^n - (p - q * sqrt(D))^n) / (2 * sqrt(D)).
-%% These solutions also hold for x^2 - D * y^2 = -1, except that n can take on only odd values.
--spec find_n_solution(FirstSolution :: solution(), D :: pos_integer(), C :: integer(), N :: pos_integer()) -> solution() | no_return().
-find_n_solution(_FirstSolution, _D, C, _N) when (C /= 1) and (C /= -1) -> error(not_supported);
-find_n_solution(_FirstSolution, _D, C, N) when (C == -1) and (N rem 2 /= 1) -> error(badarg);
-find_n_solution(FirstSolution, D, _C, N) ->
-    check_d_value(D),
-    {find_x(FirstSolution, D, N), find_y(FirstSolution, D, N)}.
-
-%% ====================================================================
-%% Internal functions
-%% ====================================================================
-
--spec check_d_value(D :: integer()) -> 'ok' | no_return().
-check_d_value(D) when D =< 0 -> error(badarg);
-check_d_value(D) ->
-    SqrtValue = math:sqrt(D),
-    BottomValue = trunc(SqrtValue),
-    TopValue = round(SqrtValue),
-    if
-        (BottomValue * BottomValue == D) or (TopValue * TopValue == D) -> error(badarg);
-        true -> ok
     end.
 
 -spec find_period(D :: integer(),
