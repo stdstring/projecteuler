@@ -60,6 +60,20 @@ find_first_solution(D, C) ->
 %% x = ((p + q * sqrt(D))^n + (p - q * sqrt(D))^n) / 2
 %% y = ((p + q * sqrt(D))^n - (p - q * sqrt(D))^n) / (2 * sqrt(D)).
 %% These solutions also hold for x^2 - D * y^2 = -1, except that n can take on only odd values.
+%% Binomial theorem (from https://en.wikipedia.org/wiki/Binomial_theorem):
+%% (a + b)^n = C(0, n) * a^n + C(1, n) * a^(n-1) * b + ... + C(k, n) * a^(n-k) * b^k + ... + C(n, n) * b^n
+%% where C(k, n) = n! / (k! * (n - k)!) - Binomial coefficient
+%% (a + b)^n + (a - b)^n = C(0, n) * a^n + C(1, n) * a^(n-1) * b + C(2, n) * a^(n-2) * b^2 + ... + C(0, n) * a^n - C(1, n) * a^(n-1) * b + C(2, n) * a^(n-2) * b^2 + ... =
+%% 2 * C(0, n) * a^n  + 2 * C(2, n) * a^(n-2) * b^2 + ...
+%% (a + b)^n + (a - b)^n = C(0, n) * a^n + C(1, n) * a^(n-1) * b + C(2, n) * a^(n-2) * b^2 + ... - C(0, n) * a^n + C(1, n) * a^(n-1) * b - C(2, n) * a^(n-2) * b^2 + ... =
+%% 2 * C(1, n) * a^(n-1) * b + 2 * C(3, n) * a^(n-3) * b^3 + ...
+%% from this is following:
+%% x = ((p + q * sqrt(D))^n + (p - q * sqrt(D))^n) / 2 =
+%% (2 * C(0, n) * p^n  + 2 * C(2, n) * p^(n-2) * q^2 * D + ... + 2 * C(k, n) * p^(n-k) * q^k * D^(k/2) [k is even] + ...)/2 = 
+%% C(0, n) * p^n  + C(2, n) * p^(n-2) * q^2 * D + ... + C(k, n) * p^(n-k) * q^k * D^(k/2) [k is even] + ...
+%% y = ((p + q * sqrt(D))^n - (p - q * sqrt(D))^n) / (2 * sqrt(D)) =
+%% (2 * C(1, n) * p^(n-1) * q * D^(1/2) + 2 * C(3, n) * p^(n-3) * q^3 * D^(3/2) + ...) / (2 * sqrt(D)) =
+%% C(1, n) * p^(n-1) * q + 2 * C(3, n) * p^(n-3) * q^3 * D + ... + C(k, n) * p^(n-k) * q^k * D^((k-1)/2) [k is odd] + ...
 -spec find_n_solution(FirstSolution :: solution(), D :: pos_integer(), C :: integer(), N :: pos_integer()) -> solution() | 'undef' | no_return().
 find_n_solution(_FirstSolution, _D, C, _N) when (C /= 1) and (C /= -1) -> error(not_supported);
 find_n_solution(_FirstSolution, _D, C, N) when (C == -1) and (N rem 2 /= 1) -> error(badarg);
