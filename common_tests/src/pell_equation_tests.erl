@@ -8,7 +8,7 @@
 %% Test functions
 %% ====================================================================
 
-find_positive_first_solution_test_() ->
+find_positive_pell_equation_first_solution_test_() ->
     [create_find_first_solution_entry(1, 1, undef),
      create_find_first_solution_entry(2, 1, {3, 2}),
      create_find_first_solution_entry(3, 1, {2, 1}),
@@ -267,7 +267,38 @@ find_negative_pell_equation_first_solution_test_() ->
       create_find_first_solution_entry(126, -1, undef),
       create_find_first_solution_entry(127, -1, undef),
       create_find_first_solution_entry(128, -1, undef)].
-%% 122, 125, 130
+
+find_first_solution_errors_test_() ->
+    [{"Solution of the equation x^2 - 2 * y^2 = 2 isn't supported", ?_assertError(not_supported, pell_equation:find_first_solution(2, 2))},
+     {"Solution of the equation x^2 - 2 * y^2 = -2 isn't supported", ?_assertError(not_supported, pell_equation:find_first_solution(2, -2))},
+     {"D = -1 =< 0", ?_assertError(badarg, pell_equation:find_first_solution(-1, 1))},
+     {"D = 0 =< 0", ?_assertError(badarg, pell_equation:find_first_solution(0, 1))}].
+
+find_positive_pell_equation_n_solution_test_() ->
+    [create_find_n_solution_entry(7, 1, {8, 3}, 1, {8, 3}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 2, {127, 48}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 3, {2024, 765}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 4, {32257, 12192}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 5, {514088, 194307}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 6, {8193151, 3096720}),
+     create_find_n_solution_entry(7, 1, {8, 3}, 7, {130576328, 49353213}),
+     create_find_n_solution_entry(2, 1, {3, 2}, 1, {3, 2}),
+     create_find_n_solution_entry(2, 1, {3, 2}, 2, {17, 12}),
+     create_find_n_solution_entry(2, 1, {3, 2}, 3, {99, 70}),
+     create_find_n_solution_entry(2, 1, {3, 2}, 4, {577, 408})].
+
+find_negative_pell_equation_n_solution_test_() ->
+    [create_find_n_solution_entry(2, -1, {1, 1}, 1, {1, 1}),
+     create_find_n_solution_entry(2, -1, {1, 1}, 3, {7, 5}),
+     create_find_n_solution_entry(2, -1, {1, 1}, 5, {41, 29}),
+     create_find_n_solution_entry(2, -1, {1, 1}, 7, {239, 169})].
+
+find_n_solution_errors_test_() ->
+    [{"Solution of the equation x^2 - 2 * y^2 = 2 isn't supported", ?_assertError(not_supported, pell_equation:find_n_solution({1, 1}, 2, 2, 1))},
+     {"Solution of the equation x^2 - 2 * y^2 = -2 isn't supported", ?_assertError(not_supported, pell_equation:find_n_solution({1, 1}, 2, 2, 1))},
+     {"D = -1 =< 0", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, -1, 1, 1))},
+     {"D = 0 =< 0", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, 0, 1, 1))},
+     {"For negative pell equation (x^2 - D * y^2 = -1), N must be odd", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, 2, -1, 2))}].
 
 %% ====================================================================
 %% Internal functions
@@ -276,3 +307,7 @@ find_negative_pell_equation_first_solution_test_() ->
 create_find_first_solution_entry(D, C, Expected) ->
     Description = lists:flatten(io_lib:format("first solution of x^2 - ~p * y^2 = ~p", [D, C])),
     {Description, ?_assertEqual(Expected, pell_equation:find_first_solution(D, C))}.
+
+create_find_n_solution_entry(D, C, FirstSolution, N, Expected) ->
+    Description = lists:flatten(io_lib:format("~p-th solution of x^2 - ~p * y^2 = ~p", [N, D, C])),
+    {Description, ?_assertEqual(Expected, pell_equation:find_n_solution(FirstSolution, D, C, N))}.

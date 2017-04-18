@@ -41,7 +41,7 @@
 %% x = p(r) and y = q(r) for r is even, no solution for r is odd
 -spec find_first_solution(D :: integer(), C :: integer()) -> solution() | 'undef' | no_return().
 find_first_solution(_D, C) when (C /= 1) and (C /= -1) -> error(not_supported);
-find_first_solution(D, _C) when D < 0 -> error(badarg);
+find_first_solution(D, _C) when D =< 0 -> error(badarg);
 find_first_solution(D, C) ->
     case is_perfect_square(D) of
         true -> undef;
@@ -77,7 +77,7 @@ find_first_solution(D, C) ->
 -spec find_n_solution(FirstSolution :: solution(), D :: pos_integer(), C :: integer(), N :: pos_integer()) -> solution() | 'undef' | no_return().
 find_n_solution(_FirstSolution, _D, C, _N) when (C /= 1) and (C /= -1) -> error(not_supported);
 find_n_solution(_FirstSolution, _D, C, N) when (C == -1) and (N rem 2 /= 1) -> error(badarg);
-find_n_solution(_FirstSolution, D, _C, _N) when D < 0 -> error(badarg);
+find_n_solution(_FirstSolution, D, _C, _N) when D =< 0 -> error(badarg);
 find_n_solution(FirstSolution, D, _C, N) ->
     case is_perfect_square(D) of
         true -> undef;
