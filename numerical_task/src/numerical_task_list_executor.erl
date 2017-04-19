@@ -59,8 +59,8 @@ process_tasks(ModulePath, [ModuleDef | ModuleDefRest], DefaultTimeThresholds, Re
 -spec process_task(ModulePath :: string(), ModuleDef :: module_def(), DefaultTimeThresholds :: #time_thresholds{}) -> [result_type()].
 process_task(ModulePath, {ModuleName, AttentionTime, WarningTime, MaxTime}, _DefaultTimeThresholds) ->
     TimeThresholds = #time_thresholds{attention = AttentionTime, warning = WarningTime, max = MaxTime},
-    numerical_task_executor:process(ModuleName, TimeThresholds, ModulePath);
-process_task(ModulePath, ModuleName, DefaultTimeThresholds) -> numerical_task_executor:process(ModuleName, DefaultTimeThresholds, ModulePath).
+    numerical_task_executor:process(ModuleName, ModulePath, TimeThresholds);
+process_task(ModulePath, ModuleName, DefaultTimeThresholds) -> numerical_task_executor:process(ModuleName, ModulePath, DefaultTimeThresholds).
 
 -spec process_results(Header :: string(), Results :: [result_type()]) -> 'ok'.
 process_results(_Header, []) -> ok;

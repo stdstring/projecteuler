@@ -10,18 +10,18 @@
 %% API functions
 %% ====================================================================
 
--spec process(ModuleName :: atom(), TimeThresholds :: #time_thresholds{}, ModuleSourceDir :: string()) -> [result_type()].
-process(ModuleName, TimeThresholds, ModuleSourceDir) ->
+-spec process(ModuleName :: atom(), ModuleSourceDir :: string(), TimeThresholds :: #time_thresholds{}) -> [result_type()].
+process(ModuleName, ModuleSourceDir, TimeThresholds) ->
     ExpectedResults = ModuleName:get_check_data(),
-    ProcessFun = fun({Input, Expected}) -> process(ModuleName, TimeThresholds, ModuleSourceDir, Input, Expected) end,
+    ProcessFun = fun({Input, Expected}) -> process(ModuleName, ModuleSourceDir, TimeThresholds, Input, Expected) end,
     lists:map(ProcessFun, ExpectedResults).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
--spec process(ModuleName :: atom(), TimeThresholds :: #time_thresholds{}, ModuleSourceDir :: string(), Input :: term(), Expected :: term()) -> result_type().
-process(ModuleName, TimeThresholds, ModuleSourceDir, Input, Expected) ->
+-spec process(ModuleName :: atom(), ModuleSourceDir :: string(), TimeThresholds :: #time_thresholds{}, Input :: term(), Expected :: term()) -> result_type().
+process(ModuleName, ModuleSourceDir, TimeThresholds, Input, Expected) ->
     PreparedData = ModuleName:prepare_data(ModuleSourceDir, Input),
     try timer:tc(ModuleName, solve, [PreparedData]) of
         {TimerValue, Actual} ->
