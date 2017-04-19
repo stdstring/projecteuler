@@ -1,7 +1,7 @@
 %% @author std-string
 
 %% in milliseconds
--define(CALC_ATTENTION_TIME, 1 * 1000).
+-define(CALC_ATTENTION_TIME, 2 * 1000).
 %% in milliseconds
 -define(CALC_WARNING_TIME, 30 * 1000).
 %% in milliseconds
