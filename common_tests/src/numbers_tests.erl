@@ -1,6 +1,12 @@
+%% @author std-string
+
 -module(numbers_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 power_test_() ->
     [{"2.0^2", ?_assertError(function_clause, numbers:power(2.0, 2))},
@@ -58,3 +64,7 @@ get_number_error_test_() ->
     [{"get number for base < 2", ?_assertThrow(badarg, numbers:get_number([0], 1))},
      {"get number for base > 10", ?_assertThrow(notsup, numbers:get_number([0], 11))},
      {"get number for incorrect digit", ?_assertThrow(badarg, numbers:get_number([8], 2))}].
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================

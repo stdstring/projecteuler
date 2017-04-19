@@ -1,6 +1,12 @@
+%% @author std-string
+
 -module(pandigital_numbers_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 is_pandigital2_test_() ->
     [{"check before 12", ?_assertNot(pandigital_numbers:is_pandigital(10))},
@@ -88,3 +94,7 @@ is_pandigital10_test_() ->
 is_pandigital_other_test_() ->
     [{"check 1", ?_assertNot(pandigital_numbers:is_pandigital(1))},
      {"check 12345678901", ?_assertNot(pandigital_numbers:is_pandigital(12345678901))}].
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================

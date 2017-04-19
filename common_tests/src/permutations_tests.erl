@@ -1,8 +1,14 @@
+%% @author std-string
+
 -module(permutations_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
 -define(ALPHABET_09, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 get_permutation_test_() ->
     [{"get 0 permutation for 012", ?_assertEqual([0, 1, 2], permutations:get_permutation(0, array:from_list([0, 1, 2])))},
@@ -25,3 +31,7 @@ get_lexographic_number_test_() ->
      {"get lexographic number for acb", ?_assertEqual(1, permutations:get_lexographic_number([a, c, b], array:from_list([a, b, c])))},
      {"get lexographic number for cab", ?_assertEqual(4, permutations:get_lexographic_number([c, a, b], array:from_list([a, b, c])))},
      {"try get lexographic number for 002", ?_assertThrow(badarg, permutations:get_lexographic_number([0, 0, 2], array:from_list([0, 1, 2])))}].
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================

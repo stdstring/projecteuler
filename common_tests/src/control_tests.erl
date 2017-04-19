@@ -1,6 +1,12 @@
+%% @author std-string
+
 -module(control_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 for_count_test_() ->
     CollectFun = fun(Index, Acc) -> Acc ++ [Index] end,
@@ -27,3 +33,7 @@ for_from_to_step_test_() ->
      {"collect indices from 2 to 4 step 1", ?_assertEqual([2, 3, 4], control:for(2, 4, 1, [], CollectFun))},
      {"collect indices from 2 to 4 step 3", ?_assertEqual([2], control:for(2, 4, 3, [], CollectFun))},
      {"collect indices from 2 to 6 step 3", ?_assertEqual([2, 5], control:for(2, 6, 3, [], CollectFun))}].
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================

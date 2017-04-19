@@ -1,8 +1,14 @@
+%% @author std-string
+
 -module(load_utils_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
 -define(SOURCE, "ebin\\src").
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 read_erlang_term_test_() ->
     [success_read_erlang_term_entry("{a, 4}.", "read {a, 4}", {a, 4}),
@@ -29,6 +35,10 @@ read_number_table_test_() ->
 read_from_file_test_() ->
     [success_read_from_file_entry("", "read empty source", 0),
      success_read_from_file_entry("abc", "read nonempty source", 3)].
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 prepare_source(SourceData) ->
     AbsFilename = filename:absname(?SOURCE),

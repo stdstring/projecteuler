@@ -1,3 +1,5 @@
+%% @author std-string
+
 -module(eratos_sieve_tests).
 
 -include_lib("eunit/include/eunit.hrl").
