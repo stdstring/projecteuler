@@ -78,4 +78,5 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 102. Triangle containment](https://projecteuler.net/problem=102)
 * [Problem 104. Pandigital Fibonacci ends](https://projecteuler.net/problem=104)
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
+* [Problem 187. Semiprimes](https://projecteuler.net/problem=187)
 * [Problem 206. Concealed Square](https://projecteuler.net/problem=206)
