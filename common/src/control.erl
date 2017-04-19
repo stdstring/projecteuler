@@ -1,5 +1,11 @@
+%% @author std-string
+
 -module(control).
 -export([for/3, for/4, for/5]).
+
+%% ====================================================================
+%% API functions
+%% ====================================================================
 
 %% 0-based index
 -spec for(Count :: non_neg_integer(),
@@ -22,6 +28,10 @@ for(From, To, State, IterationFun) -> for_impl(From, To, 1, State, IterationFun)
           IterationFun :: fun((non_neg_integer(), term()) -> term())) -> term().
 for(From, To, Step, State, IterationFun) -> for_impl(From, To, Step, State, IterationFun).
 
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
 -spec for_impl(Index :: non_neg_integer(),
                To :: non_neg_integer(),
                Step :: non_neg_integer(),
@@ -29,4 +39,4 @@ for(From, To, Step, State, IterationFun) -> for_impl(From, To, Step, State, Iter
                IterationFun :: fun((non_neg_integer(), term()) -> term())) -> term().
 for_impl(Index, To, _Step, State, _IterationFun) when Index > To -> State;
 for_impl(Index, To, Step, State, IterationFun) ->
-    for_impl(Index + Step, To, Step, IterationFun(Index, State), IterationFun).
+     for_impl(Index + Step, To, Step, IterationFun(Index, State), IterationFun).
