@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% Find the greatest product of five consecutive digits in the 1000-digit number.
 %%
 %% 73167176531330624919225119674426574742355349194934
@@ -26,25 +28,46 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type digit() :: 0..9.
+-type digits() :: [digit()].
+
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{{"problem_008.dat", 5}, 40824}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, {Filename, Count}) ->
     {ok, BinaryData} = file:read_file(filename:join(ModuleSourceDir, Filename)),
     Digits = lists:map(fun(Char) -> Char - $0 end, binary_to_list(BinaryData)),
     {Digits, Count}.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({Digits, Count}) -> find_max_product(Digits, Count).
 
-find_max_product(NumberList, Count) -> find_max_product(NumberList, 1, Count, length(NumberList), 0).
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
-find_max_product(_NumberList, Index, Count, NumbersCount, MaxProduct) when Index + Count > NumbersCount -> MaxProduct;
-find_max_product([_Number | NumberRest] = NumberList, Index, Count, NumbersCount, MaxProduct) ->
-    PretenderProduct = calc_product(NumberList, Count),
+-spec find_max_product(Digits :: digits(), Count :: pos_integer()) -> non_neg_integer().
+find_max_product(Digits, Count) -> find_max_product(Digits, 1, Count, length(Digits), 0).
+
+-spec find_max_product(Digits :: digits(),
+                       Index :: pos_integer(),
+                       Count :: pos_integer(),
+                       Size :: pos_integer(),
+                       MaxProduct :: non_neg_integer()) -> non_neg_integer().
+find_max_product(_Digits, Index, Count, Size, MaxProduct) when Index + Count > Size -> MaxProduct;
+find_max_product([_Digit | DigitsRest] = Digits, Index, Count, Size, MaxProduct) ->
+    PretenderProduct = calc_product(Digits, Count),
     if
-        PretenderProduct > MaxProduct -> find_max_product(NumberRest, Index + 1, Count, NumbersCount, PretenderProduct);
-        true -> find_max_product(NumberRest, Index + 1, Count, NumbersCount, MaxProduct)
+        PretenderProduct > MaxProduct -> find_max_product(DigitsRest, Index + 1, Count, Size, PretenderProduct);
+        true -> find_max_product(DigitsRest, Index + 1, Count, Size, MaxProduct)
     end.
 
-calc_product(NumberList, Count) ->
-    lists:foldl(fun(Number, Product) -> Number * Product end, 1, lists:sublist(NumberList, Count)).
+-spec calc_product(Digits :: digits(), Count :: pos_integer()) -> non_neg_integer().
+calc_product(Digits, Count) ->
+    lists:foldl(fun(Digit, Product) -> Digit * Product end, 1, lists:sublist(Digits, Count)).
