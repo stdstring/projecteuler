@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% By starting at the top of the triangle below and moving to adjacent numbers on the row below,
 %% the maximum total from top to bottom is 23.
 %%    3
@@ -19,12 +21,15 @@
 %% API functions
 %% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{"problem_018.dat", 1074}, {"problem_067.dat", 7273}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_number_table(filename:join(ModuleSourceDir, Filename), " ").
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(Data) ->
     RowCount = length(Data),
     Grid = fill(Data, 1, 1, grid_helper:create(RowCount, RowCount, undef)),
