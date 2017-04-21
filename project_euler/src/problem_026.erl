@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
 %% 1/2 = 0.5
 %% 1/3 = 0.(3)
@@ -16,9 +18,15 @@
 
 -behaviour(numerical_task_behaviour).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{10, 7}, {1000, 983}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 %% Solution:
@@ -27,9 +35,14 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 %% For number N : 10^n < N < 10^(n + 1) we can state the following:
 %% Rem1 = 10^(n + 1) rem N, Rem2 = 10^(n + 2) rem N, ...Remp = 10^(n + Lp) rem N, RemC1 = 10^(n + Lp + 1) rem N, ..., RemCN = 10^(n + Lp + Lc) rem N
 %% Rem1 /= Rem2 /= ..., RemC1 == RemCn, Lp + Lc < = N
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxDenominator) ->
     {Number, _CycleLength} = process_numbers(MaxDenominator, 10, {1, 0}),
     Number.
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 -spec process_numbers(Number :: pos_integer(), Numerator :: pos_integer(), PrevValue :: {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}) ->
     {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}.

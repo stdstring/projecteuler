@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% A perfect number is a number for which the sum of its proper divisors is exactly equal to the number.
 %% For example, the sum of the proper divisors of 28 would be 1 + 2 + 4 + 7 + 14 = 28, which means that 28 is a perfect number.
 %% A number n is called deficient if the sum of its proper divisors is less than n and it is called abundant if this sum exceeds n.
@@ -14,16 +16,27 @@
 -define(INF, 12).
 -define(SUP, 28123).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{none, 4179871}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     AbundantNumbers = prepare_search(?INF, []),
     AbundantNumbersSet = sets:from_list(AbundantNumbers),
     Result = process_number(1, AbundantNumbers, AbundantNumbersSet, []),
     lists:sum(Result).
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 process_number(Number, _AbundantNumbers, _AbundantNumbersSet, Dest) when Number > ?SUP -> Dest;
 process_number(Number, AbundantNumbers, AbundantNumbersSet, Dest) ->
