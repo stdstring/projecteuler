@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% Let d(n) be defined as the sum of proper divisors of n (numbers less than n which divide evenly into n).
 %% If d(a) = b and d(b) = a, where a != b, then a and b are an amicable pair and each of a and b are called amicable numbers.
 %% For example, the proper divisors of 220 are 1, 2, 4, 5, 10, 11, 20, 22, 44, 55 and 110; therefore d(220) = 284.
@@ -9,11 +11,20 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type storage() :: array:array(DividersSum :: pos_integer()).
+
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{10000 - 1, 31626}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxNumber) ->
     DividerSumStorage = prepare_dividers_sum(MaxNumber),
     IterationFun = fun(Number, NumberSum) ->
@@ -26,7 +37,13 @@ solve(MaxNumber) ->
     end,
     control:for(1, MaxNumber, 0, IterationFun).
 
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec get_number_dividers_sum(Number :: pos_integer(), _MaxNumber :: pos_integer(), DividerSumStorage :: storage()) -> pos_integer().
 get_number_dividers_sum(Number, MaxNumber, _DividerSumStorage) when Number > MaxNumber -> 0;
 get_number_dividers_sum(Number, _MaxNumber, DividerSumStorage) -> array:get(Number - 1, DividerSumStorage).
 
+-spec prepare_dividers_sum(MaxNumber :: pos_integer()) -> storage().
 prepare_dividers_sum(MaxNumber) -> array:from_list([1] ++ [lists:sum(number_dividers:get_dividers(Number)) - Number || Number <- lists:seq(2, MaxNumber)]).
