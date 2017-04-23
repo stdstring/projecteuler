@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
 %% The product 7254 is unusual, as the identity, 39 × 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
 %% Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
@@ -8,16 +10,25 @@
 
 -behaviour(numerical_task_behaviour).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{none, 45228}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(none) ->
-    lists:sum(sets:to_list(process_number())).
+-spec solve(PreparedInput :: term()) -> term().
+solve(none) -> lists:sum(sets:to_list(process_number())).
 
-process_number() ->
-    process_number([1, 2, 3, 4], sets:new()).
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+process_number() -> process_number([1, 2, 3, 4], sets:new()).
 
 process_number(ResultProbe, Storage) ->
     case choose_result_number(ResultProbe) of
