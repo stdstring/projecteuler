@@ -15,11 +15,14 @@
 %% API functions
 %% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() ->
     [{{10, [1, 2, 5]}, 10}, {{200, [1, 2, 5, 10, 20, 50, 100, 200]}, 73682}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({Sum, AvailableCoins}) ->
     SortedCoins = lists:sort(AvailableCoins),
     WayStorage = calc_ways(Sum, SortedCoins),
@@ -29,7 +32,7 @@ solve({Sum, AvailableCoins}) ->
 %% Internal functions
 %% ====================================================================
 
-%% TODO (std_string) : move into common libs
+%% TODO (std_string) : move into common libs + add description of algorithm
 calc_ways(MaxNumber, [FirstItem | _] = Items) ->
     WayStorage = array:new([{size, MaxNumber + 1}, {fixed, true}, {default, 0}]),
     calc_ways(FirstItem, MaxNumber, Items, array:set(0, 1, WayStorage)).
