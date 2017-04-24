@@ -18,16 +18,20 @@
  %% TODO (std_string) : think about this top border
 -define(MAX_NUMBER, 10000).
 
--type storage_type() :: array:array('prime' | 'processed' | 'undef').
+-type squares() :: [Square :: pos_integer()].
+-type storage() :: array:array('prime' | 'processed' | 'undef').
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() -> [{none, 5777}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     [2 | OddSieve] = eratos_sieve: get_primes(?MAX_NUMBER),
     %% 1 - first odd number
@@ -41,12 +45,12 @@ solve(none) ->
 %% Internal functions
 %% ====================================================================
 
--spec generate_square_list(Number :: pos_integer(), SquareList :: [pos_integer()]) -> [pos_integer()].
+-spec generate_square_list(Number :: pos_integer(), SquareList :: squares()) -> squares().
 generate_square_list(Number, SquareList) when (Number * Number) > ?MAX_NUMBER -> lists:reverse(SquareList);
 generate_square_list(Number, SquareList) ->
     generate_square_list(Number + 1, [Number * Number] ++ SquareList).
 
--spec process_number(Number :: pos_integer(), OddStorage :: storage_type(), SquareList :: [pos_integer()]) -> pos_integer() | no_return().
+-spec process_number(Number :: pos_integer(), OddStorage :: storage(), SquareList :: squares()) -> pos_integer() | no_return().
 process_number(Number, _OddStorage, _SquareList) when Number > ?MAX_NUMBER -> error(logic_error);
 process_number(Number, OddStorage, SquareList) ->
     Index = (Number - 3) div 2,
@@ -56,7 +60,7 @@ process_number(Number, OddStorage, SquareList) ->
         prime -> process_number(Number + 2, process_prime(Number, OddStorage, SquareList), SquareList)
     end.
 
--spec process_prime(Prime :: pos_integer(), OddStorage :: storage_type(), SquareList :: [pos_integer()]) -> storage_type().
+-spec process_prime(Prime :: pos_integer(), OddStorage :: storage(), SquareList :: squares()) -> storage().
 process_prime(Prime, OddStorage, [SquareNumber | _SquareListRest]) when (Prime + 2 * SquareNumber) > ?MAX_NUMBER -> OddStorage;
 process_prime(Prime, OddStorage, [SquareNumber | SquareListRest]) ->
     Number = Prime + 2 * SquareNumber,
