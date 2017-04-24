@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% An irrational decimal fraction is created by concatenating the positive integers:
 %% 0.123456789101112131415161718192021...
 %% It can be seen that the 12th digit of the fractional part is 1.
@@ -9,22 +11,46 @@
 
 -behaviour(numerical_task_behaviour).
 
-get_check_data() ->
-    [{none, 210}].
+%% TODO (std_string) : move into common
+-type digit() :: 0..9.
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 210}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(none) ->
-    calculate_digit(1) * calculate_digit(10) * calculate_digit(100) * calculate_digit(1000) * calculate_digit(10000) * calculate_digit(100000) * calculate_digit(1000000).
+-spec solve(PreparedInput :: term()) -> term().
+solve(none) -> calculate_digit(1) *
+               calculate_digit(10) *
+               calculate_digit(100) *
+               calculate_digit(1000) *
+               calculate_digit(10000) *
+               calculate_digit(100000) *
+               calculate_digit(1000000).
 
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec calculate_digit(Number :: pos_integer()) -> digit().
 calculate_digit(Number) -> calculate_digit(Number, 1, 9, 1).
 
+-spec calculate_digit(Number :: pos_integer(),
+                      RangeStart :: pos_integer(),
+                      RangeCount :: pos_integer(),
+                      IntegerLength :: pos_integer()) -> digit().
 calculate_digit(Number, RangeStart, RangeCount, IntegerLength) when Number > RangeCount * IntegerLength ->
     calculate_digit(Number - RangeCount * IntegerLength, RangeStart * 10, RangeCount * 10, IntegerLength + 1);
 calculate_digit(Number, 1, 9, 1) -> Number;
 calculate_digit(Number, RangeStart, _, IntegerLength) ->
     Integer = RangeStart + (Number div IntegerLength),
-    LeftwardDigitIndex = (Number rem IntegerLength) - 1,
-    get_digit(Integer, IntegerLength - LeftwardDigitIndex).
+    LeftwardDigitPosition = (Number rem IntegerLength) - 1,
+    get_digit(Integer, IntegerLength - LeftwardDigitPosition).
 
-get_digit(Number, DigitIndex) -> (Number rem numbers:power(10, DigitIndex)) div numbers:power(10, DigitIndex-1).
+-spec get_digit(Number :: pos_integer(), DigitPosition :: pos_integer()) -> digit().
+get_digit(Number, DigitPosition) -> (Number rem numbers:power(10, DigitPosition)) div numbers:power(10, DigitPosition - 1).
