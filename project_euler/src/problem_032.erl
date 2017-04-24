@@ -24,7 +24,7 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 solve(none) -> lists:sum(sets:to_list(process_number())).
 
 %% ====================================================================
-%% API functions
+%% Internal functions
 %% ====================================================================
 
 process_number() -> process_number([1, 2, 3, 4], sets:new()).
