@@ -10,8 +10,10 @@
 %% A number that never forms a palindrome through the reverse and add process is called a Lychrel number.
 %% Due to the theoretical nature of these numbers, and for the purpose of this problem, we shall assume that a number is Lychrel until proven otherwise.
 %% In addition you are given that for every number below ten-thousand,
-%% it will either (i) become a palindrome in less than fifty iterations, or, (ii) no one, with all the computing power that exists, has managed so far to map it to a palindrome.
-%% In fact, 10677 is the first number to be shown to require over fifty iterations before producing a palindrome: 4668731596684224866951378664 (53 iterations, 28-digits).
+%% it will either (i) become a palindrome in less than fifty iterations, or,
+%% (ii) no one, with all the computing power that exists, has managed so far to map it to a palindrome.
+%% In fact, 10677 is the first number to be shown to require over fifty iterations before producing a palindrome:
+%% 4668731596684224866951378664 (53 iterations, 28-digits).
 %% Surprisingly, there are palindromic numbers that are themselves Lychrel numbers; the first example is 4994.
 %% How many Lychrel numbers are there below ten-thousand?
 
@@ -22,17 +24,21 @@
 
 -define(MAX_ITERATION, 50).
 
--type storage_type() :: array:array('true' | 'false' | 'undef').
+-type result_storage() :: array:array('true' | 'false' | 'undef').
+-type search_result() :: {'true', NextNumber :: pos_integer()} | 'false'.
+-type process_chain_result() :: {Result :: boolean(), Chain :: [Number :: pos_integer()]}.
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{10000, 249}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{10000, 249}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxNumber) ->
     Storage = process_number(1, MaxNumber, array:new([{size, MaxNumber}, {fixed, true}, {default, undef}])),
     length(lists:filter(fun(Value) -> Value == false end, array:to_list(Storage))).
@@ -41,7 +47,7 @@ solve(MaxNumber) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: storage_type()) -> storage_type().
+-spec process_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: result_storage()) -> result_storage().
 process_number(Number, MaxNumber, Storage) ->
     {Result, Chain} = process_chain(Number, [], 0),
     NewStorage = collect_result(Chain, Result, MaxNumber, Storage),
@@ -50,12 +56,11 @@ process_number(Number, MaxNumber, Storage) ->
         {true, NextNumber} -> process_number(NextNumber, MaxNumber, NewStorage)
     end.
 
--spec find_next_number(Number :: pos_integer(), Storage :: storage_type()) -> {'true', NextNumber :: pos_integer()} | 'false'.
+-spec find_next_number(Number :: pos_integer(), Storage :: result_storage()) -> search_result().
 find_next_number(Number, Storage) ->
     find_next_number(Number - 1, array:size(Storage), Storage).
 
--spec find_next_number(Index :: non_neg_integer(), Count :: pos_integer(), Storage :: storage_type()) ->
-     {'true', NextNumber :: pos_integer()} | 'false'.
+-spec find_next_number(Index :: non_neg_integer(), Count :: pos_integer(), Storage :: result_storage()) -> search_result().
 find_next_number(Count, Count, _Storage) -> false;
 find_next_number(Index, Count, Storage) ->
     case array:get(Index, Storage) of
@@ -63,8 +68,7 @@ find_next_number(Index, Count, Storage) ->
         _Other -> find_next_number(Index + 1, Count, Storage)
     end.
 
--spec process_chain(Number :: pos_integer(), Chain :: [pos_integer()], Iteration :: non_neg_integer()) ->
-    {Result :: boolean(), Chain :: [pos_integer()]}.
+-spec process_chain(Number :: pos_integer(), Chain :: [pos_integer()], Iteration :: non_neg_integer()) -> process_chain_result().
 process_chain(_Number, Chain, ?MAX_ITERATION) -> {false, lists:reverse(Chain)};
 process_chain(Number, Chain, Iteration) ->
     NextNumber = process_step(Number),
@@ -73,7 +77,7 @@ process_chain(Number, Chain, Iteration) ->
         false -> process_chain(NextNumber, [Number] ++ Chain, Iteration + 1)
     end.
 
--spec collect_result(Chain :: [pos_integer()], Result :: boolean(), MaxNumber :: pos_integer(), Storage :: storage_type()) -> storage_type().
+-spec collect_result(Chain :: [pos_integer()], Result :: boolean(), MaxNumber :: pos_integer(), Storage :: result_storage()) -> result_storage().
 collect_result([], _Result, _MaxNumber, Storage) -> Storage;
 collect_result([Number | _Rest], _Result, MaxNumber, Storage) when Number > MaxNumber -> Storage;
 collect_result([Number | Rest], Result, MaxNumber, Storage) ->
