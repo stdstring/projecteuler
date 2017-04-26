@@ -38,18 +38,25 @@
 -define(STORAGE_SIZE, 89).
 -define(STORAGE_DELTA, 10).
 
--type storage_type() :: array:array([pos_integer()]).
--type result_type() :: {N0 :: pos_integer(), N1 :: pos_integer(), N2 :: pos_integer(), N3 :: pos_integer(), N4 :: pos_integer(), N5 :: pos_integer()}.
+-type storage() :: array:array([Number :: pos_integer()]).
+-type storages() :: [storage()].
+-type result() :: {N0 :: pos_integer(), N1 :: pos_integer(), N2 :: pos_integer(), N3 :: pos_integer(), N4 :: pos_integer(), N5 :: pos_integer()}.
+-type number_result() :: {'true', Value :: result()} | 'fasle'.
+-type split_result() :: {Storage :: storage(), StoragesRest :: storages()}.
+-type search_result() :: {'true', Value :: term()} | 'false'.
+-type predicate() :: fun((Number :: pos_integer()) -> search_result()).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{none, 28684}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 28684}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     TriangleNumbers = lists:map(fun(N) -> N * (N + 1) div 2 end, lists:seq(?TRIANGLE_INF, ?TRIANGLE_SUP)),
     SquareNumbers = lists:map(fun(N) -> N * N end, lists:seq(?SQUARE_INF, ?SQUARE_SUP)),
@@ -70,7 +77,7 @@ solve(none) ->
 %% Internal functions
 %% ====================================================================
 
--spec create_storage(Numbers :: [pos_integer()]) -> storage_type().
+-spec create_storage(Numbers :: [pos_integer()]) -> storage().
 create_storage(Numbers) ->
     InitStorage = array:new([{size, ?STORAGE_SIZE}, {fixed, true}, {default, []}]),
     FoldlFun = fun(Number, Storage) ->
@@ -85,7 +92,7 @@ create_storage(Numbers) ->
     end,
     lists:foldl(FoldlFun, InitStorage, Numbers).
 
--spec process_number(Numbers :: [pos_integer()], Storages :: [storage_type()]) -> result_type() | no_return().
+-spec process_number(Numbers :: [pos_integer()], Storages :: storages()) -> result() | no_return().
 process_number([], _Storages) -> error(logic_error);
 process_number([Number | Rest], Storages) ->
     case process_number(Number, Storages, 1) of
@@ -93,59 +100,57 @@ process_number([Number | Rest], Storages) ->
         false -> process_number(Rest, Storages)
     end.
 
--spec process_number(N0 :: pos_integer(), Storages :: [storage_type()], Index :: 1..6) -> {'true', Value :: result_type()} | 'fasle'.
+-spec process_number(N0 :: pos_integer(), Storages :: storages(), Position :: 1..6) -> number_result().
 process_number(_N0, _Storages, 6) -> false;
-process_number(N0, Storages, Index) ->
-    {MainStorage, StoragesRest} = split(Storages, Index),
+process_number(N0, Storages, Position) ->
+    {MainStorage, StoragesRest} = split(Storages, Position),
     N0SecondPart = N0 rem 100,
     N1List = array:get(N0SecondPart - ?STORAGE_DELTA, MainStorage),
     case find(fun(N1) -> process_number(N0, N1, StoragesRest, 1) end, N1List, [N0]) of
         {true, Value} -> {true, Value};
-        false -> process_number(N0, Storages, Index + 1)
+        false -> process_number(N0, Storages, Position + 1)
     end.
 
--spec process_number(N0 :: pos_integer(), N1 :: pos_integer(), Storages :: [storage_type()], Index :: 1..5) -> {'true', Value :: result_type()} | 'fasle'.
+-spec process_number(N0 :: pos_integer(), N1 :: pos_integer(), Storages :: storages(), Position :: 1..5) -> number_result().
 process_number(_N0, _N1, _Storages, 5) -> false;
-process_number(N0, N1, Storages, Index) ->
-    {MainStorage, StoragesRest} = split(Storages, Index),
+process_number(N0, N1, Storages, Position) ->
+    {MainStorage, StoragesRest} = split(Storages, Position),
     N1SecondPart = N1 rem 100,
     N2List = array:get(N1SecondPart - ?STORAGE_DELTA, MainStorage),
     case find(fun(N2) -> process_number(N0, N1, N2, StoragesRest, 1) end, N2List, [N0, N1]) of
         {true, Value} -> {true, Value};
-        false -> process_number(N0, N1, Storages, Index + 1)
+        false -> process_number(N0, N1, Storages, Position + 1)
     end.
 
 -spec process_number(N0 :: pos_integer(),
                      N1 :: pos_integer(),
                      N2 :: pos_integer(),
-                     Storages :: [storage_type()],
-                     Index :: 1..4) ->
-    {'true', Value :: result_type()} | 'fasle'.
+                     Storages :: storages(),
+                     Position :: 1..4) -> number_result().
 process_number(_N0, _N1, _N2, _Storages, 4) -> false;
-process_number(N0, N1, N2, Storages, Index) ->
-    {MainStorage, StoragesRest} = split(Storages, Index),
+process_number(N0, N1, N2, Storages, Position) ->
+    {MainStorage, StoragesRest} = split(Storages, Position),
     N2SecondPart = N2 rem 100,
     N3List = array:get(N2SecondPart - ?STORAGE_DELTA, MainStorage),
     case find(fun(N3) -> process_number(N0, N1, N2, N3, StoragesRest, 1) end, N3List, [N0, N1, N2]) of
         {true, Value} -> {true, Value};
-        false -> process_number(N0, N1, N2, Storages, Index + 1)
+        false -> process_number(N0, N1, N2, Storages, Position + 1)
     end.
 
 -spec process_number(N0 :: pos_integer(),
                      N1 :: pos_integer(),
                      N2 :: pos_integer(),
                      N3 :: pos_integer(),
-                     Storages :: [storage_type()],
-                     Index :: 1..3) ->
-    {'true', Value :: result_type()} | 'fasle'.
+                     Storages :: storages(),
+                     Position :: 1..3) -> number_result().
 process_number(_N0, _N1, _N2, _N3, _Storages, 3) -> false;
-process_number(N0, N1, N2, N3, Storages, Index) ->
-    {MainStorage, StoragesRest} = split(Storages, Index),
+process_number(N0, N1, N2, N3, Storages, Position) ->
+    {MainStorage, StoragesRest} = split(Storages, Position),
     N3SecondPart = N3 rem 100,
     N4List = array:get(N3SecondPart - ?STORAGE_DELTA, MainStorage),
     case find(fun(N4) -> process_number(N0, N1, N2, N3, N4, StoragesRest, 1) end, N4List, [N0, N1, N2, N3]) of
         {true, Value} -> {true, Value};
-        false -> process_number(N0, N1, N2, N3, Storages, Index + 1)
+        false -> process_number(N0, N1, N2, N3, Storages, Position + 1)
     end.
 
 -spec process_number(N0 :: pos_integer(),
@@ -153,9 +158,8 @@ process_number(N0, N1, N2, N3, Storages, Index) ->
                      N2 :: pos_integer(),
                      N3 :: pos_integer(),
                      N4 :: pos_integer(),
-                     Storages :: [storage_type()],
-                     Index :: 1) ->
-    {'true', Value :: result_type()} | 'fasle'.
+                     Storages :: storages(),
+                     Position :: 1) -> number_result.
 process_number(N0, N1, N2, N3, N4, [MainStorage], 1) ->
     N4SecondPart = N4 rem 100,
     N0FirstPart = N0 div 100,
@@ -166,7 +170,7 @@ process_number(N0, N1, N2, N3, N4, [MainStorage], 1) ->
         false -> false
     end.
 
--spec split(Storages :: [storage_type()], Index :: pos_integer()) -> {Storage :: storage_type(), StoragesRest :: [storage_type()]}.
+-spec split(Storages :: storages(), Position :: pos_integer()) -> split_result().
 %% for Storage1 ... Storage2
 split([Storage1, Storage2], 1) -> {Storage1, [Storage2]};
 split([Storage1, Storage2], 2) -> {Storage2, [Storage1]};
@@ -190,9 +194,7 @@ split([Storage1, Storage2, Storage3, Storage4, Storage5], 4) -> {Storage4, [Stor
 split([Storage1, Storage2, Storage3, Storage4, Storage5], 5) -> {Storage5, [Storage1, Storage2, Storage3, Storage4]};
 split([_Storage1, _Storage2, _Storage3, _Storage4, _Storage5], 6) -> false.
 
-
--spec find(Predicate :: fun((Number :: pos_integer()) -> boolean()), Numbers :: [pos_integer()], ExcludeList :: [pos_integer()]) ->
-    {'true', Value :: term()} | 'false'.
+-spec find(Predicate :: predicate(), Numbers :: [pos_integer()], ExcludeList :: [pos_integer()]) -> search_result().
 find(_Predicate, [], _ExcludeList) -> false;
 find(Predicate, [Number | Rest], ExcludeList) ->
     case lists:member(Number, ExcludeList) of
