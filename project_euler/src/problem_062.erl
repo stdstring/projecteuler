@@ -9,25 +9,30 @@
 
 -behaviour(numerical_task_behaviour).
 
--type cube_key_type() :: [0..9].
--type cube_dict_type() :: dict:dict(cube_key_type(), [pos_integer()]).
-
--record(state, {cube_numbers :: cube_dict_type(), suitable_keys :: [cube_key_type()]}).
-
 -define(INIT_NUMBER, 1).
 -define(INIT_CUBE_SUP, 10).
+
+%% TODO (std_string) : move into common
+-type digit() :: 0..9.
+-type digits() :: [digit()].
+-type cube_dictionary() :: dict:dict(digits(), [Number :: pos_integer()]).
+
+-record(state, {cube_numbers :: cube_dictionary(), suitable_keys :: [digits()]}).
+
+-type range_result() :: {Number :: pos_integer(), State :: #state{}}.
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{3, 41063625}, {5, 127035954683}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{3, 41063625}, {5, 127035954683}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(PermutationsCount) ->
-    process_numbers(?INIT_NUMBER, ?INIT_CUBE_SUP, PermutationsCount).
+-spec solve(PreparedInput :: term()) -> term().
+solve(PermutationsCount) -> process_numbers(?INIT_NUMBER, ?INIT_CUBE_SUP, PermutationsCount).
 
 %% ====================================================================
 %% Internal functions
@@ -42,8 +47,7 @@ process_numbers(Number, CubeSup, PermutationsCount) ->
         SuitableKeys -> process_suiatble(SuitableKeys, NewState#state.cube_numbers, undefined)
     end.
 
--spec process_range(Number :: pos_integer(), CubeSup :: pos_integer(), State :: #state{}, PermutationsCount :: pos_integer()) ->
-    {Number :: pos_integer(), State :: #state{}}.
+-spec process_range(Number :: pos_integer(), CubeSup :: pos_integer(), State :: #state{}, PermutationsCount :: pos_integer()) -> range_result().
 process_range(Number, CubeSup, State, PermutationsCount) ->
     CubeValue = Number * Number * Number,
     if
@@ -63,8 +67,7 @@ process_number(Number, State, PermutationsCount) ->
         NumbersCount > PermutationsCount -> State#state{cube_numbers = CubeNumbersDict, suitable_keys = SuitableKeys -- [Digits]}
     end.
 
--spec process_suiatble(SuitableKeys :: [cube_key_type()], CubeNumbers :: cube_dict_type(), MinValue :: 'undefined' | pos_integer()) ->
-    pos_integer().
+-spec process_suiatble(SuitableKeys :: [digits()], CubeNumbers :: cube_dictionary(), MinValue :: 'undefined' | pos_integer()) -> pos_integer().
 process_suiatble([], _CubeNumbers, MinValue) -> MinValue;
 process_suiatble([Key | KeysRest], CubeNumbers, undefined) ->
     process_suiatble(KeysRest, CubeNumbers, lists:min(dict:fetch(Key, CubeNumbers)));

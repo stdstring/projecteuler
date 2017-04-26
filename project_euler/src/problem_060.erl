@@ -12,7 +12,7 @@
 -define(SIEVE_MAX, 100000000).
 -define(SEARCH_MAX, 10000).
 
-%% TODO (std_string) : move into common place and use in other situations
+%% TODO (std_string) : bad ternary op impl
 -define(ternary_op(Cond, Left, Right), case Cond of true -> Left; false -> Right end).
 
 -type storage() :: [[pos_integer()]].
