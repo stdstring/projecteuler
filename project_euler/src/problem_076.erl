@@ -18,8 +18,7 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{5, 6}, {100, 190569291}].
+get_check_data() -> [{5, 6}, {100, 190569291}].
 
 prepare_data(_ModuleSourceDir, Input) -> Input.
 

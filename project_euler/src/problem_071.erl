@@ -13,6 +13,7 @@
 
 %% TODO (std_string) : move into common
 -type rational_fraction() :: {Numerator :: pos_integer(), Denominator :: pos_integer()}.
+%% TODO (std_string) : move into common
 -type compare_result() :: 'left' | 'equal' | 'right'.
 
 %% ====================================================================

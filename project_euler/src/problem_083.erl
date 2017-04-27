@@ -10,16 +10,21 @@
 
 -include("grid_def.hrl").
 
+%% TODO (std_string) : move into common
+-type compare_result() :: 'left' | 'equal' | 'right'.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{"problem_083_example.dat", 2297}, {"problem_083.dat", 425185}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_083_example.dat", 2297}, {"problem_083.dat", 425185}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_number_table(filename:join(ModuleSourceDir, Filename), ",").
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(GridData) ->
     Grid = grid_helper:create(GridData),
     InitPoints = [{1, 1}],
@@ -33,7 +38,8 @@ solve(GridData) ->
 %% Internal functions
 %% ====================================================================
 
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> 'left' | 'equal' | 'right'.
+%% TODO (std_string) : move into common
+-spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> compare_result().
 compare_values(LValue, RValue) ->
     if
         LValue < RValue -> left;
