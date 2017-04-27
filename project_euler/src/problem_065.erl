@@ -23,15 +23,20 @@
 
 -behaviour(numerical_task_behaviour).
 
+%% TODO (std_string) : move into common
+-type rational_fraction() :: {Numerator :: pos_integer(), Denominator :: pos_integer()}.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{10, 17}, {100, 272}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{10, 17}, {100, 272}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxTermNumber) ->
     Range = generate_e_fraction_range(MaxTermNumber),
     {N, _D} = process_range(Range, 0),
@@ -41,8 +46,7 @@ solve(MaxTermNumber) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_range(Range :: [pos_integer()], Result :: {Numerator :: pos_integer(), Denominator :: pos_integer()}) ->
-    {Numerator :: pos_integer(), Denominator :: pos_integer()}.
+-spec process_range(Range :: [pos_integer()], Result :: rational_fraction() | 0) -> rational_fraction().
 process_range([], Result) -> rational_add(2, rational_reverse(Result));
 process_range([Term | Rest], 0) -> process_range(Rest, Term);
 process_range([Term | Rest], Result) ->

@@ -19,17 +19,24 @@
 
 -behaviour(numerical_task_behaviour).
 
--type storage_type() :: array:array('undef' | {'index', Index :: non_neg_integer()} | pos_integer()).
+%% TODO (std_string) : move into common
+-type digit() :: 0..9.
+-type factorial_storage() :: array:array(digit()).
+-type chain_storage() :: array:array('undef' | {'index', Index :: non_neg_integer()} | pos_integer()).
+-type number_search_result() :: {'true', NextNumber :: pos_integer()} | 'false'.
+-type result() :: {'index', CycleStart :: pos_integer(), CycleSize :: pos_integer()} | pos_integer().
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{{1000000 - 1, 60}, 402}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{1000000 - 1, 60}, 402}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({MaxNumber, ExpectedChainSize}) ->
     FactorialStorage = array:from_list(lists:map(fun(Digit) -> numbers:factorial(Digit) end, lists:seq(0, 9))),
     StorageSize = calc_storage_size(MaxNumber),
@@ -48,7 +55,7 @@ calc_storage_size(MaxNumber) ->
 
 -spec process_storage(Index :: non_neg_integer(),
                       MaxNumber :: pos_integer(),
-                      Storage :: storage_type(),
+                      Storage :: chain_storage(),
                       ExpectedChainSize :: pos_integer(),
                       Count :: pos_integer()) -> pos_integer().
 process_storage(MaxNumber, MaxNumber, _Storage, _ExpectedChainSize, Count) -> Count;
@@ -60,8 +67,8 @@ process_storage(Index, MaxNumber, Storage, ExpectedChainSize, Count) ->
 
 -spec process_number(Number :: pos_integer(),
                      MaxNumber :: pos_integer(),
-                     Storage :: storage_type(),
-                     FactorialStorage :: array:array(pos_integer())) -> storage_type().
+                     Storage :: chain_storage(),
+                     FactorialStorage :: factorial_storage()) -> chain_storage().
 process_number(Number, MaxNumber, Storage, FactorialStorage) ->
     NewStorage = process_chain(Number, [], 0, Storage, FactorialStorage),
     case find_next_number(Number + 1, MaxNumber, Storage) of
@@ -69,8 +76,7 @@ process_number(Number, MaxNumber, Storage, FactorialStorage) ->
         false -> NewStorage
     end.
 
--spec find_next_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: storage_type()) ->
-    {'true', NextNumber :: pos_integer()} | 'false'.
+-spec find_next_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: chain_storage()) -> number_search_result().
 find_next_number(Number, MaxNumber, _Storage) when Number > MaxNumber -> false;
 find_next_number(Number, MaxNumber, Storage) ->
     case array:get(Number - 1, Storage) of
@@ -81,8 +87,8 @@ find_next_number(Number, MaxNumber, Storage) ->
 -spec process_chain(Number :: pos_integer(),
                     Chain :: [pos_integer()],
                     ChainIndex :: non_neg_integer(),
-                    Storage :: storage_type(),
-                    FactorialStorage :: array:array(pos_integer())) -> storage_type().
+                    Storage :: chain_storage(),
+                    FactorialStorage :: factorial_storage()) -> chain_storage().
 process_chain(Number, Chain, ChainIndex, Storage, FactorialStorage) ->
     case array:get(Number - 1, Storage) of
         undef ->
@@ -92,9 +98,7 @@ process_chain(Number, Chain, ChainIndex, Storage, FactorialStorage) ->
         Count -> collect_result(Chain, Count + 1, Storage)
     end.
 
--spec collect_result(Chain :: [pos_integer()],
-                     Result :: {'index', CycleStart :: pos_integer(), CycleSize :: pos_integer()} | pos_integer(),
-                     Storage :: storage_type()) -> storage_type().
+-spec collect_result(Chain :: [pos_integer()], Result :: result(), Storage :: chain_storage()) -> chain_storage().
 collect_result([], _Result, Storage) -> Storage;
 collect_result([CycleStart | ChainRest], {index, CycleStart, CycleSize}, Storage) ->
     collect_result(ChainRest, CycleSize + 1, array:set(CycleStart - 1, CycleSize, Storage));
@@ -103,6 +107,6 @@ collect_result([Number | ChainRest], {index, CycleStart, CycleSize}, Storage) ->
 collect_result([Number | ChainRest], Count, Storage) ->
     collect_result(ChainRest, Count + 1, array:set(Number - 1, Count, Storage)).
 
--spec process_step(Number :: pos_integer(), FactorialStorage :: array:array(pos_integer())) -> pos_integer().
+-spec process_step(Number :: pos_integer(), FactorialStorage :: factorial_storage()) -> pos_integer().
 process_step(Number, FactorialStorage) ->
     lists:foldl(fun(Digit, Sum) -> array:get(Digit, FactorialStorage) + Sum end, 0, numbers:get_digits(Number)).
