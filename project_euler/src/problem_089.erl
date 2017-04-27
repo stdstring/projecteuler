@@ -33,18 +33,23 @@
 %% IV -> 4
 %% I -> 1
 
--record(number, {thousands = 0 :: non_neg_integer(), hundreds = 0 :: non_neg_integer(), tens = 0 :: non_neg_integer(), ones = 0 :: non_neg_integer()}).
+%% TODO (std_string) : move into common
+-type digit() :: 0..9.
+
+-record(number, {thousands = 0 :: non_neg_integer(), hundreds = 0 :: digit(), tens = 0 :: digit(), ones = 0 :: digit()}).
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{"problem_089.dat", 743}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_089.dat", 743}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_strings(filename:join(ModuleSourceDir, Filename)).
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(WordList) ->
     lists:foldl(fun(SourceNumber, Sum) -> (length(SourceNumber) - length(simplify_number(SourceNumber))) + Sum end, 0, WordList).
 
@@ -103,7 +108,7 @@ generate_roman(#number{thousands = Thousands, hundreds = Hundreds, tens = Tens, 
     generate_roman_tens(Tens) ++
     generate_roman_ones(Ones).
 
--spec generate_roman_ones(Ones :: 0..9) -> string().
+-spec generate_roman_ones(Ones :: digit()) -> string().
 generate_roman_ones(0) -> "";
 generate_roman_ones(1) -> "I";
 generate_roman_ones(2) -> "II";
@@ -115,7 +120,7 @@ generate_roman_ones(7) -> "VII";
 generate_roman_ones(8) -> "VIII";
 generate_roman_ones(9) -> "IX".
 
--spec generate_roman_tens(Tens :: 0..9) -> string().
+-spec generate_roman_tens(Tens :: digit()) -> string().
 generate_roman_tens(0) -> "";
 generate_roman_tens(1) -> "X";
 generate_roman_tens(2) -> "XX";
@@ -127,7 +132,7 @@ generate_roman_tens(7) -> "LXX";
 generate_roman_tens(8) -> "LXXX";
 generate_roman_tens(9) -> "XC".
 
--spec generate_roman_hundreds(Hundreds :: 0 .. 9) -> string().
+-spec generate_roman_hundreds(Hundreds :: digit()) -> string().
 generate_roman_hundreds(0) -> "";
 generate_roman_hundreds(1) -> "C";
 generate_roman_hundreds(2) -> "CC";
