@@ -14,34 +14,35 @@
 -define(BOTTOM_BORDER, 100000000).
 -define(TOP_BORDER, 1000000000).
 
+-type border_data() :: {TopBorder :: pos_integer(), Divider :: pos_integer()}.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{none, 329468}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 329468}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) -> process(1, 1, 2, {?TOP_BORDER, 1}).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
--spec process(CurrentFib :: pos_integer(),
-              PrevFib :: pos_integer(),
-              FibNumber :: pos_integer(),
-              BorderData :: {TopBorder :: pos_integer(), Divider :: pos_integer()}) -> pos_integer().
-process(CurrentFib, PrevFib, FibNumber, {TopBorder, Divider}) when CurrentFib =< ?BOTTOM_BORDER ->
+-spec process(CurrentFib :: pos_integer(), PrevFib :: pos_integer(), FibNumber :: pos_integer(), BorderData :: border_data()) -> pos_integer().
+process(CurrentFib, PrevFib, FibNumber, BorderData) when CurrentFib =< ?BOTTOM_BORDER ->
     NextFib = gen_next_fibonacci(CurrentFib, PrevFib),
-    process(NextFib, CurrentFib, FibNumber + 1, {TopBorder, Divider});
+    process(NextFib, CurrentFib, FibNumber + 1, BorderData);
 process(CurrentFib, PrevFib, FibNumber, {TopBorder, Divider}) ->
     case check_number(CurrentFib, Divider) of
         true -> FibNumber;
         false ->
             NextFib = gen_next_fibonacci(CurrentFib, PrevFib),
-            process(NextFib, CurrentFib, FibNumber + 1, calc_border_data(NextFib, TopBorder, Divider))
+            process(NextFib, CurrentFib, FibNumber + 1, calc_border_data(NextFib, {TopBorder, Divider}))
     end.
 
 -spec check_number(Number ::pos_integer(), Divider :: pos_integer()) -> boolean().
@@ -57,6 +58,6 @@ check_number(Number, Divider) ->
 -spec gen_next_fibonacci(Current :: pos_integer(), Prev :: pos_integer()) -> pos_integer().
 gen_next_fibonacci(Current, Prev) -> Current + Prev.
 
--spec calc_border_data(Number :: pos_integer(), TopBorder :: pos_integer(), Divider :: pos_integer()) -> {TopBorder :: pos_integer(), Divider :: pos_integer()}.
-calc_border_data(Number, TopBorder, Divider) when Number >= TopBorder -> {TopBorder * 10, Divider * 10};
-calc_border_data(_Number, TopBorder, Divider) -> {TopBorder, Divider}.
+-spec calc_border_data(Number :: pos_integer(), BorderData :: border_data()) -> border_data().
+calc_border_data(Number, {TopBorder, Divider}) when Number >= TopBorder -> {TopBorder * 10, Divider * 10};
+calc_border_data(_Number, BorderData) -> BorderData.

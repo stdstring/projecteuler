@@ -7,7 +7,7 @@
 %% The light beam in this problem starts at the point (0.0, 10.1) just outside the white cell, and the beam first impacts the mirror at (1.4, -9.6).
 %% Each time the laser beam hits the surface of the ellipse, it follows the usual law of reflection "angle of incidence equals angle of reflection."
 %% That is, both the incident and reflected beams make the same angle with the normal line at the point of incidence.
-%% The slope m of the tangent line at any point (x,y) of the given ellipse is: m = −4x/y
+%% The slope m of the tangent line at any point (x, y) of the given ellipse is: m = − 4 * x / y
 %% The normal line is perpendicular to this tangent line at the point of incidence.
 %% How many times does the beam hit the internal surface of the white cell before exiting?
 
@@ -22,18 +22,21 @@
 -define(POINT_0, {0.0, 10.1}).
 -define(POINT_1, {1.4, -9.6}).
 
--type point_type() :: {X :: float(), Y :: float()}.
--type vector_type() :: {X :: float(), Y :: float()}.
+%% TODO (std_string) : move into common
+-type point() :: {X :: float(), Y :: float()}.
+-type vector() :: {X :: float(), Y :: float()}.
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{none, 354}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 354}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     {X0, Y0} = ?POINT_0,
     {X1, Y1} = ?POINT_1,
@@ -48,8 +51,8 @@ solve(none) ->
 %% Internal functions
 %% ====================================================================
 
--spec propagate_beam(StartPoint :: point_type(), DirectVector :: vector_type(), ReflectNumber :: pos_integer()) ->
-    {LastPoint :: point_type(), LastDirectVector :: vector_type(), ReflectNumber :: pos_integer()}.
+-spec propagate_beam(StartPoint :: point(), DirectVector :: vector(), ReflectNumber :: pos_integer()) ->
+    {LastPoint :: point(), LastDirectVector :: vector(), ReflectNumber :: pos_integer()}.
 propagate_beam({StartX, StartY}, {DirectX, DirectY}, ReflectNumber) ->
     FinishPoint = calc_crosspoint({StartX, StartY}, {DirectX, DirectY}),
     case is_hole(FinishPoint) of
@@ -60,7 +63,7 @@ propagate_beam({StartX, StartY}, {DirectX, DirectY}, ReflectNumber) ->
             propagate_beam(FinishPoint, NewDirect, ReflectNumber + 1)
     end.
 
--spec calc_normal(Point :: point_type()) -> vector_type().
+-spec calc_normal(Point :: point()) -> vector().
 calc_normal({X0, Y0}) ->
     %% ellipse equation is 4*x^2 + y^2 = 100, (x^2 / 25) + (y^2 / 100) = 1 => a^2 = 25, b^2 = 100
     %% tangent equation at point is (x0, y0): (x0 * x / a^2) + (y0 * y / b^2) = 1
@@ -72,7 +75,7 @@ calc_normal({X0, Y0}) ->
     Length = math:sqrt(16 * X0 * X0 + Y0 * Y0),
     {-4 * X0 / Length, -Y0 / Length}.
 
--spec reflect_vector(SourceBeamVector :: vector_type(), Normal :: vector_type()) -> vector_type().
+-spec reflect_vector(SourceBeamVector :: vector(), Normal :: vector()) -> vector().
 reflect_vector({SourceX, SourceY}, {NormalX, NormalY}) ->
     %% inverse source vector
     AngleCos = -1.0 * (SourceX * NormalX + SourceY * NormalY),
@@ -84,7 +87,7 @@ reflect_vector({SourceX, SourceY}, {NormalX, NormalY}) ->
     Length = math:sqrt(DestX * DestX + DestY * DestY),
     {DestX / Length, DestY / Length}.
 
--spec calc_crosspoint(StartPoint :: point_type(), DirectVector :: vector_type()) -> point_type().
+-spec calc_crosspoint(StartPoint :: point(), DirectVector :: vector()) -> point().
 calc_crosspoint({StartX, StartY}, {DirectX, DirectY}) ->
     %% ellipse equation is 4 * x^2 + y^2 = 100
     %% line parametric equation is x = x0 + dx * t, y = y0 + dy * t
@@ -105,6 +108,6 @@ calc_crosspoint({StartX, StartY}, {DirectX, DirectY}) ->
     CrossY = StartY + DirectY * TValue,
     {CrossX, CrossY}.
 
--spec is_hole(Point :: point_type()) -> boolean().
+-spec is_hole(Point :: point()) -> boolean().
 is_hole({X, Y}) ->
     (Y > 0) and (?LEFT_HOLE_X_BORDER =< X) and (X =< ?RIGHT_HOLE_X_BORDER).
