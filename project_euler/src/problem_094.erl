@@ -17,8 +17,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{1000000000, 518408346}].
+get_check_data() -> [{1000000000, 518408346}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -66,7 +65,7 @@ process({X, _Y}, FirstSolution, N, MaxPerimeter, Sum) ->
         true -> process(pell_equation:find_n_solution(FirstSolution, ?D, 1, N + 1), FirstSolution, N + 1, MaxPerimeter, Sum + P1 + P2)
     end.
 
--spec calc_perimeter(X :: integer(), Sign :: integer()) -> integer().
+-spec calc_perimeter(X :: integer(), Sign :: 1 | -1) -> integer().
 calc_perimeter(X, Sign) ->
     %% Not all values of X are leads to the integer values of sides
     Value = X - 2 * Sign,
