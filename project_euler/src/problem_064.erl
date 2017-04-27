@@ -32,11 +32,13 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{13, 4}, {10000, 1322}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{13, 4}, {10000, 1322}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxNumber) -> process_numbers(?NUMBER_START, MaxNumber, ?A0_START, 0).
 
 %% ====================================================================

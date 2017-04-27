@@ -20,23 +20,26 @@
 
 -define(NUMBER_START, 2).
 
+-type process_state() :: {SavedNumber :: integer(), SavedMaxX :: integer()}.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{7, 5}, {1000, 661}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{7, 5}, {1000, 661}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(MaxNumber) ->
-    process_numbers(?NUMBER_START, MaxNumber, {0, 0}).
+-spec solve(PreparedInput :: term()) -> term().
+solve(MaxNumber) -> process_numbers(?NUMBER_START, MaxNumber, {0, 0}).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
--spec process_numbers(Number :: integer(), MaxNumber :: integer(), SavedData :: {SavedNumber :: integer(), SavedMaxX :: integer()}) -> integer().
+-spec process_numbers(Number :: integer(), MaxNumber :: integer(), SavedData :: process_state()) -> integer().
 process_numbers(Number, MaxNumber, {SavedNumber, _SavedMaxX}) when Number > MaxNumber -> SavedNumber;
 process_numbers(Number, MaxNumber, {SavedNumber, SavedMaxX}) ->
     case pell_equation:find_first_solution(Number, 1) of
