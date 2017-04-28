@@ -33,8 +33,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{3, 12}, {1000, 4782}].
+get_check_data() -> [{3, 12}, {1000, 4782}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -42,7 +41,6 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 -spec solve(PreparedInput :: term()) -> term().
 solve(DigitsCount) ->
     Bound = numbers:power(10, DigitsCount - 1),
-    %%Generator = fun generate_fibonacci_with_number/1,
     Generator = fun({FibonacciPair, Number}) -> {generate_fibonacci(FibonacciPair), Number + 1} end,
     Predicate = fun({{_, Current}, _}) -> Current div Bound == 0 end,
     {_, TermNumber} = skip_while(Generator, Predicate, {{1, 1}, 2}),
@@ -59,8 +57,6 @@ skip_while(Generator, Predicate, Current) ->
         true -> skip_while(Generator, Predicate, New);
         false -> New
     end.
-
-%%generate_fibonacci_with_number({FibonacciPair, Number}) -> {generate_fibonacci(FibonacciPair), Number + 1}.
 
 -spec generate_fibonacci(FibonacciPair :: fibonacci_pair()) -> fibonacci_pair().
 generate_fibonacci({Prev, Current}) -> {Current, Current + Prev}.

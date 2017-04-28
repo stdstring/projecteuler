@@ -13,7 +13,9 @@
 
 -define(MAX_POSSIBLE_NUMBER, 1000).
 
--type words() :: array:array(string()).
+%% TODO (std_string) : think about creation module for word processing
+-type word() :: string().
+-type words_array() :: array:array(word()).
 
 %% ====================================================================
 %% API functions
@@ -40,22 +42,28 @@ solve_impl(MaxNumber) ->
     OtherTens = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"],
     parse_numbers(MaxNumber, array:from_list(From0To9), array:from_list(From10To19), array:from_list(OtherTens)).
 
--spec parse_numbers(MaxNumber :: pos_integer(), From0To9 :: words(), From10To19 :: words(), OtherTens :: words()) -> pos_integer().
+-spec parse_numbers(MaxNumber :: pos_integer(),
+                    From0To9 :: words_array(),
+                    From10To19 :: words_array(),
+                    OtherTens :: words_array()) -> pos_integer().
 parse_numbers(MaxNumber, From0To9, From10To19, OtherTens) ->
     parse_numbers(MaxNumber, 1, 0, From0To9, From10To19, OtherTens).
 
 -spec parse_numbers(MaxNumber :: pos_integer(),
                     CurrentNumber :: pos_integer(),
                     LetterCount :: non_neg_integer(),
-                    From0To9 :: words(),
-                    From10To19 :: words(),
-                    OtherTens :: words()) -> pos_integer().
+                    From0To9 :: words_array(),
+                    From10To19 :: words_array(),
+                    OtherTens :: words_array()) -> pos_integer().
 parse_numbers(MaxNumber, CurrentNumber, LetterCount, _From0To9, _From10To19, _OtherTens) when CurrentNumber > MaxNumber -> LetterCount;
 parse_numbers(MaxNumber, CurrentNumber, LetterCount, From0To9, From10To19, OtherTens) ->
     CurrentCount = parse_number(CurrentNumber, From0To9, From10To19, OtherTens),
     parse_numbers(MaxNumber, CurrentNumber + 1, LetterCount + CurrentCount, From0To9, From10To19, OtherTens).
 
--spec parse_number(Number :: pos_integer(), From0To9 :: words(), From10To19 :: words(), OtherTens :: words()) -> pos_integer().
+-spec parse_number(Number :: pos_integer(),
+                   From0To9 :: words_array(),
+                   From10To19 :: words_array(),
+                   OtherTens :: words_array()) -> pos_integer().
 parse_number(1000, _From0To9, _From10To19, _OtherTens) -> length("one" ++ "thousand");
 parse_number(Number, From0To9, From10To19, OtherTens) when Number >= 100 ->
         LessHundred = less_hundred(Number rem 100, From0To9, From10To19, OtherTens),
@@ -66,7 +74,10 @@ parse_number(Number, From0To9, From10To19, OtherTens) when Number >= 100 ->
 parse_number(Number, From0To9, From10To19, OtherTens) ->
     less_hundred(Number rem 100, From0To9, From10To19, OtherTens).
 
--spec less_hundred(Number :: non_neg_integer(), From0To9 :: words(), From10To19 :: words(), OtherTens :: words()) -> non_neg_integer().
+-spec less_hundred(Number :: non_neg_integer(),
+                   From0To9 :: words_array(),
+                   From10To19 :: words_array(),
+                   OtherTens :: words_array()) -> non_neg_integer().
 less_hundred(Number, _TensFrom0To9, _From10To19, _OtherTens) when Number >= 100 -> erlang:error(badarg);
 less_hundred(Number, From0To9, _From10To19, _OtherTens) when Number =< 9 ->
     length(array:get(Number, From0To9));

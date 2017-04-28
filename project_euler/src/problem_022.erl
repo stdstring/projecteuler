@@ -16,8 +16,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{"problem_022.dat", 871198282}].
+get_check_data() -> [{"problem_022.dat", 871198282}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
