@@ -20,8 +20,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{4, 19316}, {5, 443839}].
+get_check_data() -> [{4, 19316}, {5, 443839}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Power) ->

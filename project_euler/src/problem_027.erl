@@ -14,15 +14,14 @@
 -behaviour(numerical_task_behaviour).
 
 -type primes_set() :: sets:set(PrimeNumber :: pos_integer()).
--type result() :: {Number :: non_neg_integer(), A :: integer(), B :: integer()}.
+-type process_result() :: {Number :: non_neg_integer(), A :: integer(), B :: integer()}.
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{1000, 1000}, -59231}].
+get_check_data() -> [{{1000, 1000}, -59231}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -44,19 +43,19 @@ solve({AMax, BMax}) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_coeffb(AMax :: pos_integer(), SieveB :: [pos_integer()], SieveSet :: primes_set(), SavedResult :: result()) -> result().
+-spec process_coeffb(AMax :: pos_integer(), SieveB :: [pos_integer()], SieveSet :: primes_set(), SavedResult :: process_result()) -> process_result().
 process_coeffb(_AMax, [], _SieveSet, SavedResult) -> SavedResult;
 process_coeffb(AMax, [B | SieveBRest], SieveSet, SavedResult) ->
     NewSavedResult = process_coeffa(-B, B, AMax, SieveSet, SavedResult),
     process_coeffb(AMax, SieveBRest, SieveSet, NewSavedResult).
 
--spec process_coeffa(A :: integer(), B :: integer(), AMax :: pos_integer(), SieveSet :: primes_set(), SavedResult :: result()) -> result().
+-spec process_coeffa(A :: integer(), B :: integer(), AMax :: pos_integer(), SieveSet :: primes_set(), SavedResult :: process_result()) -> process_result().
 process_coeffa(A, _B, AMax, _SieveSet, SavedResult) when A > AMax -> SavedResult;
 process_coeffa(A, B, AMax, SieveSet, SavedResult) ->
     Result = process_sequence(0, A, B, SieveSet),
     process_coeffa(A + 2, B, AMax, SieveSet, merge_results(Result, SavedResult)).
 
--spec process_sequence(Number :: non_neg_integer(), A :: integer(), B :: integer(), SieveSet :: primes_set()) -> result().
+-spec process_sequence(Number :: non_neg_integer(), A :: integer(), B :: integer(), SieveSet :: primes_set()) -> process_result().
 process_sequence(B, A, B, _SieveSet) -> {B - 1, A, B};
 process_sequence(Number, A, B, SieveSet) ->
     Value = calc_value(Number, A, B),
@@ -68,7 +67,7 @@ process_sequence(Number, A, B, SieveSet) ->
 -spec calc_value(Number :: non_neg_integer(), A :: integer(), B :: integer()) -> integer().
 calc_value(Number, A, B) -> Number * Number + A * Number + B.
 
--spec merge_results(Result1 :: result(), Result2 :: result()) -> result().
+-spec merge_results(Result1 :: process_result(), Result2 :: process_result()) -> process_result().
 merge_results({Number1, A1, B1}, {Number2, A2, B2}) ->
     if
         Number1 >= Number2 -> {Number1, A1, B1};

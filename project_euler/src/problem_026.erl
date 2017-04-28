@@ -18,13 +18,16 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type process_result() :: {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}.
+-type process_number_result() :: {'true', CycleLength :: non_neg_integer()} | 'false'.
+-type remainder_array() :: array:array(Remainder :: non_neg_integer()).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{10, 7}, {1000, 983}].
+get_check_data() -> [{10, 7}, {1000, 983}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -44,8 +47,7 @@ solve(MaxDenominator) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_numbers(Number :: pos_integer(), Numerator :: pos_integer(), PrevValue :: {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}) ->
-    {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}.
+-spec process_numbers(Number :: pos_integer(), Numerator :: pos_integer(), PrevValue :: process_result()) -> process_result().
 process_numbers(1, _Numerator, {SavedNumber, SavedCycleLength}) -> {SavedNumber, SavedCycleLength};
 process_numbers(Number, _Numerator, {SavedNumber, SavedCycleLength}) when SavedCycleLength > Number -> {SavedNumber, SavedCycleLength};
 process_numbers(Number, Numerator, {SavedNumber, SavedCycleLength}) ->
@@ -55,7 +57,7 @@ process_numbers(Number, Numerator, {SavedNumber, SavedCycleLength}) ->
         {true, _CycleLength} -> process_numbers(Number - 1, Numerator, {SavedNumber, SavedCycleLength})
     end.
 
--spec process_number(Number :: pos_integer(), Numerator :: pos_integer()) -> 'false' | {'true', CycleLength :: non_neg_integer()}.
+-spec process_number(Number :: pos_integer(), Numerator :: pos_integer()) -> process_number_result().
 process_number(Numerator, Numerator) -> false;
 process_number(Number, Numerator) when Numerator rem Number == 0 -> {true, 0};
 process_number(Number, Numerator) ->
@@ -63,7 +65,10 @@ process_number(Number, Numerator) ->
     CycleLength = process_number(Number, Numerator, 0, RemArray),
     {true, CycleLength}.
 
--spec process_number(Number :: pos_integer(), Numerator :: pos_integer(), Index :: non_neg_integer(), RemArray :: array:array(non_neg_integer())) -> non_neg_integer().
+-spec process_number(Number :: pos_integer(),
+                     Numerator :: pos_integer(),
+                     Index :: non_neg_integer(),
+                     RemArray :: remainder_array()) -> non_neg_integer().
 process_number(Number, Numerator, Index, RemArray) ->
     RemValue = Numerator rem Number,
     case array:get(RemValue, RemArray) of
