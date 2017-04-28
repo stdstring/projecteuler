@@ -28,16 +28,12 @@
 
 -behaviour(numerical_task_behaviour).
 
--type digit() :: 0..9.
--type digits() :: [digit()].
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{"problem_008.dat", 5}, 40824}].
+get_check_data() -> [{{"problem_008.dat", 5}, 40824}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, {Filename, Count}) ->
@@ -52,10 +48,10 @@ solve({Digits, Count}) -> find_max_product(Digits, Count).
 %% Internal functions
 %% ====================================================================
 
--spec find_max_product(Digits :: digits(), Count :: pos_integer()) -> non_neg_integer().
+-spec find_max_product(Digits :: numbers:digits(), Count :: pos_integer()) -> non_neg_integer().
 find_max_product(Digits, Count) -> find_max_product(Digits, 1, Count, length(Digits), 0).
 
--spec find_max_product(Digits :: digits(),
+-spec find_max_product(Digits :: numbers:digits(),
                        Index :: pos_integer(),
                        Count :: pos_integer(),
                        Size :: pos_integer(),
@@ -68,6 +64,6 @@ find_max_product([_Digit | DigitsRest] = Digits, Index, Count, Size, MaxProduct)
         true -> find_max_product(DigitsRest, Index + 1, Count, Size, MaxProduct)
     end.
 
--spec calc_product(Digits :: digits(), Count :: pos_integer()) -> non_neg_integer().
+-spec calc_product(Digits :: numbers:digits(), Count :: pos_integer()) -> non_neg_integer().
 calc_product(Digits, Count) ->
     lists:foldl(fun(Digit, Product) -> Digit * Product end, 1, lists:sublist(Digits, Count)).

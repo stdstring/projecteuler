@@ -1,7 +1,10 @@
 %% @author std-string
 
 -module(numbers).
--export([power/2, factorial/1, get_digits/1, get_digits/2, get_number/1, get_number/2]).
+-export([power/2, factorial/1, get_digits/1, get_digits/2, get_number/1, get_number/2, calc_binomial_coeff/2]).
+
+-type digit() :: 0..9.
+-type digits() :: [digit()].
 
 %% ====================================================================
 %% API functions
@@ -17,7 +20,7 @@ factorial(0) -> 1;
 factorial(1) -> 1;
 factorial(Number) when is_integer(Number), Number > 0 -> factorial_impl(Number, 1).
 
--spec get_digits(Number :: non_neg_integer()) -> [0..9].
+-spec get_digits(Number :: non_neg_integer()) -> digits().
 get_digits(Number) -> get_digits(Number, 10).
 
 -spec get_digits(Number :: non_neg_integer(), Base :: 2..10) -> [non_neg_integer()].
@@ -27,13 +30,22 @@ get_digits(0, _Base) -> [0];
 get_digits(Number, Base) when is_integer(Number), Number > 0 ->
     get_digits_impl(Number, Base, []).
 
--spec get_number(Digits :: [0..9]) -> non_neg_integer().
+-spec get_number(Digits :: digits()) -> non_neg_integer().
 get_number(Digits) -> get_number(Digits, 10).
 
 -spec get_number(Digits :: [non_neg_integer()], Base :: 2..10) -> non_neg_integer().
 get_number(_Digits, Base) when Base < 2 -> throw(badarg);
 get_number(_Digits, Base) when Base > 10 -> throw(notsup);
 get_number(Digits, Base) -> get_number_impl(Digits, Base, 0).
+
+-spec calc_binomial_coeff(N :: pos_integer(), K :: integer()) -> pos_integer().
+calc_binomial_coeff(N, K) when K > N -> 0;
+calc_binomial_coeff(_N, K) when K < 0 -> 0;
+calc_binomial_coeff(N, _K) when N =< 0 -> error(badarg);
+calc_binomial_coeff(N, K) ->
+    Denominator = factorial(K),
+    Numerator = control:for(N - K + 1, N, 1, fun(Number, Product) -> Number * Product end),
+    Numerator div Denominator.
 
 %% ====================================================================
 %% Internal functions
@@ -55,7 +67,7 @@ get_digits_impl(0, _Base, Digits) -> Digits;
 get_digits_impl(Number, Base, Digits) ->
     get_digits_impl(Number div Base, Base, [Number rem Base] ++ Digits).
 
--spec get_number_impl(Digits :: [0..9], Base :: 2..10, Number :: non_neg_integer()) -> non_neg_integer().
+-spec get_number_impl(Digits :: [non_neg_integer()], Base :: 2..10, Number :: non_neg_integer()) -> non_neg_integer().
 get_number_impl([], _Base, Number) -> Number;
 get_number_impl([Digit | _Rest], Base, _Number) when Digit >= Base -> throw(badarg);
 get_number_impl([Digit | Rest], Base, Number) -> get_number_impl(Rest, Base, Number * Base + Digit).
