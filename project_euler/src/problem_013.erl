@@ -12,8 +12,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{"problem_013.dat", 10}, "5537376230"}].
+get_check_data() -> [{{"problem_013.dat", 10}, "5537376230"}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, {Filename, DigitsCount}) ->

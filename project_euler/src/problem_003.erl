@@ -12,8 +12,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{13195, 29}, {600851475143, 6857}].
+get_check_data() -> [{13195, 29}, {600851475143, 6857}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -25,7 +24,7 @@ solve(Number) -> hd(traverse_number(Number)).
 %% Internal functions
 %% ====================================================================
 
--spec traverse_number(Number :: pos_integer) -> [pos_integer()].
+-spec traverse_number(Number :: pos_integer()) -> [pos_integer()].
 traverse_number(Number) ->
     RestNumber = clear_from_divider(Number, 2),
     if

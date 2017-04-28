@@ -12,8 +12,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{2, 15}, 26}, {{2, 1000}, 1366}].
+get_check_data() -> [{{2, 15}, 26}, {{2, 1000}, 1366}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.

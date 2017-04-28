@@ -7,13 +7,14 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type primes() :: [Prime :: pos_integer()].
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{6, 13}, {10001, 104743}].
+get_check_data() -> [{6, 13}, {10001, 104743}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -26,10 +27,9 @@ solve(DesireCount) -> find_nth_prime(DesireCount).
 %% ====================================================================
 
 -spec find_nth_prime(DesireCount :: pos_integer()) -> pos_integer().
-find_nth_prime(DesireCount) ->
-    find_nth_prime(3, 1, DesireCount, [2]).
+find_nth_prime(DesireCount) -> find_nth_prime(3, 1, DesireCount, [2]).
 
--spec find_nth_prime(Number :: pos_integer(), Count :: pos_integer(), DesireCount :: pos_integer(), PrimeList :: [pos_integer()]) -> pos_integer().
+-spec find_nth_prime(Number :: pos_integer(), Count :: pos_integer(), DesireCount :: pos_integer(), PrimeList :: primes()) -> pos_integer().
 find_nth_prime(_, DesireCount, DesireCount, PrimeList) -> lists:last(PrimeList);
 find_nth_prime(Number, Count, DesireCount, PrimeList) ->
     CheckResult = check_prime(Number, PrimeList),
@@ -38,10 +38,10 @@ find_nth_prime(Number, Count, DesireCount, PrimeList) ->
         true -> find_nth_prime(Number + 2, Count, DesireCount, PrimeList)
     end.
 
--spec check_prime(Number :: pos_integer(), PrimeList :: [pos_integer()]) -> boolean().
+-spec check_prime(Number :: pos_integer(), PrimeList :: primes()) -> boolean().
 check_prime(Number, PrimeList) -> check_prime(Number, trunc(math:sqrt(Number)), PrimeList).
 
--spec check_prime(Number :: pos_integer(), Bound :: pos_integer(), PrimeList :: [pos_integer()]) -> boolean().
+-spec check_prime(Number :: pos_integer(), Bound :: pos_integer(), PrimeList :: primes()) -> boolean().
 check_prime(Number, Bound, [Prime | PrimeRest]) ->
     if
         Prime > Bound -> true;
