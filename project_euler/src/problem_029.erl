@@ -24,8 +24,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{5, 5}, 15}, {{100, 100}, 9183}].
+get_check_data() -> [{{5, 5}, 15}, {{100, 100}, 9183}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -39,13 +38,13 @@ solve({MaxBase, MaxExp}) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_base(Base :: pos_integer(), MaxBase :: pos_integer(), MaxExp :: pos_integer(), Storage :: power_set()) -> term().
+-spec process_base(Base :: pos_integer(), MaxBase :: pos_integer(), MaxExp :: pos_integer(), Storage :: power_set()) -> power_set().
 process_base(Base, MaxBase, _MaxExp, Storage) when Base > MaxBase -> Storage;
 process_base(Base, MaxBase, MaxExp, Storage) ->
     NewStorage = process_exp(Base, ?MIN_EXP, MaxExp, Storage),
     process_base(Base + 1, MaxBase, MaxExp, NewStorage).
 
--spec process_exp(Base :: pos_integer(), Exp :: pos_integer(), MaxExp :: pos_integer(), Storage :: power_set()) -> term().
+-spec process_exp(Base :: pos_integer(), Exp :: pos_integer(), MaxExp :: pos_integer(), Storage :: power_set()) -> power_set().
 process_exp(_Base, Exp, MaxExp, Storage) when Exp > MaxExp -> Storage;
 process_exp(Base, Exp, MaxExp, Storage) ->
     Value = numbers:power(Base, Exp),

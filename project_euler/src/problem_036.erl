@@ -9,9 +9,7 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type number_digits() :: array:array(digit()).
+-type number_digits() :: array:array(numbers:digit()).
 
 %% ====================================================================
 %% API functions

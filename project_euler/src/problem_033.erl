@@ -14,12 +14,9 @@
 -define(START_NUMBER, 11).
 -define(MAX_NUMBER, 50).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
--type simplification_result() :: {'true', Digit1 :: digit(), Digit2 :: digit()} | 'false'.
+-type simplification_result() :: {'true', Digit1 :: numbers:digit(), Digit2 :: numbers:digit()} | 'false'.
 -type check_result() :: {true, Numerator :: pos_integer(), Denominator :: pos_integer()} | 'false'.
--type result() :: [{Numerator :: pos_integer(), Denominator :: pos_integer()}].
+-type process_result() :: [{Numerator :: pos_integer(), Denominator :: pos_integer()}].
 
 %% ====================================================================
 %% API functions
@@ -38,7 +35,7 @@ solve(none) -> lists:reverse(process_number(?START_NUMBER, [])).
 %% Internal functions
 %% ====================================================================
 
--spec process_number(Number :: pos_integer(), Result :: result()) -> result().
+-spec process_number(Number :: pos_integer(), Result :: process_result()) -> process_result().
 process_number(?MAX_NUMBER, Result) -> Result;
 process_number(Number, Result) when Number rem 10 == 0 -> process_number(Number + 1, Result);
 process_number(Number, Result) ->
@@ -52,7 +49,7 @@ check_number(Number) ->
     NumberDigits = numbers:get_digits(Number),
     check_number(Number, NumberDigits, Number + 1).
 
--spec check_number(Number :: pos_integer(), NumberDigits :: digits(), OtherNumber :: pos_integer()) -> check_result().
+-spec check_number(Number :: pos_integer(), NumberDigits :: numbers:digits(), OtherNumber :: pos_integer()) -> check_result().
 check_number(_Number, _NumberDigits, OtherNumber) when OtherNumber >= 100 -> false;
 check_number(Number, NumberDigits, OtherNumber) ->
     OtherNumberDigits = numbers:get_digits(OtherNumber),
@@ -65,7 +62,7 @@ check_number(Number, NumberDigits, OtherNumber) ->
         false -> check_number(Number, NumberDigits, OtherNumber + 1)
     end.
 
--spec try_simplify(DigitsLeft :: [digit()], DigitRight :: [digit()]) -> simplification_result().
+-spec try_simplify(DigitsLeft :: numbers:digits(), DigitRight :: numbers:digits()) -> simplification_result().
 try_simplify([Digit, Digit2], [Digit3, Digit]) -> {true, Digit2, Digit3};
 try_simplify([Digit1, Digit], [Digit3, Digit]) -> {true, Digit1, Digit3};
 try_simplify([Digit, Digit2], [Digit, Digit4]) -> {true, Digit2, Digit4};
