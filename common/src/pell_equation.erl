@@ -170,7 +170,7 @@ find_x(FirstSolution, D, N) -> find_x(FirstSolution, D, N, 0, 0).
 -spec find_x(FirstSolution :: solution(), D :: pos_integer(), N :: pos_integer(), K :: non_neg_integer(), Result :: non_neg_integer()) -> integer().
 find_x(_FirstSolution, _D, N, K, Result) when K > N -> Result;
 find_x({X0, Y0} = FirstSolution, D, N, K, Result) ->
-    Value = calc_binomial_coefficient(N, K) * numbers:power(X0, N - K) * numbers:power(Y0, K) * numbers:power(D, K div 2),
+    Value = numbers:calc_binomial_coeff(N, K) * numbers:power(X0, N - K) * numbers:power(Y0, K) * numbers:power(D, K div 2),
     find_x(FirstSolution, D, N, K + 2, Result + Value).
 
 -spec find_y(FirstSolution :: solution(), D :: pos_integer(), N :: pos_integer()) -> integer().
@@ -179,9 +179,5 @@ find_y(FirstSolution, D, N) -> find_y(FirstSolution, D, N, 1, 0).
 -spec find_y(FirstSolution :: solution(), D :: pos_integer(), N :: pos_integer(), K :: non_neg_integer(), Result :: non_neg_integer()) -> integer().
 find_y(_FirstSolution, _D, N, K, Result) when K > N -> Result;
 find_y({X0, Y0} = FirstSolution, D, N, K, Result) ->
-    Value = calc_binomial_coefficient(N, K) * numbers:power(X0, N - K) * numbers:power(Y0, K) * numbers:power(D, K div 2),
+    Value = numbers:calc_binomial_coeff(N, K) * numbers:power(X0, N - K) * numbers:power(Y0, K) * numbers:power(D, K div 2),
     find_y(FirstSolution, D, N, K + 2, Result + Value).
-
-%% TODO (std_string) : move to another module
--spec calc_binomial_coefficient(N :: non_neg_integer(), K :: non_neg_integer()) -> pos_integer().
-calc_binomial_coefficient(N, K) -> numbers:factorial(N) div (numbers:factorial(K) * numbers:factorial(N - K)).
