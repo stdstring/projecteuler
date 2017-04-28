@@ -15,15 +15,13 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{{4, 3}, "120"}, {{1000000, 10}, "2783915460"}].
+get_check_data() -> [{{4, 3}, "120"}, {{1000000, 10}, "2783915460"}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 -spec solve(PreparedInput :: term()) -> term().
-solve({_LexographicNumber, DigitCount}) when DigitCount > 10 ->
-    throw(badarg);
+solve({_LexographicNumber, DigitCount}) when DigitCount > 10 -> error(badarg);
 solve({LexographicNumber, DigitCount}) ->
     SourceDigits = lists:seq($0, $0 + DigitCount - 1),
     Alphabet = array:from_list(SourceDigits),

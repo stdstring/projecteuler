@@ -22,8 +22,7 @@
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{"problem_018.dat", 1074}, {"problem_067.dat", 7273}].
+get_check_data() -> [{"problem_018.dat", 1074}, {"problem_067.dat", 7273}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
@@ -51,7 +50,7 @@ fill([[] | Rows], Row, _Column, Grid) -> fill(Rows, Row + 1, 1, Grid);
 fill([[Value | RowRest] | Rows], Row, Column, Grid) ->
     fill([RowRest] ++ Rows, Row, Column + 1, grid_helper:set_value(Row, Column, Value, Grid)).
 
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> 'left' | 'equal' | 'right'.
+-spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> grid_path_searcher:compare_result().
 compare_values(LValue, RValue) ->
     if
         LValue > RValue -> left;
