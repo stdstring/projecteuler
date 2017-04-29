@@ -11,7 +11,7 @@
 %% ====================================================================
 
 -spec get_dividers(Number :: pos_integer()) -> [pos_integer()].
-get_dividers(Number) when Number =< 0 -> throw(ebadarg);
+get_dividers(Number) when Number =< 0 -> error(badarg);
 get_dividers(1) -> [1];
 get_dividers(Number) -> get_dividers_impl(Number, 2, trunc(math:sqrt(Number)), [1], [Number]).
 
