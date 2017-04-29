@@ -33,11 +33,8 @@ solve(MaxNumber) ->
 %% ====================================================================
 
 -spec calc_sum_square(MaxNumber :: pos_integer()) -> pos_integer().
-calc_sum_square(MaxNumber) ->
-    calc_sum_square(1, MaxNumber, 0).
+calc_sum_square(MaxNumber) -> calc_sum_square(1, MaxNumber, 0).
 
 -spec calc_sum_square(Number :: pos_integer(), MaxNumber :: pos_integer(), Sum :: non_neg_integer()) -> pos_integer().
-calc_sum_square(MaxNumber, MaxNumber, Sum) ->
-    Sum + MaxNumber * MaxNumber;
-calc_sum_square(Number, MaxNumber, Sum) ->
-    calc_sum_square(Number + 1, MaxNumber, Sum + Number * Number).
+calc_sum_square(MaxNumber, MaxNumber, Sum) -> Sum + MaxNumber * MaxNumber;
+calc_sum_square(Number, MaxNumber, Sum) -> calc_sum_square(Number + 1, MaxNumber, Sum + Number * Number).

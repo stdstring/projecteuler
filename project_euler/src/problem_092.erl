@@ -18,7 +18,6 @@
 -define(KNOWN_UNHAPPY, [4, 16, 37, 58, 89, 145, 42, 20]).
 
 -type number_storage() :: array:array('happy' | 'unhappy' | 'undef').
-%% TODO (std_string) : move into common
 -type search_result() :: {'true', NextNumber :: pos_integer()} | 'false'.
 
 %% ====================================================================

@@ -19,9 +19,7 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type factorial_storage() :: array:array(digit()).
+-type factorial_storage() :: array:array(numbers:digit()).
 -type chain_storage() :: array:array('undef' | {'index', Index :: non_neg_integer()} | pos_integer()).
 -type number_search_result() :: {'true', NextNumber :: pos_integer()} | 'false'.
 -type result() :: {'index', CycleStart :: pos_integer(), CycleSize :: pos_integer()} | pos_integer().

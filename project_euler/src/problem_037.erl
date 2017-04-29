@@ -13,10 +13,7 @@
 
 -define(EXPECTED_COUNT, 11).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
--type number_data() :: {Digits :: digits(), DigitsCount :: pos_integer()}.
+-type number_data() :: {Digits :: numbers:digits(), DigitsCount :: pos_integer()}.
 
 %% ====================================================================
 %% API functions
@@ -55,14 +52,17 @@ process_numbers({NumberDigits, NumberDigitsCount}, Found, FoundCount) ->
             end
     end.
 
--spec generate_next_number(Digits :: digits(), DigitsCount :: pos_integer()) -> number_data().
+-spec generate_next_number(Digits :: numbers:digits(), DigitsCount :: pos_integer()) -> number_data().
 generate_next_number(PrevNumberDigits, PrevNumberDigitsCount) ->
     case lists:reverse(PrevNumberDigits) of
         [3 | DigitsRest] -> generate_next_number(DigitsRest, PrevNumberDigitsCount, false, [7]);
         [7 | DigitsRest] -> generate_next_number(DigitsRest, PrevNumberDigitsCount, true, [3])
     end.
 
--spec generate_next_number(Digits :: digits(), DigitsCount :: pos_integer(), TransferAddition :: boolean(), Result :: digits()) -> number_data().
+-spec generate_next_number(Digits :: numbers:digits(),
+                           DigitsCount :: pos_integer(),
+                           TransferAddition :: boolean(),
+                           Result :: numbers:digits()) -> number_data().
 generate_next_number([], DigitsCount, false, Result) -> {Result, DigitsCount};
 generate_next_number([Digit | DigitsRest], DigitsCount, false, Result) -> generate_next_number(DigitsRest, DigitsCount, false, [Digit] ++ Result);
 generate_next_number([2], DigitsCount, true, Result) -> {[3] ++ Result, DigitsCount};

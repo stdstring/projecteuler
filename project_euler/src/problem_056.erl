@@ -46,5 +46,4 @@ process_exp(Base, Exp, MaxExp, Result) ->
     end.
 
 -spec calc_digits_sum(Number :: pos_integer()) -> pos_integer().
-calc_digits_sum(Number) ->
-    lists:sum(numbers:get_digits(Number)).
+calc_digits_sum(Number) -> lists:sum(numbers:get_digits(Number)).

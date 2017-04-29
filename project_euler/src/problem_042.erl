@@ -12,6 +12,7 @@
 
 -behaviour(numerical_task_behaviour).
 
+%% TODO (std_string) : think about creation module for word processing
 -type word() :: string().
 -type triangle_numbers_set() :: sets:set(TriangleNumber :: pos_integer()).
 

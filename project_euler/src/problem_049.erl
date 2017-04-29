@@ -15,9 +15,6 @@
 -define(SECOND_TERM_RANGE, [{1000, 5999}, {2000, 6499}, {3000, 6999}, {4000, 7499}, {5000, 7999}, {6000, 8499}, {7000, 8999}, {8000, 9499}, {9000, 9999}]).
 -define(KNOWN_RESULT, {1487, 4817, 8147}).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
 -type number_range() :: 1000..9999.
 -type primes_seq() :: {FirstTerm :: number_range(), SecondTerm :: number_range(), ThirdTerm :: number_range()}.
 -type primes_set() :: sets:set(Prime :: pos_integer()).
@@ -79,7 +76,7 @@ process_prime(Prime, State) ->
                                        sets:is_element(ThirdTerm, SieveSet),
                                        check_digits([D1, D2, D3, D4], numbers:get_digits(ThirdTerm))].
 
--spec generate_numbers(D1 :: digit(), D2 :: digit(), D3 :: digit(), D4 :: digit()) -> [digits()].
+-spec generate_numbers(D1 :: numbers:digit(), D2 :: numbers:digit(), D3 :: numbers:digit(), D4 :: numbers:digit()) -> [numbers:digits()].
 generate_numbers(D1, D, D, D) ->
     [[D, D1, D, D], [D, D, D1, D], [D, D, D, D1]];
 generate_numbers(D, D2, D, D) ->
@@ -185,7 +182,7 @@ generate_numbers(D1, D2, D3, D4) ->
      [D4, D3, D1, D2],
      [D4, D3, D2, D1]].
 
--spec check_digits(Expected :: digits(), Actual :: digits()) -> boolean().
+-spec check_digits(Expected :: numbers:digits(), Actual :: numbers:digits()) -> boolean().
 check_digits([D1, D2, D3, D4], [D1, D2, D3, D4]) -> true;
 check_digits([D1, D2, D3, D4], [D1, D2, D4, D3]) -> true;
 check_digits([D1, D2, D3, D4], [D1, D3, D2, D4]) -> true;

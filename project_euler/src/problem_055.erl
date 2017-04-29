@@ -57,8 +57,7 @@ process_number(Number, MaxNumber, Storage) ->
     end.
 
 -spec find_next_number(Number :: pos_integer(), Storage :: result_storage()) -> search_result().
-find_next_number(Number, Storage) ->
-    find_next_number(Number - 1, array:size(Storage), Storage).
+find_next_number(Number, Storage) -> find_next_number(Number - 1, array:size(Storage), Storage).
 
 -spec find_next_number(Index :: non_neg_integer(), Count :: pos_integer(), Storage :: result_storage()) -> search_result().
 find_next_number(Count, Count, _Storage) -> false;

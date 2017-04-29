@@ -12,12 +12,9 @@
 -define(INIT_NUMBER, 1).
 -define(INIT_CUBE_SUP, 10).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
--type cube_dictionary() :: dict:dict(digits(), [Number :: pos_integer()]).
+-type cube_dictionary() :: dict:dict(numbers:digits(), [Number :: pos_integer()]).
 
--record(state, {cube_numbers :: cube_dictionary(), suitable_keys :: [digits()]}).
+-record(state, {cube_numbers :: cube_dictionary(), suitable_keys :: [numbers:digits()]}).
 
 -type range_result() :: {Number :: pos_integer(), State :: #state{}}.
 
@@ -67,7 +64,9 @@ process_number(Number, State, PermutationsCount) ->
         NumbersCount > PermutationsCount -> State#state{cube_numbers = CubeNumbersDict, suitable_keys = SuitableKeys -- [Digits]}
     end.
 
--spec process_suiatble(SuitableKeys :: [digits()], CubeNumbers :: cube_dictionary(), MinValue :: 'undefined' | pos_integer()) -> pos_integer().
+-spec process_suiatble(SuitableKeys :: [numbers:digits()],
+                       CubeNumbers :: cube_dictionary(),
+                       MinValue :: 'undefined' | pos_integer()) -> pos_integer().
 process_suiatble([], _CubeNumbers, MinValue) -> MinValue;
 process_suiatble([Key | KeysRest], CubeNumbers, undefined) ->
     process_suiatble(KeysRest, CubeNumbers, lists:min(dict:fetch(Key, CubeNumbers)));

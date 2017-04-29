@@ -11,9 +11,6 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -37,13 +34,13 @@ solve(none) -> calculate_digit(1) *
 %% Internal functions
 %% ====================================================================
 
--spec calculate_digit(Number :: pos_integer()) -> digit().
+-spec calculate_digit(Number :: pos_integer()) -> numbers:digit().
 calculate_digit(Number) -> calculate_digit(Number, 1, 9, 1).
 
 -spec calculate_digit(Number :: pos_integer(),
                       RangeStart :: pos_integer(),
                       RangeCount :: pos_integer(),
-                      IntegerLength :: pos_integer()) -> digit().
+                      IntegerLength :: pos_integer()) -> numbers:digit().
 calculate_digit(Number, RangeStart, RangeCount, IntegerLength) when Number > RangeCount * IntegerLength ->
     calculate_digit(Number - RangeCount * IntegerLength, RangeStart * 10, RangeCount * 10, IntegerLength + 1);
 calculate_digit(Number, 1, 9, 1) -> Number;
@@ -52,5 +49,5 @@ calculate_digit(Number, RangeStart, _, IntegerLength) ->
     LeftwardDigitPosition = (Number rem IntegerLength) - 1,
     get_digit(Integer, IntegerLength - LeftwardDigitPosition).
 
--spec get_digit(Number :: pos_integer(), DigitPosition :: pos_integer()) -> digit().
+-spec get_digit(Number :: pos_integer(), DigitPosition :: pos_integer()) -> numbers:digit().
 get_digit(Number, DigitPosition) -> (Number rem numbers:power(10, DigitPosition)) div numbers:power(10, DigitPosition - 1).

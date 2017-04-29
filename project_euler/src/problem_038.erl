@@ -53,7 +53,7 @@ process_number(Number, SavedResult) ->
 
 -spec process_number(Number :: pos_integer(), Factor :: factor(), Result :: non_neg_integer()) -> process_result().
 process_number(_Number, _Factor, Result) when Result > ?PANDIGITAL9_MAX -> false;
-process_number(_Number, _Factor, Result) when (Result >= ?PANDIGITAL9_MIN) and (Result =< ?PANDIGITAL9_MAX) ->
+process_number(_Number, _Factor, Result) when Result >= ?PANDIGITAL9_MIN, Result =< ?PANDIGITAL9_MAX ->
     case pandigital_numbers:is_pandigital(Result) of
         true -> {true, Result};
         false -> false

@@ -16,15 +16,12 @@
 
 -define(ALPHABET_SIZE, 26).
 
-%% TODO (std_string) : move into common
+%% TODO (std_string) : think about creation module for word processing
 -type word() :: string().
 -type words() :: [string()].
 -type word_pair() :: {Word1 :: word(), Word2 :: word()}.
 -type word_pairs() :: [word_pair()].
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [0..9].
--type digits_array() :: array:array(Digit :: digit()).
+-type digits_array() :: array:array(Digit :: numbers:digit()).
 -type chars_array() :: array:array(Character :: char()).
 -type squares() :: [Square :: pos_integer()].
 -type squares_set() :: sets:set(Square :: pos_integer()).
@@ -74,17 +71,17 @@ match_word(Word, Number) ->
     DigitMatchStorage = array:new([{size, 10}, {fixed, true}, {default, undef}]),
     match_word(Word, numbers:get_digits(Number), LetterMatchStorage, DigitMatchStorage).
 
--spec match_word(Word :: word(), Digits :: digits(), LetterMatchStorage :: digits_array(), DigitMatchStorage :: chars_array()) -> match_word_result().
+-spec match_word(Word :: word(), Digits :: numbers:digits(), LetterMatchStorage :: digits_array(), DigitMatchStorage :: chars_array()) -> match_word_result().
 match_word([], [], LetterMatchStorage, _DigitMatchStorage) -> {true, LetterMatchStorage};
 match_word([Letter | WordRest], [Digit | DigitsRest], LetterMatchStorage, DigitMatchStorage) ->
     LetterMatchValue = array:get(Letter - $A, LetterMatchStorage),
     DigitMatchValue = array:get(Digit, DigitMatchStorage),
     if
-        (LetterMatchValue == undef) and (DigitMatchValue == undef) ->
+        LetterMatchValue == undef, DigitMatchValue == undef ->
             NewLetterMatchStorage = array:set(Letter - $A, Digit, LetterMatchStorage),
             NewDigitMatchStorage = array:set(Digit, Letter, DigitMatchStorage),
             match_word(WordRest, DigitsRest, NewLetterMatchStorage, NewDigitMatchStorage);
-        (LetterMatchValue == Digit) and (DigitMatchValue == Letter) ->
+        LetterMatchValue == Digit, DigitMatchValue == Letter ->
             match_word(WordRest, DigitsRest, LetterMatchStorage, DigitMatchStorage);
         true -> false
     end.

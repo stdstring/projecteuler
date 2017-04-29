@@ -33,10 +33,10 @@
 %% IV -> 4
 %% I -> 1
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
-
--record(number, {thousands = 0 :: non_neg_integer(), hundreds = 0 :: digit(), tens = 0 :: digit(), ones = 0 :: digit()}).
+-record(number, {thousands = 0 :: non_neg_integer(),
+                 hundreds = 0 :: numbers:digit(),
+                 tens = 0 :: numbers:digit(),
+                 ones = 0 :: numbers:digit()}).
 
 %% ====================================================================
 %% API functions
@@ -108,7 +108,7 @@ generate_roman(#number{thousands = Thousands, hundreds = Hundreds, tens = Tens, 
     generate_roman_tens(Tens) ++
     generate_roman_ones(Ones).
 
--spec generate_roman_ones(Ones :: digit()) -> string().
+-spec generate_roman_ones(Ones :: numbers:digit()) -> string().
 generate_roman_ones(0) -> "";
 generate_roman_ones(1) -> "I";
 generate_roman_ones(2) -> "II";
@@ -120,7 +120,7 @@ generate_roman_ones(7) -> "VII";
 generate_roman_ones(8) -> "VIII";
 generate_roman_ones(9) -> "IX".
 
--spec generate_roman_tens(Tens :: digit()) -> string().
+-spec generate_roman_tens(Tens :: numbers:digit()) -> string().
 generate_roman_tens(0) -> "";
 generate_roman_tens(1) -> "X";
 generate_roman_tens(2) -> "XX";
@@ -132,7 +132,7 @@ generate_roman_tens(7) -> "LXX";
 generate_roman_tens(8) -> "LXXX";
 generate_roman_tens(9) -> "XC".
 
--spec generate_roman_hundreds(Hundreds :: digit()) -> string().
+-spec generate_roman_hundreds(Hundreds :: numbers:digit()) -> string().
 generate_roman_hundreds(0) -> "";
 generate_roman_hundreds(1) -> "C";
 generate_roman_hundreds(2) -> "CC";
