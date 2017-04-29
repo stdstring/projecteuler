@@ -44,7 +44,7 @@ solve(MinTotalCount) ->
 process(FirstSolution, N, MinTotalCount) ->
     {X, Y} = pell_equation:find_n_solution(FirstSolution, ?D, ?C, N),
     if
-        (X div 2 == 0) or (Y div 2 == 0) -> process(FirstSolution, N + 2, MinTotalCount);
+        X div 2 == 0; Y div 2 == 0 -> process(FirstSolution, N + 2, MinTotalCount);
         true ->
             TotalCount = (X + 1) div 2,
             if

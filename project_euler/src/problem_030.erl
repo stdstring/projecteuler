@@ -41,7 +41,7 @@ solve({Power, Infimum}) ->
 find_infimum(Delta) -> find_infimum(1, 10, Delta, Delta).
 
 -spec find_infimum(LeftBound :: pos_integer(), RightBound :: pos_integer(), Value  :: pos_integer(), Delta :: pos_integer()) -> pos_integer().
-find_infimum(LeftBound, RightBound, Value, _Delta) when (LeftBound < Value) and (Value < RightBound) -> Value;
+find_infimum(LeftBound, RightBound, Value, _Delta) when LeftBound < Value, Value < RightBound -> Value;
 find_infimum(LeftBound, RightBound, Value, Delta) -> find_infimum(10 * LeftBound, 10 * RightBound, Value + Delta, Delta).
 
 -spec traverse_numbers(Max :: pos_integer(), PowerStorage :: power_storage()) -> pos_integer().

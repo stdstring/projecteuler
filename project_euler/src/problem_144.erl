@@ -109,5 +109,4 @@ calc_crosspoint({StartX, StartY}, {DirectX, DirectY}) ->
     {CrossX, CrossY}.
 
 -spec is_hole(Point :: point()) -> boolean().
-is_hole({X, Y}) ->
-    (Y > 0) and (?LEFT_HOLE_X_BORDER =< X) and (X =< ?RIGHT_HOLE_X_BORDER).
+is_hole({X, Y}) -> (Y > 0) and (?LEFT_HOLE_X_BORDER =< X) and (X =< ?RIGHT_HOLE_X_BORDER).

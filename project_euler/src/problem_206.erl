@@ -63,7 +63,7 @@ check_number(Number) ->
 check_last_digits(Number) ->
     Rem = Number rem 100,
     if
-        (Rem == 09) or (Rem == 29) or (Rem == 49) or (Rem == 69) or (Rem == 89) -> {true, Number div 100};
+        Rem == 09; Rem == 29; Rem == 49; Rem == 69; Rem == 89 -> {true, Number div 100};
         true -> false
     end.
 

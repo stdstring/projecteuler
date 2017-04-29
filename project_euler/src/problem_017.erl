@@ -81,7 +81,7 @@ parse_number(Number, From0To9, From10To19, OtherTens) ->
 less_hundred(Number, _TensFrom0To9, _From10To19, _OtherTens) when Number >= 100 -> erlang:error(badarg);
 less_hundred(Number, From0To9, _From10To19, _OtherTens) when Number =< 9 ->
     length(array:get(Number, From0To9));
-less_hundred(Number, _From0To9, From10To19, _OtherTens) when (Number > 9) and (Number < 20) ->
+less_hundred(Number, _From0To9, From10To19, _OtherTens) when (Number > 9), (Number < 20) ->
     length(array:get(Number - 10, From10To19));
 less_hundred(Number, From0To9, _From10To19, OtherTens) ->
     length(array:get((Number div 10) - 2, OtherTens)) + length(array:get(Number rem 10, From0To9)).

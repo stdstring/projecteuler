@@ -8,10 +8,7 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
--type digits_alphabet() :: array:array(digit()).
+-type digits_alphabet() :: array:array(numbers:digit()).
 
 %% ====================================================================
 %% API functions
@@ -40,12 +37,14 @@ solve(none) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_number(NumberDigits :: digits(), LexographicNumber :: non_neg_integer(), Alphabet :: digits_alphabet()) -> digits().
+-spec process_number(NumberDigits :: numbers:digits(),
+                     LexographicNumber :: non_neg_integer(),
+                     Alphabet :: digits_alphabet()) -> numbers:digits().
 process_number(NumberDigits, 0, _Alphabet) ->
     Number = numbers:get_number(NumberDigits),
     case number_dividers:is_prime(Number) of
         true -> NumberDigits;
-        false -> throw(badarg)
+        false -> error(badarg)
     end;
 process_number(NumberDigits, LexographicNumber, Alphabet) ->
     Number = numbers:get_number(NumberDigits),

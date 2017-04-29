@@ -17,10 +17,6 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -42,7 +38,7 @@ solve(none) ->
 %% ====================================================================
 
 %% process d8d9d10
--spec process_number(Digits :: digit(), Number :: pos_integer(), Result :: [pos_integer()]) -> [pos_integer()].
+-spec process_number(Digits :: numbers:digits(), Number :: pos_integer(), Result :: [pos_integer()]) -> [pos_integer()].
 process_number(_Digits, Number, Result) when Number > 999 -> Result;
 process_number(Digits, Number, Result) ->
     [Digit8, Digit9, Digit10] = get_digits(Number),
@@ -55,11 +51,11 @@ process_number(Digits, Number, Result) ->
     end.
 
 %% process d7d8d9
--spec process_number(ProcessedDigits :: digits(),
-                     Digits :: digits(),
-                     Digit8 :: digit(),
-                     Digit9 :: digit(),
-                     Digit10 :: digit(),
+-spec process_number(ProcessedDigits :: numbers:digits(),
+                     Digits :: numbers:digits(),
+                     Digit8 :: numbers:digit(),
+                     Digit9 :: numbers:digit(),
+                     Digit10 :: numbers:digit(),
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit8, _Digit9, _Digit10, Result) -> Result;
 process_number([Digit7 | Digit7Rest], Digits, Digit8, Digit9, Digit10, Result) ->
@@ -73,12 +69,12 @@ process_number([Digit7 | Digit7Rest], Digits, Digit8, Digit9, Digit10, Result) -
     end.
 
 %% process d6d7d8
--spec process_number(ProcessedDigits :: digits(),
-                     Digits :: digits(),
-                     Digit7 :: digit(),
-                     Digit8 :: digit(),
-                     Digit9 :: digit(),
-                     Digit10 :: digit(),
+-spec process_number(ProcessedDigits :: numbers:digits(),
+                     Digits :: numbers:digits(),
+                     Digit7 :: numbers:digit(),
+                     Digit8 :: numbers:digit(),
+                     Digit9 :: numbers:digit(),
+                     Digit10 :: numbers:digit(),
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit7, _Digit8, _Digit9, _Digit10, Result) -> Result;
 %% d6 = 0, 5 due to d4d5d6 is divisible by 5
@@ -95,13 +91,13 @@ process_number([_Digit6 | Digit6Rest], Digits, Digit7, Digit8, Digit9, Digit10, 
     process_number(Digit6Rest, Digits, Digit7, Digit8, Digit9, Digit10, Result).
 
 %% process d5d6d7
--spec process_number(ProcessedDigits :: digits(),
-                     Digits :: digits(),
-                     Digit6 :: digit(),
-                     Digit7 :: digit(),
-                     Digit8 :: digit(),
-                     Digit9 :: digit(),
-                     Digit10 :: digit(),
+-spec process_number(ProcessedDigits :: numbers:digits(),
+                     Digits :: numbers:digits(),
+                     Digit6 :: numbers:digit(),
+                     Digit7 :: numbers:digit(),
+                     Digit8 :: numbers:digit(),
+                     Digit9 :: numbers:digit(),
+                     Digit10 :: numbers:digit(),
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit6, _Digit7, _Digit8, _Digit9, _Digit10, Result) -> Result;
 process_number([Digit5 | Digit5Rest], Digits, Digit6, Digit7, Digit8, Digit9, Digit10, Result) ->
@@ -115,14 +111,14 @@ process_number([Digit5 | Digit5Rest], Digits, Digit6, Digit7, Digit8, Digit9, Di
     end.
 
 %% process d4d5d6
--spec process_number(ProcessedDigits :: digits(),
-                     Digits :: digits(),
-                     Digit5 :: digit(),
-                     Digit6 :: digit(),
-                     Digit7 :: digit(),
-                     Digit8 :: digit(),
-                     Digit9 :: digit(),
-                     Digit10 :: digit(),
+-spec process_number(ProcessedDigits :: numbers:digits(),
+                     Digits :: numbers:digits(),
+                     Digit5 :: numbers:digit(),
+                     Digit6 :: numbers:digit(),
+                     Digit7 :: numbers:digit(),
+                     Digit8 :: numbers:digit(),
+                     Digit9 :: numbers:digit(),
+                     Digit10 :: numbers:digit(),
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit5, _Digit6, _Digit7, _Digit8, _Digit9, _Digit10, Result) -> Result;
 %% d4 = 0, 2, 4, 6, 8 due to d2d3d4 is divisible by 2
@@ -135,15 +131,15 @@ process_number([_Digit4 | Digit4Rest], Digits, Digit5, Digit6, Digit7, Digit8, D
     process_number(Digit4Rest, Digits, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result).
 
 %% process d3d4d5
--spec process_number(ProcessedDigits :: digits(),
-                     Digits :: digits(),
-                     Digit4 :: digit(),
-                     Digit5 :: digit(),
-                     Digit6 :: digit(),
-                     Digit7 :: digit(),
-                     Digit8 :: digit(),
-                     Digit9 :: digit(),
-                     Digit10 :: digit(),
+-spec process_number(ProcessedDigits :: numbers:digits(),
+                     Digits :: numbers:digits(),
+                     Digit4 :: numbers:digit(),
+                     Digit5 :: numbers:digit(),
+                     Digit6 :: numbers:digit(),
+                     Digit7 :: numbers:digit(),
+                     Digit8 :: numbers:digit(),
+                     Digit9 :: numbers:digit(),
+                     Digit10 :: numbers:digit(),
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit4, _Digit5, _Digit6, _Digit7, _Digit8, _Digit9, _Digit10, Result) -> Result;
 process_number([Digit3 | Digit3Rest], Digits, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result) ->
@@ -156,15 +152,15 @@ process_number([Digit3 | Digit3Rest], Digits, Digit4, Digit5, Digit6, Digit7, Di
         _Other -> process_number(Digit3Rest, Digits, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result)
     end.
 
--spec collect(Digits :: digits(),
-              Digit3 :: digit(),
-              Digit4 :: digit(),
-              Digit5 :: digit(),
-              Digit6 :: digit(),
-              Digit7 :: digit(),
-              Digit8 :: digit(),
-              Digit9 :: digit(),
-              Digit10 :: digit(),
+-spec collect(Digits :: numbers:digits(),
+              Digit3 :: numbers:digit(),
+              Digit4 :: numbers:digit(),
+              Digit5 :: numbers:digit(),
+              Digit6 :: numbers:digit(),
+              Digit7 :: numbers:digit(),
+              Digit8 :: numbers:digit(),
+              Digit9 :: numbers:digit(),
+              Digit10 :: numbers:digit(),
               Result :: [pos_integer()]) -> [pos_integer()].
 collect([Digit1, 0], Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result) ->
     [numbers:get_number([Digit1, 0, Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10])] ++ Result;
@@ -175,13 +171,13 @@ collect([Digit1, Digit2], Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9
     Number2 = numbers:get_number([Digit2, Digit1, Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10]),
     [Number1, Number2] ++ Result.
 
--spec check_d8d9d10_part(Digit8 :: digit(), Digit9 :: digit(), Digit10 :: digit()) -> boolean().
+-spec check_d8d9d10_part(Digit8 :: numbers:digit(), Digit9 :: numbers:digit(), Digit10 :: numbers:digit()) -> boolean().
 check_d8d9d10_part(Digit, Digit, _Digit10) -> false;
 check_d8d9d10_part(Digit, _Digit9, Digit) -> false;
 check_d8d9d10_part(_Digit8, Digit, Digit) -> false;
 check_d8d9d10_part(_Digit8, _Digit9, _Digit10) -> true.
 
--spec get_digits(Number :: pos_integer()) -> digits().
-get_digits(Number) when Number > 999 -> throw(badarg);
+-spec get_digits(Number :: pos_integer()) -> numbers:digits().
+get_digits(Number) when Number > 999 -> error(badarg);
 get_digits(Number) when Number < 100 -> [0] ++ numbers:get_digits(Number);
 get_digits(Number) -> numbers:get_digits(Number).

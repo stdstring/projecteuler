@@ -25,7 +25,7 @@ prepare_data(ModuleSourceDir, Filename) ->
 
 -spec solve(PreparedInput :: term()) -> term().
 solve(NameList) ->
-    {_, Sum} = lists:foldl(fun(Name, {Index, Sum}) -> {Index+1, Sum + Index * (lists:sum(Name) - length(Name) * ($A - 1))} end, {1, 0}, NameList),
+    {_, Sum} = lists:foldl(fun(Name, {Index, Sum}) -> {Index + 1, Sum + Index * (lists:sum(Name) - length(Name) * ($A - 1))} end, {1, 0}, NameList),
     Sum.
 
 %% ====================================================================

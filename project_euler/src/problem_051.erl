@@ -17,8 +17,6 @@
 -define(YOUNG_POSSIBLE_DIGITS, [1, 3, 7, 9]).
 
 %% TODO (std_string) : move into common
--type digit() :: 0..9.
--type digits() :: [digit()].
 -type digits_pos() :: [DigitPos :: non_neg_integer()].
 -type digits_info() :: array:array(digits_pos()).
 -type process_result() :: {'true', Number :: pos_integer()} | 'false'.
@@ -53,13 +51,13 @@ create_digits_info(Number, DigitsCount) ->
     {InfoFinal, _} = lists:foldl(fun(Digit, {Info, Pos}) -> {array:set(Digit, [Pos] ++ array:get(Digit, Info), Info), Pos - 1} end, AccInit, Digits),
     InfoFinal.
 
--spec select_possible_variants(DigitsInfo :: digits_info(), FamilySize :: pos_integer()) -> digits().
+-spec select_possible_variants(DigitsInfo :: digits_info(), FamilySize :: pos_integer()) -> numbers:digits().
 select_possible_variants(DigitsInfo, FamilySize) -> select_possible_variants(DigitsInfo, FamilySize, 0, []).
 
 -spec select_possible_variants(DigitsInfo :: digits_info(),
                                FamilySize :: pos_integer(),
-                               Digit :: digit(),
-                               Storage :: digits()) -> digits().
+                               Digit :: numbers:digit(),
+                               Storage :: numbers:digits()) -> numbers:digits().
 select_possible_variants(_DigitsInfo, _FamilySize, Digit, Storage) when Digit > 9 -> Storage;
 select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
     PosList = array:get(Digit, DigitsInfo),
@@ -68,7 +66,7 @@ select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
         true -> select_possible_variants(DigitsInfo, FamilySize, Digit + 1, [Digit] ++ Storage)
     end.
 
--spec check_possible_variant(PosList :: digits_pos(), Digit :: digit(), FamilySize :: pos_integer()) -> boolean().
+-spec check_possible_variant(PosList :: digits_pos(), Digit :: numbers:digit(), FamilySize :: pos_integer()) -> boolean().
 check_possible_variant([], _Digit, _FamilySize) -> false;
 %% last (younger) digit must be 1, 3, 7, 9
 check_possible_variant([0 | _Rest], 1, FamilySize) -> FamilySize =< 4;
@@ -77,17 +75,16 @@ check_possible_variant([0 | _Rest], 7, FamilySize) -> FamilySize =< 2;
 check_possible_variant([0 | _Rest], 9, FamilySize) -> FamilySize =< 1;
 check_possible_variant(_PosList, Digit, FamilySize) -> FamilySize =< (10 - Digit).
 
--spec calc_number_part(Digit :: digit(), PosList :: digits_pos()) -> non_neg_integer().
+-spec calc_number_part(Digit :: numbers:digit(), PosList :: digits_pos()) -> non_neg_integer().
 calc_number_part(0, _PosList) -> 0;
 calc_number_part(_Digit, []) -> 0;
-calc_number_part(Digit, PosList) ->
-    Digit * lists:sum(lists:map(fun(Pos) -> numbers:power(10, Pos) end, PosList)).
+calc_number_part(Digit, PosList) -> Digit * lists:sum(lists:map(fun(Pos) -> numbers:power(10, Pos) end, PosList)).
 
 -spec create_number(DigitsInfo :: digits_info()) -> non_neg_integer().
 create_number(DigitsInfo) -> array:foldl(fun(Digit, PosList, Number) -> calc_number_part(Digit, PosList) + Number end, 0, DigitsInfo).
 
 -spec check_family(DigitsInfo :: digits_info(),
-                   Digit :: digit(),
+                   Digit :: numbers:digit(),
                    FamilySize :: pos_integer(),
                    Primes :: eratos_sieve:sieve()) -> boolean().
 check_family(DigitsInfo, Digit, FamilySize, Primes) ->
@@ -104,7 +101,7 @@ check_family(DigitsInfo, Digit, FamilySize, Primes) ->
     end.
 
 -spec check_family_impl(InvNumberPart :: non_neg_integer(),
-                        Digits :: digits(),
+                        Digits :: numbers:digits(),
                         PosList :: digits_pos(),
                         FamilySizeRest :: integer(),
                         Primes :: eratos_sieve:sieve()) -> boolean().
@@ -118,7 +115,7 @@ check_family_impl(InvNumberPart, [Digit | DigitsRest], PosList, FamilySizeRest, 
     end.
 
 -spec check_possible_families(DigitsInfo :: digits_info(),
-                              Variants :: digits(),
+                              Variants :: numbers:digits(),
                               FamilySize :: pos_integer(),
                               Primes :: eratos_sieve:sieve()) -> boolean().
 check_possible_families(_DigitsInfo, [], _FamilySize, _Primes) -> false;

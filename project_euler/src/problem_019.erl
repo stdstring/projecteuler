@@ -58,8 +58,7 @@ process_year([Month | Rest], {DayNumber, Count}) ->
     end.
 
 -spec is_leap_year(Year :: pos_integer()) -> boolean().
-is_leap_year(Year) ->
-    (Year rem 4 == 0) and ((Year rem 100 /= 0) or (Year rem 400 == 0)).
+is_leap_year(Year) -> (Year rem 4 == 0) and ((Year rem 100 /= 0) or (Year rem 400 == 0)).
 
 -spec correct_last_sunday(Result :: process_result()) -> process_result().
 correct_last_sunday({0, Count}) -> {0, Count - 1};

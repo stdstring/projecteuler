@@ -10,9 +10,6 @@
 
 -include("grid_def.hrl").
 
-%% TODO (std_string) : move into common
--type compare_result() :: 'left' | 'equal' | 'right'.
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -38,8 +35,7 @@ solve(GridData) ->
 %% Internal functions
 %% ====================================================================
 
-%% TODO (std_string) : move into common
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> compare_result().
+-spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> grid_path_searcher:compare_result().
 compare_values(LValue, RValue) ->
     if
         LValue < RValue -> left;
