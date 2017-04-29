@@ -9,8 +9,8 @@
 %% ====================================================================
 
 get_dividers_test_() ->
-    [{"dividers for -1", ?_assertThrow(ebadarg, number_dividers:get_dividers(-1))},
-     {"dividers for 0", ?_assertThrow(ebadarg, number_dividers:get_dividers(0))},
+    [{"dividers for -1", ?_assertError(badarg, number_dividers:get_dividers(-1))},
+     {"dividers for 0", ?_assertError(badarg, number_dividers:get_dividers(0))},
      {"dividers for 1", ?_assertEqual([1], number_dividers:get_dividers(1))},
      {"dividers for 2", ?_assertEqual([1, 2], number_dividers:get_dividers(2))},
      {"dividers for 10", ?_assertEqual([1, 2, 5, 10], number_dividers:get_dividers(10))},

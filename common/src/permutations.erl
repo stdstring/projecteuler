@@ -39,7 +39,7 @@ find_item(AlphabetRest, ItemIndex) ->
 
 -spec find_item(AlphabetRest :: array:array(term()), AlphabetSize :: pos_integer(), ItemIndex :: non_neg_integer(), Index :: non_neg_integer()) ->
     {Item :: term(), AlphabetRest :: array:array(term())} | no_return().
-find_item(_AlphabetRest, AlphabetSize, _ItemIndex, AlphabetSize) -> throw(badarg);
+find_item(_AlphabetRest, AlphabetSize, _ItemIndex, AlphabetSize) -> error(badarg);
 find_item(AlphabetRest, AlphabetSize, 0, Index) ->
     case array:get(Index, AlphabetRest) of
         undef -> find_item(AlphabetRest, AlphabetSize, 0, Index + 1);
@@ -58,7 +58,7 @@ find_item(AlphabetRest, AlphabetSize, ItemIndex, Index) ->
 get_lexographic_number_impl([], 0, _AlphabetRest, Result) -> Result;
 get_lexographic_number_impl([Item | Items], ItemsCount, AlphabetRest, Result) ->
     case find_index(AlphabetRest, Item) of
-        {-1, _NewAlphabetRest} -> throw(badarg);
+        {-1, _NewAlphabetRest} -> error(badarg);
         {ItemIndex, NewAlphabetRest} ->
             NewResult = Result + ItemIndex * numbers:factorial(ItemsCount - 1),
             get_lexographic_number_impl(Items, ItemsCount - 1, NewAlphabetRest, NewResult)
