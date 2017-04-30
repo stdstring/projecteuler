@@ -21,7 +21,6 @@ get_check_data() -> [{"problem_099.dat", 709}].
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_number_table(filename:join(ModuleSourceDir, Filename), ",").
 
-%% TODO (std_string) : think about approach
 -spec solve(PreparedInput :: term()) -> term().
 solve(PairTable) ->
     CollectFun = fun([Base, Exponent], {Index, SavedExponentValue, SavedIndex}) ->

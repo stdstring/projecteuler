@@ -12,20 +12,19 @@
 -define(SIEVE_MAX, 100000000).
 -define(SEARCH_MAX, 10000).
 
-%% TODO (std_string) : bad ternary op impl
--define(ternary_op(Cond, Left, Right), case Cond of true -> Left; false -> Right end).
-
--type storage() :: [[pos_integer()]].
+-type result_storage() :: [[PrimeNumber :: pos_integer()]].
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{4, 792}, {5, 26033}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{4, 792}, {5, 26033}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(SetSize) ->
     Sieve = eratos_sieve:get_sieve(?SIEVE_MAX),
     InitStorage = init_storage(Sieve, 3, []),
@@ -45,22 +44,33 @@ checkPrime([], _CheckedPrime, _Sieve) -> true;
 checkPrime([Prime | PrimesRest], CheckedPrime, Sieve) ->
     Combination1 = combine(Prime, CheckedPrime, 1),
     Combination2 = combine(CheckedPrime, Prime, 1),
-    ?ternary_op(eratos_sieve:is_prime(Combination1, Sieve) and eratos_sieve:is_prime(Combination2, Sieve), checkPrime(PrimesRest, CheckedPrime, Sieve), false).
+    case eratos_sieve:is_prime(Combination1, Sieve) and eratos_sieve:is_prime(Combination2, Sieve) of
+        true -> checkPrime(PrimesRest, CheckedPrime, Sieve);
+        false -> false
+    end.
 
--spec init_storage(Sieve :: eratos_sieve:sieve(), Prime :: pos_integer(), Storage :: storage()) -> storage().
+-spec init_storage(Sieve :: eratos_sieve:sieve(), Prime :: pos_integer(), Storage :: result_storage()) -> result_storage().
 init_storage(_Sieve, Prime, Storage) when Prime > ?SEARCH_MAX -> Storage;
 init_storage(Sieve, 5, Storage) -> init_storage(Sieve, eratos_sieve:get_next_prime(5, Sieve), Storage);
 init_storage(Sieve, Prime, Storage) -> init_storage(Sieve, eratos_sieve:get_next_prime(Prime, Sieve), [[Prime]] ++ Storage).
 
--spec process_storage(Sieve :: eratos_sieve:sieve(), PrevStorage :: storage(), NextStorage :: storage()) -> storage().
+-spec process_storage(Sieve :: eratos_sieve:sieve(),
+                      PrevStorage :: result_storage(),
+                      NextStorage :: result_storage()) -> result_storage().
 process_storage(_Sieve, [], NextStorage) -> NextStorage;
 process_storage(Sieve, [[Prime | _] = Primes | PrevStorageRest], NextStorage) ->
     NextPrime = eratos_sieve:get_next_prime(Prime, Sieve),
     process_storage(Sieve, PrevStorageRest, process_primes(Sieve, Primes, NextPrime, NextStorage)).
 
--spec process_primes(Sieve :: eratos_sieve:sieve(), Primes :: [pos_integer()], CheckedPrime :: pos_integer(), NextStorage :: storage()) -> storage().
+-spec process_primes(Sieve :: eratos_sieve:sieve(),
+                     Primes :: [pos_integer()],
+                     CheckedPrime :: pos_integer(),
+                     NextStorage :: result_storage()) -> result_storage().
 process_primes(_Sieve, _Primes, CheckedPrime, NextStorage) when CheckedPrime > ?SEARCH_MAX -> NextStorage;
 process_primes(Sieve, Primes, CheckedPrime, NextStorage) ->
-    UpdatedNextStorage = ?ternary_op(checkPrime(Primes, CheckedPrime, Sieve), [[CheckedPrime] ++ Primes] ++ NextStorage, NextStorage),
+    UpdatedNextStorage = case checkPrime(Primes, CheckedPrime, Sieve) of
+        true -> [[CheckedPrime] ++ Primes] ++ NextStorage;
+        false -> NextStorage
+    end,
     NextCheckedPrime = eratos_sieve:get_next_prime(CheckedPrime, Sieve),
     process_primes(Sieve, Primes, NextCheckedPrime, UpdatedNextStorage).

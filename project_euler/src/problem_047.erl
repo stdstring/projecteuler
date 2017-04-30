@@ -32,7 +32,7 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 
 -spec solve(PreparedInput :: term()) -> term().
 solve(Count) ->
-    FirstPrimes = first(?KNOWN_PRIMES, Count),
+    FirstPrimes = lists:sublist(?KNOWN_PRIMES, Count),
     MinNumber = lists:foldl(fun(Number, Product) -> Number * Product end, 1, FirstPrimes),
     InitStorage = array:new([{size, ?KNOWN_PRIME_TOP_BOUND - 1}, {fixed, false}, {default, undef}]),
     PrimeStorage = lists:foldl(fun(Number, Storage) -> array:set(Number - 2, prime, Storage) end, InitStorage, ?KNOWN_PRIMES),
@@ -53,15 +53,6 @@ process_number(Number, Count, Storage) ->
                 {false, LastNumber, NewStorage} -> process_number(LastNumber + 1, Count, NewStorage)
             end
     end.
-
-%% TODO (std_string) : move to common libs
--spec first(SourceList :: list(), Count :: pos_integer()) -> list().
-first(SourceList, Count) -> first(SourceList, 0, Count, []).
-
--spec first(SourceList :: list(), Index :: non_neg_integer(), Count :: pos_integer(), Dest :: list()) -> list().
-first(_SourceList, Count, Count, Dest) -> lists:reverse(Dest);
-first([], _Index, _Count, _Dest) -> error(logic_error);
-first([SourceHead | SourceListRest], Index, Count, Dest) -> first(SourceListRest, Index + 1, Count, [SourceHead] ++ Dest).
 
 -spec get_prime_dividers(Number :: pos_integer(), Storage :: storage()) -> prime_dividers().
 get_prime_dividers(Number, Storage) -> get_prime_dividers(Number, 2, Storage).
