@@ -369,8 +369,7 @@ create_predict_context(Cells, DigitsBinary, Grid) ->
         Constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, append_row_digits(Row, Grid, DigitsBinary))),
         #cell_info{row = Row, column = Column, constraint = Constraint}
     end, Cells),
-    %% TODO (std_string) : move this into permutations module
-    SupLexNumber = numbers:factorial(length(Digits)),
+    SupLexNumber = permutations:get_lexicographical_number_sup(array:from_list(Digits)),
     #predict_context{cells = CellsInfo, digits = Digits, lex_number = -1, sup_lex_number = SupLexNumber - 1, grid = Grid}.
 
 -spec select_next_combination(Context :: #predict_context{}) ->

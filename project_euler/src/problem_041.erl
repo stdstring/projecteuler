@@ -30,7 +30,7 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 solve(none) ->
     MaxNumber = numbers:get_digits(7654321),
     Alphabet = array:from_list(lists:seq(1, 7)),
-    LexographicNumber = permutations:get_lexographic_number(MaxNumber, Alphabet),
+    LexographicNumber = permutations:get_lexicographical_number(MaxNumber, Alphabet),
     numbers:get_number(process_number(MaxNumber, LexographicNumber, Alphabet)).
 
 %% ====================================================================
