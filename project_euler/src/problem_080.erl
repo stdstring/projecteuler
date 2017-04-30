@@ -15,17 +15,21 @@
 -define(NUMBER_START, 2).
 -define(INTEGER_ROOT_START, 2).
 
+-type number_data() :: {IntegerPart :: numbers:digits(), FractionPart :: numbers:digits()}.
+-type digit_pair() :: {Digit :: numbers:digit(), Digit :: numbers:digit()}.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{{2, 100}, 475}, {{100, 100}, 40886}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{2, 100}, 475}, {{100, 100}, 40886}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve({MaxNumber, DigitCount}) ->
-    process_numbers(?NUMBER_START, MaxNumber, DigitCount, ?INTEGER_ROOT_START, 0).
+-spec solve(PreparedInput :: term()) -> term().
+solve({MaxNumber, DigitCount}) -> process_numbers(?NUMBER_START, MaxNumber, DigitCount, ?INTEGER_ROOT_START, 0).
 
 %% ====================================================================
 %% Internal functions
@@ -45,15 +49,13 @@ process_numbers(Number, MaxNumber, DigitCount, IntegerRoot, Sum) ->
     FractionPart = lists:sublist(FullFractionPart, DigitCount - IntegerPartSize),
     process_numbers(Number + 1, MaxNumber, DigitCount, IntegerRoot, Sum + lists:sum(IntegerPart) + lists:sum(FractionPart)).
 
-%% TODO (std_string) : probably move to common libs
--spec prepare_number(N :: pos_integer(), FractionSize :: pos_integer()) -> {IntegerPart :: [0..9], FractionPart :: [0..9]}.
+-spec prepare_number(N :: pos_integer(), FractionSize :: pos_integer()) -> number_data().
 prepare_number(N, FractionSize) ->
     InitegerDigits = split_digits(numbers:get_digits(N)),
     FractionDigits = control:for(FractionSize, [], fun(_Index, Storage) -> [{0, 0}] ++ Storage end),
     {InitegerDigits, FractionDigits}.
 
-%% TODO (std_string) : think about generalizing this solution
--spec split_digits(Digits :: [0..9]) -> [{Digit :: 0..9, Digit :: 0..9}].
+-spec split_digits(Digits :: numbers:digits()) -> [digit_pair()].
 split_digits([D1]) -> [{0, D1}];
 split_digits([D1, D2]) -> [{D1, D2}];
 split_digits([D1, D2, D3]) -> [{0, D1}, {D2, D3}];
@@ -75,15 +77,13 @@ split_digits([D1, D2, D3, D4]) -> [{D1, D2}, {D3, D4}].
 %% 2c) Place the digit x as the next digit of the root, i.e., above the two digits of the square you just brought down. Thus the next p will be the old p times 10 plus x.
 %% 3) Subtract y from c to form a new remainder.
 %% 4) If the remainder is zero and there are no more digits to bring down, then the algorithm has terminated. Otherwise go back to step 1 for another iteration.
--spec process_number(Source :: {IntegerPart :: [0..9], FractionPart :: [0..9]}) -> {IntegerPart :: [0..9], FractionPart :: [0..9]}.
-process_number({IntegerPart, FractionPart}) ->
-    process_number({IntegerPart, FractionPart}, {[], []}, ?P_START, ?C_START).
+-spec process_number(Source :: number_data()) -> number_data().
+process_number({IntegerPart, FractionPart}) -> process_number({IntegerPart, FractionPart}, {[], []}, ?P_START, ?C_START).
 
--spec process_number(Source :: {IntegerPart :: [0..9], FractionPart :: [0..9]},
-                     Result :: {IntegerPart :: [0..9], FractionPart :: [0..9]},
+-spec process_number(Source :: number_data(),
+                     Result :: number_data(),
                      P :: non_neg_integer(),
-                     C :: non_neg_integer()) ->
-    {IntegerPart :: [0..9], FractionPart :: [0..9]}.
+                     C :: non_neg_integer()) -> number_data().
 process_number({[], []}, {IntegerResult, FractionResult}, _P, _C) ->
     {lists:reverse(IntegerResult), lists:reverse(FractionResult)};
 process_number({[], [{D1, D2} | FractionRest]}, {IntegerResult, FractionResult}, P, C) ->
@@ -93,8 +93,8 @@ process_number({[{D1, D2} | IntegerRest], FractionPart}, {IntegerResult, Fractio
     {Digit, NewP, NewC} = calc_next_digit(P, C, {D1, D2}),
     process_number({IntegerRest, FractionPart}, {[Digit] ++ IntegerResult, FractionResult}, NewP, NewC).
 
--spec calc_next_digit(P :: non_neg_integer(), C :: non_neg_integer(), DigitPair :: {Digit :: 0..9, Digit :: 0..9}) ->
-    {Digit :: 0..9, P :: non_neg_integer(), C  :: non_neg_integer()}.
+-spec calc_next_digit(P :: non_neg_integer(), C :: non_neg_integer(), DigitPair :: digit_pair()) ->
+    {Digit :: numbers:digit(), P :: non_neg_integer(), C  :: non_neg_integer()}.
 calc_next_digit(P, C, {D1, D2}) ->
     Y = C * 100 + D1 * 10 + D2,
     Digit = find_digit(P, Y, 0),
@@ -102,7 +102,7 @@ calc_next_digit(P, C, {D1, D2}) ->
     NewP = P * 10 + Digit,
     {Digit, NewP, NewC}.
 
--spec find_digit(P :: non_neg_integer(), C :: non_neg_integer(), Digit :: 0..9) -> 0..9.
+-spec find_digit(P :: non_neg_integer(), C :: non_neg_integer(), Digit :: numbers:digit()) -> numbers:digit().
 find_digit(_P, _C, 9) -> 9;
 find_digit(P, C, Digit) ->
     Value = Digit * (20 * P + Digit),
