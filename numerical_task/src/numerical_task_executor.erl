@@ -13,7 +13,11 @@
 -spec process(ModuleName :: atom(), ModuleSourceDir :: string(), TimeThresholds :: #time_thresholds{}) -> [result_type()].
 process(ModuleName, ModuleSourceDir, TimeThresholds) ->
     ExpectedResults = ModuleName:get_check_data(),
-    ProcessFun = fun({Input, Expected}) -> process(ModuleName, ModuleSourceDir, TimeThresholds, Input, Expected) end,
+    ProcessFun = fun({Input, Expected}) ->
+        Result = process(ModuleName, ModuleSourceDir, TimeThresholds, Input, Expected),
+        garbage_collect(),
+        Result
+    end,
     lists:map(ProcessFun, ExpectedResults).
 
 %% ====================================================================
