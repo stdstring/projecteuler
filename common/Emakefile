@@ -11,3 +11,4 @@
 {'src/pandigital_numbers', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/pell_equation', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/permutations', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/rational', [warnings_as_errors, {outdir, "ebin"}]}.
