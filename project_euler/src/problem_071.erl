@@ -12,8 +12,6 @@
 -behaviour(numerical_task_behaviour).
 
 %% TODO (std_string) : move into common
--type rational_fraction() :: {Numerator :: pos_integer(), Denominator :: pos_integer()}.
-%% TODO (std_string) : move into common
 -type compare_result() :: 'left' | 'equal' | 'right'.
 
 %% ====================================================================
@@ -36,9 +34,9 @@ solve({MaxDenominator, Fraction}) ->
 %% ====================================================================
 
 -spec process_denominator(Denominator :: pos_integer(),
-                          SavedFraction :: rational_fraction(),
+                          SavedFraction :: rational:rational_fraction(),
                           MaxDenominator :: pos_integer(),
-                          Fraction :: rational_fraction()) -> rational_fraction().
+                          Fraction :: rational:rational_fraction()) -> rational:rational_fraction().
 process_denominator(Denominator, SavedFraction, MaxDenominator, _Fraction) when Denominator > MaxDenominator -> SavedFraction;
 process_denominator(Denominator, SavedFraction, MaxDenominator, Fraction) ->
     LeftNeighbour = find_left_neighbour(Denominator, Fraction),
@@ -52,13 +50,13 @@ process_denominator(Denominator, SavedFraction, MaxDenominator, Fraction) ->
             end
     end.
 
--spec find_left_neighbour(Denominator :: pos_integer(), Fraction :: rational_fraction()) -> rational_fraction().
+-spec find_left_neighbour(Denominator :: pos_integer(), Fraction :: rational:rational_fraction()) -> rational:rational_fraction().
 find_left_neighbour(Denominator, {FractionNumerator, FractionDenominator}) ->
     %% Numerator * FractionDenominator <= FractionNumerator * Denominator < (Numerator + 1) * FractionDenominator
     %% Numerator = FractionNumerator * Denominator div FractionDenominator
     {(FractionNumerator * Denominator) div FractionDenominator, Denominator}.
 
--spec compare_fractions(Left :: rational_fraction(), Right :: rational_fraction()) -> compare_result().
+-spec compare_fractions(Left :: rational:rational_fraction(), Right :: rational:rational_fraction()) -> compare_result().
 compare_fractions({LeftNumerator, LeftDenominator}, {RightNumerator, RightDenominator}) ->
     LeftResult = LeftNumerator * RightDenominator,
     RightResult = RightNumerator * LeftDenominator,

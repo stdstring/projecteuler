@@ -23,9 +23,6 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type rational_fraction() :: {Numerator :: pos_integer(), Denominator :: pos_integer()}.
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -46,11 +43,11 @@ solve(MaxTermNumber) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_range(Range :: [pos_integer()], Result :: rational_fraction() | 0) -> rational_fraction().
-process_range([], Result) -> rational_add(2, rational_reverse(Result));
+-spec process_range(Range :: [pos_integer()], Result :: rational:rational_fraction() | 0) -> rational:rational_fraction().
+process_range([], Result) -> rational:add(2, rational:reverse(Result));
 process_range([Term | Rest], 0) -> process_range(Rest, Term);
 process_range([Term | Rest], Result) ->
-    NextResult = rational_add(Term, rational_reverse(Result)),
+    NextResult = rational:add(Term, rational:reverse(Result)),
     process_range(Rest, NextResult).
 
 -spec generate_e_fraction_range(Count :: pos_integer()) -> [pos_integer()].
@@ -63,15 +60,3 @@ generate_e_fraction_range(Count) ->
         1 -> [1] ++ Result;
         2 -> [2 * (TripleCount + 1), 1] ++ Result
     end.
-
-%% TODO (std_string) : move into common libs
-rational_add({N1, D1}, {N2, D2}) -> {N1 * D2 + N2 * D1, D1 * D2};
-rational_add({N1, D1}, N2) -> {N1 + N2 * D1, D1};
-rational_add(N1, {N2, D2}) -> {N1 * D2 + N2, D2};
-rational_add(N1, N2) -> N1 + N2.
-
-rational_reverse({1, D}) -> D;
-rational_reverse({N, D}) when D rem N  == 0 -> D div N;
-rational_reverse({N, D}) -> {D, N};
-rational_reverse(N) -> {1, N}.
-

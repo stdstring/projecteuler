@@ -2,7 +2,7 @@
 
 -module(number_dividers).
 
--export([get_dividers/1, is_prime/1]).
+-export([get_dividers/1, is_prime/1, calc_gcd/2]).
 
 -include("primes_def.hrl").
 
@@ -23,6 +23,21 @@ is_prime(Number) when is_integer(Number), Number > 1 ->
     if
         Rem2 == 0 -> false;
         Rem2 /= 0 -> is_prime_impl(Number, 3)
+    end.
+
+-spec calc_gcd(A :: integer(), B :: integer()) -> integer().
+calc_gcd(A, B) when not is_integer(A); not is_integer(B) -> error(badarg);
+calc_gcd(0, 0) -> error(badarg);
+calc_gcd(A, B) when A < 0 -> calc_gcd(-A, B);
+calc_gcd(A, B) when B < 0 -> calc_gcd(A, -B);
+calc_gcd(A, B) when A < B -> calc_gcd(B, A);
+calc_gcd(A, A) -> A;
+calc_gcd(A, 0) -> A;
+calc_gcd(A, B) ->
+    Remainder = A rem B,
+    case Remainder of
+        0 -> B;
+        _Other -> calc_gcd(B, Remainder)
     end.
 
 %% ====================================================================
