@@ -9,6 +9,7 @@
 {'src/number_dividers', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/numerical_task_behaviour', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pandigital_numbers', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
+{'src/partition', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pell_equation', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/permutations', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/rational', [warnings_as_errors, {outdir, "ebin"}]}.

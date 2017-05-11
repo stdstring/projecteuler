@@ -18,30 +18,18 @@
 %% API functions
 %% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
 get_check_data() -> [{5, 6}, {100, 190569291}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(Number) ->
     AvailableNumbers = lists:seq(1, Number - 1),
-    WayStorage = calc_ways(Number, AvailableNumbers),
-    array:get(Number, WayStorage).
+    Storage = partition:create_partition_storage(Number, AvailableNumbers),
+    partition:get_partition_count(Number, Storage).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-%% TODO (std_string) : move into common libs
-calc_ways(MaxNumber, [FirstItem | _] = Items) ->
-    WayStorage = array:new([{size, MaxNumber + 1}, {fixed, true}, {default, 0}]),
-    calc_ways(FirstItem, MaxNumber, Items, array:set(0, 1, WayStorage)).
-
-calc_ways(Number, MaxNumber, [_HeadItem | ItemsRest], WayStorage) when Number > MaxNumber ->
-    case ItemsRest of
-        [] -> WayStorage;
-        [NextHeadItem | _] -> calc_ways(NextHeadItem, MaxNumber, ItemsRest, WayStorage)
-    end;
-calc_ways(Number, MaxNumber, [HeadItem | _] = Items, WayStorage) ->
-    CurrentValue = array:get(Number, WayStorage),
-    PrevValue = array:get(Number - HeadItem, WayStorage),
-    calc_ways(Number + 1, MaxNumber, Items, array:set(Number, CurrentValue + PrevValue, WayStorage)).
