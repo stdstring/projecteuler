@@ -33,10 +33,12 @@ get_partition_count(Number, Storage) ->
 %% Internal functions
 %% ====================================================================
 
+-spec fill_partition_storage(MaxNumber :: pos_integer(), Items :: items(), Storage :: partition_storage()) -> partition_storage().
 fill_partition_storage(_MaxNumber, [], Storage) -> Storage;
 fill_partition_storage(MaxNumber, [HeadItem | ItemsRest], Storage) ->
     fill_partition_storage(MaxNumber, ItemsRest, fill_partition_storage_for_number(HeadItem, MaxNumber, HeadItem, Storage)).
 
+-spec fill_partition_storage_for_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Item :: items(), Storage :: partition_storage()) -> partition_storage().
 fill_partition_storage_for_number(Number, MaxNumber, _Item, Storage) when Number > MaxNumber -> Storage;
 fill_partition_storage_for_number(Number, MaxNumber, Item, Storage) ->
     Value = array:get(Number - Item, Storage),
