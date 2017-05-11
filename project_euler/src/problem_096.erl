@@ -27,9 +27,6 @@
 -define(DIGIT_9 ,2#100000000).
 -define(SQUARES, [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}]).
 
-%% TODO (std_string) : think about this digit type
-%%-type digit() :: 1..9.
-%%-type digits() :: [digit()].
 %% TODO (std_string) : move into common and use such approach in all other cases
 -type grid() :: array:array(numbers:digit()).
 -type row() :: 1..?GRID_SIDE.

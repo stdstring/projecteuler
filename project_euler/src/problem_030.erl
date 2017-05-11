@@ -13,8 +13,6 @@
 
 -behaviour(numerical_task_behaviour).
 
--type power_storage() :: array:array(DigitPower :: non_neg_integer()).
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -29,9 +27,7 @@ prepare_data(_ModuleSourceDir, Power) ->
     {Power, Infimum}.
 
 -spec solve(PreparedInput :: term()) -> term().
-solve({Power, Infimum}) ->
-    PowerStorage = prepare_powers(9, Power),
-    traverse_numbers(Infimum, PowerStorage).
+solve({Power, Infimum}) -> traverse_numbers(Power, Infimum).
 
 %% ====================================================================
 %% Internal functions
@@ -44,17 +40,14 @@ find_infimum(Delta) -> find_infimum(1, 10, Delta, Delta).
 find_infimum(LeftBound, RightBound, Value, _Delta) when LeftBound < Value, Value < RightBound -> Value;
 find_infimum(LeftBound, RightBound, Value, Delta) -> find_infimum(10 * LeftBound, 10 * RightBound, Value + Delta, Delta).
 
--spec traverse_numbers(Max :: pos_integer(), PowerStorage :: power_storage()) -> pos_integer().
-traverse_numbers(Max, PowerStorage) -> traverse_numbers(2, Max, 0, PowerStorage).
+-spec traverse_numbers(Power :: pos_integer(), Max :: pos_integer()) -> pos_integer().
+traverse_numbers(Power, Max) -> traverse_numbers(Power, 2, Max, 0).
 
--spec traverse_numbers(Current :: pos_integer(), Max :: pos_integer(), Sum :: non_neg_integer(), PowerStorage :: power_storage()) -> pos_integer().
-traverse_numbers(Current, Max, Sum, _) when Current > Max -> Sum;
-traverse_numbers(Current, Max, Sum, PowerStorage) ->
-    DigitsPowerSum = lists:foldl(fun(Digit, Acc) -> Acc + array:get(Digit, PowerStorage) end, 0, numbers:get_digits(Current)),
+-spec traverse_numbers(Power :: pos_integer(), Current :: pos_integer(), Max :: pos_integer(), Sum :: non_neg_integer()) -> pos_integer().
+traverse_numbers(_Power, Current, Max, Sum) when Current > Max -> Sum;
+traverse_numbers(Power, Current, Max, Sum) ->
+    DigitsPowerSum = lists:foldl(fun(Digit, Acc) -> Acc + numbers:power(Digit, Power) end, 0, numbers:get_digits(Current)),
     if
-        Current == DigitsPowerSum -> traverse_numbers(Current + 1, Max, Sum + Current, PowerStorage);
-        Current /= DigitsPowerSum -> traverse_numbers(Current + 1, Max, Sum, PowerStorage)
+        Current == DigitsPowerSum -> traverse_numbers(Power, Current + 1, Max, Sum + Current);
+        Current /= DigitsPowerSum -> traverse_numbers(Power,  Current + 1, Max, Sum)
     end.
-
--spec prepare_powers(MaxNumber :: pos_integer(), Power :: pos_integer()) -> power_storage().
-prepare_powers(MaxNumber, Power) -> array:from_list([numbers:power(Number, Power) || Number <- lists:seq(0, MaxNumber)]).

@@ -16,7 +16,7 @@
 -define(DIGITS_COUNT, 2).
 -define(YOUNG_POSSIBLE_DIGITS, [1, 3, 7, 9]).
 
-%% TODO (std_string) : move into common
+%% TODO (std_string) : think - may be move into common
 -type digits_pos() :: [DigitPos :: non_neg_integer()].
 -type digits_info() :: array:array(digits_pos()).
 -type process_result() :: {'true', Number :: pos_integer()} | 'false'.

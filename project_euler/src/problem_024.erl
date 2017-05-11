@@ -21,11 +21,11 @@ get_check_data() -> [{{4, 3}, "120"}, {{1000000, 10}, "2783915460"}].
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 -spec solve(PreparedInput :: term()) -> term().
-solve({_LexographicNumber, DigitCount}) when DigitCount > 10 -> error(badarg);
-solve({LexographicNumber, DigitCount}) ->
+solve({_LexicographicalNumber, DigitCount}) when DigitCount > 10 -> error(badarg);
+solve({LexicographicalNumber, DigitCount}) ->
     SourceDigits = lists:seq($0, $0 + DigitCount - 1),
     Alphabet = array:from_list(SourceDigits),
-    permutations:get_permutation(LexographicNumber - 1, Alphabet).
+    permutations:get_permutation(LexicographicalNumber - 1, Alphabet).
 
 %% ====================================================================
 %% Internal functions

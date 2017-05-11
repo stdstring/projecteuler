@@ -30,15 +30,15 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 solve(none) ->
     MaxNumber = numbers:get_digits(7654321),
     Alphabet = array:from_list(lists:seq(1, 7)),
-    LexographicNumber = permutations:get_lexicographical_number(MaxNumber, Alphabet),
-    numbers:get_number(process_number(MaxNumber, LexographicNumber, Alphabet)).
+    LexicographicalNumber = permutations:get_lexicographical_number(MaxNumber, Alphabet),
+    numbers:get_number(process_number(MaxNumber, LexicographicalNumber, Alphabet)).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
 -spec process_number(NumberDigits :: numbers:digits(),
-                     LexographicNumber :: non_neg_integer(),
+                     LexicographicalNumber :: non_neg_integer(),
                      Alphabet :: digits_alphabet()) -> numbers:digits().
 process_number(NumberDigits, 0, _Alphabet) ->
     Number = numbers:get_number(NumberDigits),
@@ -46,12 +46,12 @@ process_number(NumberDigits, 0, _Alphabet) ->
         true -> NumberDigits;
         false -> error(badarg)
     end;
-process_number(NumberDigits, LexographicNumber, Alphabet) ->
+process_number(NumberDigits, LexicographicalNumber, Alphabet) ->
     Number = numbers:get_number(NumberDigits),
     case number_dividers:is_prime(Number) of
         true -> NumberDigits;
         false ->
-            NextLexographicNumber = LexographicNumber - 1,
-            NextNumber = permutations:get_permutation(NextLexographicNumber, Alphabet),
-            process_number(NextNumber, NextLexographicNumber, Alphabet)
+            NextLexicographicalNumber = LexicographicalNumber - 1,
+            NextNumber = permutations:get_permutation(NextLexicographicalNumber, Alphabet),
+            process_number(NextNumber, NextLexicographicalNumber, Alphabet)
     end.

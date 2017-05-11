@@ -38,5 +38,4 @@ solve(PairTable) ->
 %% ====================================================================
 
 -spec calculate_standard_exponent(Base :: integer(), Exponent :: integer()) -> float().
-calculate_standard_exponent(Base, Exponent) ->
-    Exponent * math:log(Base).
+calculate_standard_exponent(Base, Exponent) -> Exponent * math:log(Base).
