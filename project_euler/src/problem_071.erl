@@ -11,9 +11,6 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into common
--type compare_result() :: 'left' | 'equal' | 'right'.
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -56,12 +53,8 @@ find_left_neighbour(Denominator, {FractionNumerator, FractionDenominator}) ->
     %% Numerator = FractionNumerator * Denominator div FractionDenominator
     {(FractionNumerator * Denominator) div FractionDenominator, Denominator}.
 
--spec compare_fractions(Left :: rational:rational_fraction(), Right :: rational:rational_fraction()) -> compare_result().
+-spec compare_fractions(Left :: rational:rational_fraction(), Right :: rational:rational_fraction()) -> compare:compare_result().
 compare_fractions({LeftNumerator, LeftDenominator}, {RightNumerator, RightDenominator}) ->
     LeftResult = LeftNumerator * RightDenominator,
     RightResult = RightNumerator * LeftDenominator,
-    if
-        LeftResult < RightResult -> right;
-        LeftResult > RightResult -> left;
-        LeftResult == RightResult -> equal
-    end.
+    compare:compare_desc(LeftResult, RightResult).

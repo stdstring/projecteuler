@@ -35,7 +35,7 @@ solve(Data) ->
     InitPoints = [{1, 1}],
     ResultPoints = lists:map(fun(Number) -> {RowCount, Number} end, lists:seq(1, RowCount)),
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
-    ValueComparator = fun compare_values/2,
+    ValueComparator = fun compare:compare_desc/2,
     {Value, _Path} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
     Value.
 
@@ -49,14 +49,6 @@ fill([], _Row, _Column, Grid) -> Grid;
 fill([[] | Rows], Row, _Column, Grid) -> fill(Rows, Row + 1, 1, Grid);
 fill([[Value | RowRest] | Rows], Row, Column, Grid) ->
     fill([RowRest] ++ Rows, Row, Column + 1, grid_helper:set_value(Row, Column, Value, Grid)).
-
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> grid_path_searcher:compare_result().
-compare_values(LValue, RValue) ->
-    if
-        LValue > RValue -> left;
-        LValue == RValue -> equal;
-        LValue < RValue -> right
-    end.
 
 -spec get_next_points(Point :: point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [point_type()].
 get_next_points({RowMax, _Column}, RowMax, _ColumnMax) -> [];

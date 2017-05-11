@@ -27,21 +27,13 @@ solve(GridData) ->
     InitPoints = [{1, 1}],
     ResultPoints = [{grid_helper:get_row_count(Grid), grid_helper:get_column_count(Grid)}],
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
-    ValueComparator = fun compare_values/2,
+    ValueComparator = fun compare:compare_asc/2,
     {Value, _Path} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
     Value.
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> grid_path_searcher:compare_result().
-compare_values(LValue, RValue) ->
-    if
-        LValue < RValue -> left;
-        LValue == RValue -> equal;
-        LValue > RValue -> right
-    end.
 
 -spec get_next_points(Point :: point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [point_type()].
 get_next_points({RowMax, ColumnMax}, RowMax, ColumnMax) -> [];

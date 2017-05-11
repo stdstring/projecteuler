@@ -6,8 +6,7 @@
 -include("grid_def.hrl").
 
 -type value_builder_fun() :: fun((AccValue :: term(), PointValue :: term()) -> term()).
--type compare_result() :: 'left' | 'equal' | 'right'.
--type value_comparator_fun() :: fun((LValue :: term(), RValue :: term()) -> compare_result()).
+-type value_comparator_fun() :: fun((LValue :: term(), RValue :: term()) -> compare:compare_result()).
 -type next_points_provider_type() :: fun((Point :: point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [point_type()]).
 -type result_item_type() :: {Path :: [point_type()], Value :: term()}.
 -type result_type() :: array:array(array:array(result_item_type() | 'undef')).
