@@ -42,9 +42,14 @@ get_partition_count_test_() ->
 %% Internal functions
 %% ====================================================================
 
+-spec create_partition_storage_entry(Description :: string(),
+                                     MaxNumber :: pos_integer(),
+                                     Items :: partition:items(),
+                                     ExpectedResult :: [non_neg_integer()]) -> tuple().
 create_partition_storage_entry(Description, MaxNumber, Items, ExpectedResult) ->
     {Description, ?_assertEqual(ExpectedResult, create_partition_storage(MaxNumber, Items))}.
 
+-spec create_partition_storage(MaxNumber :: pos_integer(), Items :: partition:items()) -> [non_neg_integer()] | no_return().
 create_partition_storage(MaxNumber, Items) ->
     Storage = partition:create_partition_storage(MaxNumber, Items),
     lists:map(fun(Number) -> partition:get_partition_count(Number, Storage) end, lists:seq(1, MaxNumber)).

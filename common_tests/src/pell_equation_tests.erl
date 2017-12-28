@@ -304,10 +304,16 @@ find_n_solution_errors_test_() ->
 %% Internal functions
 %% ====================================================================
 
+-spec create_find_first_solution_entry(D :: integer(), C :: integer(), Expected :: pell_equation:solution() | 'undef') -> tuple().
 create_find_first_solution_entry(D, C, Expected) ->
     Description = lists:flatten(io_lib:format("first solution of x^2 - ~p * y^2 = ~p", [D, C])),
     {Description, ?_assertEqual(Expected, pell_equation:find_first_solution(D, C))}.
 
+-spec create_find_n_solution_entry(D :: integer(),
+                                   C :: integer(),
+                                   FirstSolution :: pell_equation:solution(),
+                                   N :: pos_integer(),
+                                   Expected :: pell_equation:solution()) -> tuple().
 create_find_n_solution_entry(D, C, FirstSolution, N, Expected) ->
     Description = lists:flatten(io_lib:format("~p-th solution of x^2 - ~p * y^2 = ~p", [N, D, C])),
     {Description, ?_assertEqual(Expected, pell_equation:find_n_solution(FirstSolution, D, C, N))}.

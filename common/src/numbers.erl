@@ -12,7 +12,6 @@
 
 %% X^Y
 -spec power(X :: integer(), Y :: integer()) -> integer().
-%%power(X, Y) when is_integer(X), is_integer(Y) -> power_impl(X, Y, 1).
 power(X, Y) when not is_integer(X); not is_integer(Y) -> error(badarg);
 power(0, 0) -> error(badarg);
 power(_X, Y) when Y < 0 -> error(badarg);

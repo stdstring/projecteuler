@@ -38,9 +38,11 @@ calc_sieve_get_next_prime_test_() ->
 %% Internal functions
 %% ====================================================================
 
+-spec create_get_primes_entry(MaxNumber :: pos_integer()) -> tuple().
 create_get_primes_entry(MaxNumber) ->
     {lists:flatten(io_lib:format("primes below ~p", [MaxNumber])), ?_assertEqual(eratos_sieve:calc_primes(MaxNumber), eratos_sieve:get_primes(MaxNumber))}.
 
+-spec create_is_prime_entries(Sieve :: eratos_sieve:sieve()) -> [tuple()].
 create_is_prime_entries(Sieve) ->
     [{"check that 2 is prime number", ?_assertEqual(true, eratos_sieve:is_prime(2, Sieve))},
      {"check that 3 is prime number", ?_assertEqual(true, eratos_sieve:is_prime(3, Sieve))},
@@ -52,6 +54,7 @@ create_is_prime_entries(Sieve) ->
      {"check that 15 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(15, Sieve))},
      {"check processing of bad arguments", ?_assertError(badarg, eratos_sieve:is_prime(1, Sieve))}].
 
+-spec create_get_next_prime_entries(Sieve :: eratos_sieve:sieve()) -> [tuple()].
 create_get_next_prime_entries(Sieve) ->
     [{"next prime number for 2", ?_assertEqual(3, eratos_sieve:get_next_prime(2, Sieve))},
      {"next prime number for 3", ?_assertEqual(5, eratos_sieve:get_next_prime(3, Sieve))},

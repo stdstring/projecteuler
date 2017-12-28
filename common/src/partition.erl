@@ -13,14 +13,14 @@
 %% ====================================================================
 
 %% TODO (std_string) : think about working with partially filled storage in future
--spec create_partition_storage(MaxNumber :: pos_integer(), Items :: items()) -> partition_storage().
+-spec create_partition_storage(MaxNumber :: pos_integer(), Items :: items()) -> partition_storage() | no_return().
 create_partition_storage(MaxNumber, _Items) when MaxNumber =< 0 -> error(badarg);
 create_partition_storage(_MaxNumber, []) -> error(badarg);
 create_partition_storage(MaxNumber, Items) ->
     Storage = array:new([{default, 0}]),
     fill_partition_storage(MaxNumber, Items, array:set(0, 1, Storage)).
 
--spec get_partition_count(Number :: pos_integer(), Storage :: partition_storage()) -> non_neg_integer().
+-spec get_partition_count(Number :: pos_integer(), Storage :: partition_storage()) -> non_neg_integer() | 'undef' | no_return().
 get_partition_count(Number, _Storage) when Number =< 0 -> error(badarg);
 get_partition_count(Number, Storage) ->
     Size = array:size(Storage),
