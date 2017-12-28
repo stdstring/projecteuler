@@ -16,7 +16,7 @@
 
 -define(ALPHABET_SIZE, 26).
 
-%% TODO (std_string) : think about creation module for word processing
+%% TODO (std_string) : probably, move into separate module
 -type word() :: string().
 -type words() :: [string()].
 -type word_pair() :: {Word1 :: word(), Word2 :: word()}.

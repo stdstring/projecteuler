@@ -22,7 +22,7 @@
 -define(POINT_0, {0.0, 10.1}).
 -define(POINT_1, {1.4, -9.6}).
 
-%% TODO (std_string) : move into common
+%% TODO (std_string) : probably, move into separate module
 -type point() :: {X :: float(), Y :: float()}.
 -type vector() :: {X :: float(), Y :: float()}.
 

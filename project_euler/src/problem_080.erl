@@ -61,7 +61,7 @@ split_digits([D1, D2]) -> [{D1, D2}];
 split_digits([D1, D2, D3]) -> [{0, D1}, {D2, D3}];
 split_digits([D1, D2, D3, D4]) -> [{D1, D2}, {D3, D4}].
 
-%% TODO (std_string) : probably move to common libs
+%% TODO (std_string) : probably, move this algorithm into separate module
 %% Algorithm (from https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Digit-by-digit_calculation):
 %% Write the original number in decimal form. The numbers are written similar to the long division algorithm, and, as in long division, the root will be written on the line above.
 %% Now separate the digits into pairs, starting from the decimal point and going both left and right. The decimal point of the root will be above the decimal point of the square.

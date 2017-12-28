@@ -59,7 +59,7 @@ process_numbers(Number, MaxNumber, A0, Count) ->
             end
     end.
 
-%% TODO (std_string) : probably move to common libs
+%% TODO (std_string) : probably, move this algorithm into separate module
 %% Algorithm (from https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Continued_fraction_expansion):
 %% N - source number
 %% m0 = 0, d0 = 1, a0 = integer(N^(1/2))

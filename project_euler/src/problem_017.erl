@@ -13,7 +13,7 @@
 
 -define(MAX_POSSIBLE_NUMBER, 1000).
 
-%% TODO (std_string) : think about creation module for word processing
+%% TODO (std_string) : probably, move into separate module
 -type word() :: string().
 -type words_array() :: array:array(word()).
 
