@@ -1,7 +1,7 @@
 %% @author std-string
 
 -module(numbers).
--export([power/2, factorial/1, get_digits/1, get_digits/2, get_number/1, get_number/2, calc_binomial_coeff/2]).
+-export([power/2, factorial/1, get_digits/1, get_digits/2, get_number/1, get_number/2, calc_binomial_coeff/2, is_perfect_square/1]).
 
 -type digit() :: 0..9.
 -type digits() :: [digit()].
@@ -49,6 +49,15 @@ calc_binomial_coeff(N, K) ->
     Denominator = factorial(K),
     Numerator = control:for(N - K + 1, N, 1, fun(Number, Product) -> Number * Product end),
     Numerator div Denominator.
+
+%% TODO (std_string) : think about right place of this function
+-spec is_perfect_square(Number :: integer()) -> boolean().
+is_perfect_square(Number) when not is_integer(Number); Number < 0 -> error(badarg);
+is_perfect_square(Number) ->
+    SqrtValue = math:sqrt(Number),
+    BottomValue = trunc(SqrtValue),
+    TopValue = round(SqrtValue),
+    (BottomValue * BottomValue == Number) or (TopValue * TopValue == Number).
 
 %% ====================================================================
 %% Internal functions

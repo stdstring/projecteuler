@@ -94,6 +94,41 @@ calc_binomial_coeff_test_() ->
      {"calc_binomial_coeff(4, -1)", ?_assertEqual(0, numbers:calc_binomial_coeff(4, -1))},
      {"calc_binomial_coeff(4, 666)", ?_assertEqual(0, numbers:calc_binomial_coeff(4, 666))}].
 
+%% TODO (std_string) : think about right place of this function
+is_perfect_square_error_test_() ->
+    [{"is_perfect_square(2.0)", ?_assertError(badarg, numbers:is_perfect_square(2.0))},
+     {"is_perfect_square(-1)", ?_assertError(badarg, numbers:is_perfect_square(-1))}].
+
+%% TODO (std_string) : think about right place of this function
+is_perfect_square_test_() ->
+    [{"is_perfect_square(0)", ?_assertEqual(true, numbers:is_perfect_square(0))},
+     {"is_perfect_square(1)", ?_assertEqual(true, numbers:is_perfect_square(1))},
+     {"is_perfect_square(2)", ?_assertEqual(false, numbers:is_perfect_square(2))},
+     {"is_perfect_square(3)", ?_assertEqual(false, numbers:is_perfect_square(3))},
+     {"is_perfect_square(4)", ?_assertEqual(true, numbers:is_perfect_square(4))},
+     {"is_perfect_square(5)", ?_assertEqual(false, numbers:is_perfect_square(5))},
+     {"is_perfect_square(6)", ?_assertEqual(false, numbers:is_perfect_square(6))},
+     {"is_perfect_square(7)", ?_assertEqual(false, numbers:is_perfect_square(7))},
+     {"is_perfect_square(8)", ?_assertEqual(false, numbers:is_perfect_square(8))},
+     {"is_perfect_square(9)", ?_assertEqual(true, numbers:is_perfect_square(9))},
+     {"is_perfect_square(10)", ?_assertEqual(false, numbers:is_perfect_square(10))},
+     {"is_perfect_square(11)", ?_assertEqual(false, numbers:is_perfect_square(11))},
+     {"is_perfect_square(14)", ?_assertEqual(false, numbers:is_perfect_square(14))},
+     {"is_perfect_square(15)", ?_assertEqual(false, numbers:is_perfect_square(15))},
+     {"is_perfect_square(16)", ?_assertEqual(true, numbers:is_perfect_square(16))},
+     {"is_perfect_square(17)", ?_assertEqual(false, numbers:is_perfect_square(17))},
+     {"is_perfect_square(18)", ?_assertEqual(false, numbers:is_perfect_square(18))},
+     {"is_perfect_square(23)", ?_assertEqual(false, numbers:is_perfect_square(23))},
+     {"is_perfect_square(24)", ?_assertEqual(false, numbers:is_perfect_square(24))},
+     {"is_perfect_square(25)", ?_assertEqual(true, numbers:is_perfect_square(25))},
+     {"is_perfect_square(26)", ?_assertEqual(false, numbers:is_perfect_square(26))},
+     {"is_perfect_square(27)", ?_assertEqual(false, numbers:is_perfect_square(27))},
+     {"is_perfect_square(34)", ?_assertEqual(false, numbers:is_perfect_square(34))},
+     {"is_perfect_square(35)", ?_assertEqual(false, numbers:is_perfect_square(35))},
+     {"is_perfect_square(36)", ?_assertEqual(true, numbers:is_perfect_square(36))},
+     {"is_perfect_square(37)", ?_assertEqual(false, numbers:is_perfect_square(37))},
+     {"is_perfect_square(38)", ?_assertEqual(false, numbers:is_perfect_square(38))}].
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================

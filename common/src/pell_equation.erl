@@ -43,7 +43,7 @@
 find_first_solution(_D, C) when (C /= 1) and (C /= -1) -> error(not_supported);
 find_first_solution(D, _C) when D =< 0 -> error(badarg);
 find_first_solution(D, C) ->
-    case is_perfect_square(D) of
+    case numbers:is_perfect_square(D) of
         true -> undef;
         false -> find_first_solution_impl(D, C)
     end.
@@ -79,7 +79,7 @@ find_n_solution(_FirstSolution, _D, C, _N) when (C /= 1) and (C /= -1) -> error(
 find_n_solution(_FirstSolution, _D, C, N) when (C == -1) and (N rem 2 /= 1) -> error(badarg);
 find_n_solution(_FirstSolution, D, _C, _N) when D =< 0 -> error(badarg);
 find_n_solution(FirstSolution, D, _C, N) ->
-    case is_perfect_square(D) of
+    case numbers:is_perfect_square(D) of
         true -> undef;
         false -> {find_x(FirstSolution, D, N), find_y(FirstSolution, D, N)}
     end.
@@ -87,14 +87,6 @@ find_n_solution(FirstSolution, D, _C, N) ->
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-%% TODO (std_string) : move to another module
--spec is_perfect_square(D :: integer()) -> boolean().
-is_perfect_square(D) ->
-    SqrtValue = math:sqrt(D),
-    BottomValue = trunc(SqrtValue),
-    TopValue = round(SqrtValue),
-    (BottomValue * BottomValue == D) or (TopValue * TopValue == D).
 
 -spec find_first_solution_impl(D :: integer(), C :: integer()) -> solution() | 'undef'.
 find_first_solution_impl(D, C) ->
