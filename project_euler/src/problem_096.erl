@@ -16,16 +16,18 @@
 -define(SQUARE_SIDE, 3).
 -define(GRID_SIDE, 9).
 -define(ALL_NUMBERS ,2#111111111).
--define(DIGIT_1 ,2#000000001).
--define(DIGIT_2 ,2#000000010).
--define(DIGIT_3 ,2#000000100).
--define(DIGIT_4 ,2#000001000).
--define(DIGIT_5 ,2#000010000).
--define(DIGIT_6 ,2#000100000).
--define(DIGIT_7 ,2#001000000).
--define(DIGIT_8 ,2#010000000).
--define(DIGIT_9 ,2#100000000).
+-define(NUMBER_1 ,2#000000001).
+-define(NUMBER_2 ,2#000000010).
+-define(NUMBER_3 ,2#000000100).
+-define(NUMBER_4 ,2#000001000).
+-define(NUMBER_5 ,2#000010000).
+-define(NUMBER_6 ,2#000100000).
+-define(NUMBER_7 ,2#001000000).
+-define(NUMBER_8 ,2#010000000).
+-define(NUMBER_9 ,2#100000000).
 -define(SQUARES, [{1, 1}, {1, 4}, {1, 7}, {4, 1}, {4, 4}, {4, 7}, {7, 1}, {7, 4}, {7, 7}]).
+
+-record(numbers_binary, {value :: non_neg_integer()}).
 
 %% TODO (std_string) : move into common and use such approach in all other cases
 -type grid() :: array:array(numbers:digit()).
@@ -33,24 +35,23 @@
 -type column() :: 1..?GRID_SIDE.
 -type coord() :: {Row :: row(), Column :: column()}.
 -type coords() :: [coord()].
--type search_result() :: {Cells :: coords(), Digits :: non_neg_integer()}.
--type digits_info() :: array:array(coords()).
--type choose_cell_result() :: {'true', Digit :: numbers:digit(), Cell :: coord()} | 'false'.
+-type scan_result() :: {Cells :: coords(), NumbersBinary :: #numbers_binary{}}.
+-type choose_cell_result() :: {'true', Number :: numbers:digit(), Cell :: coord()} | 'false'.
 
 -record(grid_case, {name :: string(), grid :: grid()}).
-
--record(cell_info, {row :: row(), column :: column(), constraint :: non_neg_integer()}).
+-record(cell_info, {cell :: coord(), constraint :: #numbers_binary{}}).
 -record(calc_context, {empty_count :: non_neg_integer(), grid :: grid()}).
 -record(predict_context, {cells :: [#cell_info{}],
-                          digits :: numbers:digits(),
+                          numbers :: array:array(numbers:digit()),
                           lex_number :: non_neg_integer(),
                           sup_lex_number :: non_neg_integer(),
                           grid :: grid()}).
 
--type prediction_stack() :: [#predict_context{}].
--type grid_cases() :: [#grid_case{}].
 -type cells_info() :: [#cell_info{}].
--type prediction() :: {Digits :: numbers:digits(), Predict :: #predict_context{}, PredictionStack :: prediction_stack()}.
+-type numbers_info() :: array:array(coords() | 'undef').
+-type calc_result() :: {'true', Context :: #calc_context{}} | 'false'.
+-type prediction_stack() :: [#predict_context{}].
+-type prediction() :: {Numbers :: [numbers:digit()], Predict :: #predict_context{}, PredictionStack :: prediction_stack()}.
 
 %% ====================================================================
 %% API functions
@@ -72,26 +73,19 @@ solve(Data) ->
 %% Internal functions
 %% ====================================================================
 
--spec solve_case(Name :: string(), InitGrid :: grid())-> pos_integer().
-solve_case(_Name, InitGrid)->
-    Grid = process_grid([], create_context(InitGrid)),
-    get_element(1, 1, Grid) * 100 + get_element(1, 2, Grid) * 10 + get_element(1, 3, Grid).
+%% TODO (std_string) : move into common and use such approach in all other cases
+-spec get_element(Row :: row(), Column :: column(), Grid :: grid()) -> numbers:digit().
+get_element(Row, Column, Grid) ->
+    Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
+    array:get(Index, Grid).
 
--spec process_grid(PredictionStack :: prediction_stack(), CalcContextBefore :: #calc_context{}) -> grid().
-process_grid(PredictionStack, CalcContextBefore) ->
-    case process_calculation(CalcContextBefore) of
-        stop_calc ->
-            {DigitCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, stop_calc),
-            UpdatedGrid = apply_prediction(DigitCombination, PredictContext, PredictContext#predict_context.grid),
-            process_grid(UpdatedPredictionStack, create_context(UpdatedGrid));
-        {false, CalcContextAfter} ->
-            {DigitCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, CalcContextAfter),
-            UpdatedGrid = apply_prediction(DigitCombination, PredictContext, CalcContextAfter#calc_context.grid),
-            process_grid(UpdatedPredictionStack, create_context(UpdatedGrid));
-        {true, CalcContextAfter} -> CalcContextAfter#calc_context.grid
-    end.
+%% TODO (std_string) : move into common and use such approach in all other cases
+-spec set_element(Row :: row(), Column :: column(), Value :: numbers:digit(), Grid :: grid()) -> grid().
+set_element(Row, Column, Value, Grid) ->
+    Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
+    array:set(Index, Value, Grid).
 
--spec convert_data(Source :: [string()], Dest :: grid_cases()) -> grid_cases().
+-spec convert_data(Source :: [string()], Dest :: [#grid_case{}]) -> [#grid_case{}].
 convert_data([], Dest) -> lists:reverse(Dest);
 convert_data([Description, Str1, Str2, Str3, Str4, Str5, Str6, Str7, Str8, Str9 | Rest], Dest) ->
     Row1 = lists:map(fun(Char) -> Char - $0 end, Str1),
@@ -106,20 +100,30 @@ convert_data([Description, Str1, Str2, Str3, Str4, Str5, Str6, Str7, Str8, Str9 
     Grid = array:fix(array:from_list(Row1 ++ Row2 ++ Row3 ++ Row4 ++ Row5 ++ Row6 ++ Row7 ++ Row8 ++ Row9)),
     convert_data(Rest, [#grid_case{name = Description, grid = Grid}] ++ Dest).
 
-%% TODO (std_string) : move into common and use such approach in all other cases
--spec get_element(Row :: row(), Column :: column(), Grid :: grid()) -> numbers:digit().
-get_element(Row, Column, Grid) ->
-    Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
-    array:get(Index, Grid).
+-spec solve_case(Name :: string(), InitGrid :: grid())-> pos_integer().
+solve_case(_Name, InitGrid)->
+    Grid = process_grid([], create_calc_context(InitGrid)),
+    get_element(1, 1, Grid) * 100 + get_element(1, 2, Grid) * 10 + get_element(1, 3, Grid).
 
-%% TODO (std_string) : move into common and use such approach in all other cases
--spec set_element(Row :: row(), Column :: column(), Value :: numbers:digit(), Grid :: grid()) -> grid().
-set_element(Row, Column, Value, Grid) ->
-    Index = (Row - 1) * ?GRID_SIDE + (Column - 1),
-    array:set(Index, Value, Grid).
+-spec process_grid(PredictionStack :: prediction_stack(), CalcContextBefore :: #calc_context{}) -> grid().
+process_grid(PredictionStack, CalcContextBefore) ->
+    case process_calculation(CalcContextBefore) of
+        stop ->
+            {NumbersCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, stop),
+            UpdatedGrid = apply_prediction(NumbersCombination, PredictContext, PredictContext#predict_context.grid),
+            process_grid(UpdatedPredictionStack, create_calc_context(UpdatedGrid));
+        {false, CalcContextAfter} ->
+            {NumbersCombination, PredictContext, UpdatedPredictionStack} = create_prediction(PredictionStack, CalcContextAfter),
+            UpdatedGrid = apply_prediction(NumbersCombination, PredictContext, CalcContextAfter#calc_context.grid),
+            process_grid(UpdatedPredictionStack, create_calc_context(UpdatedGrid));
+        {true, CalcContextAfter} -> CalcContextAfter#calc_context.grid
+    end.
 
--spec occupy_digit(Digits :: non_neg_integer(), Digit :: numbers:digit()) -> non_neg_integer().
-occupy_digit(Digits, Digit) -> Digits band bnot(1 bsl (Digit - 1)).
+-spec contains_number(NumbersBinary :: #numbers_binary{}, Number :: numbers:digit()) -> boolean().
+contains_number(NumbersBinary, Number) -> (NumbersBinary#numbers_binary.value band (1 bsl (Number - 1))) /= 0.
+
+-spec use_number(NumbersBinary :: #numbers_binary{}, Number :: numbers:digit()) -> #numbers_binary{}.
+use_number(NumbersBinary, Number) -> #numbers_binary{value = NumbersBinary#numbers_binary.value band bnot(1 bsl (Number - 1))}.
 
 -spec generate_row(Row :: row()) -> coords().
 generate_row(Row) -> lists:map(fun(Column) -> {Row, Column} end, lists:seq(1, ?GRID_SIDE)).
@@ -141,277 +145,247 @@ generate_square(Row, Column) ->
      {RowTop + 2, ColumnLeft + 1},
      {RowTop + 2, ColumnLeft + 2}].
 
--spec scan_row(Row :: row(), Grid :: grid()) -> search_result().
+-spec scan_row(Row :: row(), Grid :: grid()) -> scan_result().
 scan_row(Row, Grid) -> scan_cells(Grid, generate_row(Row)).
 
--spec scan_column(Column :: column(), Grid :: grid()) -> search_result().
+-spec scan_column(Column :: column(), Grid :: grid()) -> scan_result().
 scan_column(Column, Grid) -> scan_cells(Grid, generate_column(Column)).
 
--spec scan_square(CellRow :: row(), CellColumn :: column(), Grid :: grid()) -> search_result().
+-spec scan_square(CellRow :: row(), CellColumn :: column(), Grid :: grid()) -> scan_result().
 scan_square(CellRow, CellColumn, Grid) -> scan_cells(Grid, generate_square(CellRow, CellColumn)).
 
--spec scan_cells(Grid :: grid(), Cells :: coords()) -> search_result().
+-spec scan_cells(Grid :: grid(), Cells :: coords()) -> scan_result().
 scan_cells(Grid, Cells) ->
-    lists:foldl(fun ({Row, Column}, {FreeCells, Digits}) ->
+    lists:foldl(fun ({Row, Column}, {FreeCells, NumbersBinary}) ->
         CellValue = get_element(Row, Column, Grid),
         if
-            CellValue == 0 -> {[{Row, Column}] ++ FreeCells, Digits};
-            CellValue /= 0 -> {FreeCells, occupy_digit(Digits, CellValue)}
+            CellValue == 0 -> {[{Row, Column}] ++ FreeCells, NumbersBinary};
+            CellValue /= 0 -> {FreeCells, use_number(NumbersBinary, CellValue)}
         end
-    end, {[], ?ALL_NUMBERS}, Cells).
+    end, {[], #numbers_binary{value = ?ALL_NUMBERS}}, Cells).
 
--spec append_row_digits(CellRow :: row(), Grid :: grid(), CellDigits :: non_neg_integer()) -> non_neg_integer().
-append_row_digits(CellRow, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_row(CellRow)).
+-spec append_row(Row :: row(), Grid :: grid(), NumbersBinary :: #numbers_binary{}) -> #numbers_binary{}.
+append_row(Row, Grid, NumbersBinary) -> append_cells(generate_row(Row), Grid, NumbersBinary).
 
--spec append_column_digits(CellColumn :: column(), Grid :: grid(), CellDigits :: non_neg_integer()) -> non_neg_integer().
-append_column_digits(CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_column(CellColumn)).
+-spec append_column(Column :: column(), Grid :: grid(), NumbersBinary :: #numbers_binary{}) -> #numbers_binary{}.
+append_column(Column, Grid, NumbersBinary) -> append_cells(generate_column(Column), Grid, NumbersBinary).
 
--spec append_square_digits(CellRow :: row(), CellColumn :: column(), Grid :: grid(), CellDigits :: non_neg_integer()) -> non_neg_integer().
-append_square_digits(CellRow, CellColumn, Grid, CellDigits) -> append_cells_digits(Grid, CellDigits, generate_square(CellRow, CellColumn)).
+-spec append_square(Row :: row(), Column :: column(), Grid :: grid(), NumbersBinary :: #numbers_binary{}) -> #numbers_binary{}.
+append_square(Row, Column, Grid, NumbersBinary) -> append_cells(generate_square(Row, Column), Grid, NumbersBinary).
 
--spec append_cells_digits(Grid :: grid(), SourceDigits :: non_neg_integer(), Cells :: coords()) -> non_neg_integer().
-append_cells_digits(Grid, SourceDigits, Cells) ->
-    lists:foldl(fun ({Row, Column}, Digits) ->
+-spec append_cells(Cells :: coords(), Grid :: grid(), SourceNumbersBinary :: #numbers_binary{}) -> #numbers_binary{}.
+append_cells(Cells, Grid, SourceNumbersBinary) ->
+    lists:foldl(fun ({Row, Column}, NumbersBinary) ->
         CellValue = get_element(Row, Column, Grid),
         if
-            CellValue == 0 -> Digits;
-            CellValue /= 0 -> occupy_digit(Digits, CellValue)
+            CellValue == 0 -> NumbersBinary;
+            CellValue /= 0 -> use_number(NumbersBinary, CellValue)
         end
-    end, SourceDigits, Cells).
+    end, SourceNumbersBinary, Cells).
 
--spec create_digits_info(CellsInfo :: #cell_info{}) -> digits_info().
-create_digits_info(CellsInfo) ->
-    DigitsInfo = array:new([{size, ?GRID_SIDE}, {fixed, true}, {default, []}]),
-    lists:foldl(fun(CellInfo, Dest) -> create_digits_info(CellInfo, Dest) end, DigitsInfo, CellsInfo).
+-spec create_numbers_info(CellsInfo :: cells_info()) -> numbers_info().
+create_numbers_info(CellsInfo) ->
+    NumbersInfo = array:new([{size, ?GRID_SIDE}, {fixed, true}, {default, undef}]),
+    lists:foldl(fun(CellInfo, Dest) -> append_cell_info(CellInfo, Dest) end, NumbersInfo, CellsInfo).
 
--spec create_digits_info(CellInfo :: #cell_info{}, DigitsInfo :: digits_info()) -> digits_info().
-create_digits_info(#cell_info{row = Row, column = Column, constraint = DigitsBinary}, DigitsInfo) ->
-    DigitsList = get_free_digits_list(DigitsBinary),
-    lists:foldl(fun(Digit, Dest) -> array:set(Digit - 1, [{Row, Column}] ++ array:get(Digit - 1, Dest), Dest) end, DigitsInfo, DigitsList).
+-spec append_cell_info(CellInfo :: #cell_info{}, NumbersInfo :: numbers_info()) -> numbers_info().
+append_cell_info(#cell_info{cell = Cell, constraint = NumbersBinary}, NumbersInfo) ->
+    NumbersList = lists:filter(fun(Number) -> contains_number(NumbersBinary, Number) end, lists:seq(1, ?GRID_SIDE)),
+    lists:foldl(fun(Number, Dest) ->
+        Cells = case array:get(Number - 1, Dest) of
+                    undef -> [];
+                    Other -> Other
+                end,
+        array:set(Number - 1, [Cell] ++ Cells, Dest)
+    end, NumbersInfo, NumbersList).
 
--spec get_free_digits_list(DigitsBinary :: non_neg_integer()) -> numbers:digits().
-get_free_digits_list(DigitsBinary) ->
-    lists:foldl(fun(Digit, DigitsList) ->
-        case DigitsBinary band (1 bsl (Digit - 1)) of
-            0 -> DigitsList;
-            _ -> [Digit] ++ DigitsList
-        end
-    end, [], lists:seq(1, ?GRID_SIDE)).
-
--spec choose_cell(CellsInfo :: cells_info(), DigitsInfo :: digits_info()) -> choose_cell_result().
-choose_cell(CellsInfo, DigitsInfo) ->
+-spec choose_cell(CellsInfo :: cells_info(), NumbersInfo :: numbers_info()) -> choose_cell_result().
+choose_cell(CellsInfo, NumbersInfo) ->
     case choose_cells_info(CellsInfo) of
-        {true, Digit, {Row, Column}} -> {true, Digit, {Row, Column}};
+        {true, Number, Cell} -> {true, Number, Cell};
         false ->
-            case choose_digits_info(DigitsInfo) of
-                {true, Digit, {Row, Column}} -> {true, Digit, {Row, Column}};
+            case choose_numbers_info(NumbersInfo) of
+                {true, Number, Cell} -> {true, Number, Cell};
                 false -> false
             end
     end.
 
 -spec choose_cells_info(CellsInfo :: cells_info()) -> choose_cell_result().
 choose_cells_info([]) -> false;
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_1} | _Rest]) -> {true, 1, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_2} | _Rest]) -> {true, 2, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_3} | _Rest]) -> {true, 3, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_4} | _Rest]) -> {true, 4, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_5} | _Rest]) -> {true, 5, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_6} | _Rest]) -> {true, 6, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_7} | _Rest]) -> {true, 7, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_8} | _Rest]) -> {true, 8, {Row, Column}};
-choose_cells_info([#cell_info{row = Row, column = Column, constraint = ?DIGIT_9} | _Rest]) -> {true, 9, {Row, Column}};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_1}} | _Rest]) -> {true, 1, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_2}} | _Rest]) -> {true, 2, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_3}} | _Rest]) -> {true, 3, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_4}} | _Rest]) -> {true, 4, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_5}} | _Rest]) -> {true, 5, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_6}} | _Rest]) -> {true, 6, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_7}} | _Rest]) -> {true, 7, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_8}} | _Rest]) -> {true, 8, Cell};
+choose_cells_info([#cell_info{cell = Cell, constraint = #numbers_binary{value = ?NUMBER_9}} | _Rest]) -> {true, 9, Cell};
 choose_cells_info([_CellInfo | Rest]) -> choose_cells_info(Rest).
 
--spec choose_digits_info(DigitsInfo :: digits_info()) -> choose_cell_result().
-choose_digits_info(DigitsInfo) -> choose_digits_info(DigitsInfo, 1).
+-spec choose_numbers_info(NumbersInfo :: numbers_info()) -> choose_cell_result().
+choose_numbers_info(NumbersInfo) -> choose_numbers_info(NumbersInfo, lists:seq(1, ?GRID_SIDE)).
 
--spec choose_digits_info(DigitsInfo :: digits_info(), Digit :: numbers:digit()) -> choose_cell_result().
-choose_digits_info(_DigitsInfo, Digit) when Digit > ?GRID_SIDE -> false;
-choose_digits_info(DigitsInfo, Digit) ->
-    case array:get(Digit - 1, DigitsInfo) of
-        [{Row, Column}] -> {true, Digit, {Row, Column}};
-        _Other -> choose_digits_info(DigitsInfo, Digit + 1)
+-spec choose_numbers_info(NumbersInfo :: numbers_info(), Numbers :: [numbers:digit()]) -> choose_cell_result().
+choose_numbers_info(_NumbersInfo, []) -> false;
+choose_numbers_info(NumbersInfo, [Number | NumbersRest]) ->
+    case array:get(Number - 1, NumbersInfo) of
+        [Cell] -> {true, Number, Cell};
+        _Other -> choose_numbers_info(NumbersInfo, NumbersRest)
     end.
 
--spec strikeout_cell(SourceRow :: row(),
-                     SourceColumn :: column(),
-                     Digit :: numbers:digit(),
-                     CellsInfo :: cells_info(),
-                     DigitsInfo :: digits_info()) -> {CellsInfo :: cells_info(), DigitsInfo :: digits_info()}.
-strikeout_cell(SourceRow, SourceColumn, Digit, CellsInfo, DigitsInfo) ->
-    NewCellsInfo = lists:filter(fun(#cell_info{row = Row, column = Column}) -> (Row /= SourceRow) or (Column /= SourceColumn) end, CellsInfo),
-    NewDigitsInfo = array:map(fun(_Index, Cells) -> lists:delete({SourceRow, SourceColumn}, Cells) end, array:set(Digit - 1, [], DigitsInfo)),
-    {NewCellsInfo, NewDigitsInfo}.
+-spec check_calculation(CellsInfo :: cells_info(), NumbersInfo :: numbers_info()) -> boolean().
+check_calculation(CellsInfo, NumbersInfo) ->
+    lists:all(fun(#cell_info{constraint = #numbers_binary{value = Value}}) -> Value /= 0 end, CellsInfo) and
+    array:foldl(fun(_Index, Cells, Result) -> Result and (Cells /= []) end, true, NumbersInfo).
 
--spec process_row(SourceRow :: row(), Context :: #calc_context{}) -> #calc_context{}.
-process_row(SourceRow, Context) ->
+-spec process_row(SourceRow :: row(), CalcResult :: calc_result()) -> calc_result().
+process_row(_SourceRow, false) -> false;
+process_row(SourceRow, {true, Context}) ->
     Grid = Context#calc_context.grid,
-    {FreeCells, InitCellDigits} = scan_row(SourceRow, Grid),
+    {FreeCells, NumbersBinary} = scan_row(SourceRow, Grid),
     CellsInfo = lists:map(fun({Row, Column}) ->
-        #cell_info{row = Row, column = Column, constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, InitCellDigits))}
+        #cell_info{cell = {Row, Column}, constraint = append_square(Row, Column, Grid, append_column(Column, Grid, NumbersBinary))}
     end, FreeCells),
     process_cells(CellsInfo, Context).
 
--spec process_column(SourceColumn :: column(), Context :: #calc_context{}) -> #calc_context{}.
-process_column(SourceColumn, Context) ->
+-spec process_column(SourceColumn :: column(), CalcResult :: calc_result()) -> calc_result().
+process_column(_SourceColumn, false) -> false;
+process_column(SourceColumn, {true, Context}) ->
     Grid = Context#calc_context.grid,
-    {FreeCells, InitCellDigits} = scan_column(SourceColumn, Grid),
+    {FreeCells, NumbersBinary} = scan_column(SourceColumn, Grid),
     CellsInfo = lists:map(fun({Row, Column}) ->
-        #cell_info{row = Row, column = Column, constraint = append_square_digits(Row, Column, Grid, append_row_digits(Row, Grid, InitCellDigits))}
+        #cell_info{cell = {Row, Column}, constraint = append_square(Row, Column, Grid, append_row(Row, Grid, NumbersBinary))}
     end, FreeCells),
     process_cells(CellsInfo, Context).
 
--spec process_square(CellRow :: row(), CellColumn :: column(), Context :: #calc_context{}) -> #calc_context{}.
-process_square(CellRow, CellColumn, Context) ->
+-spec process_square(CellRow :: row(), CellColumn :: column(), CalcResult :: calc_result()) -> calc_result().
+process_square(_CellRow, _CellColumn, false) -> false;
+process_square(CellRow, CellColumn, {true, Context}) ->
     Grid = Context#calc_context.grid,
-    {FreeCells, InitCellDigits} = scan_square(CellRow, CellColumn, Grid),
+    {FreeCells, NumbersBinary} = scan_square(CellRow, CellColumn, Grid),
     CellsInfo = lists:map(fun({Row, Column}) ->
-        #cell_info{row = Row, column = Column, constraint = append_column_digits(Column, Grid, append_row_digits(Row, Grid, InitCellDigits))}
-    end, FreeCells),
-    process_cells(CellsInfo, Context).
+        #cell_info{cell = {Row, Column}, constraint = append_column(Column, Grid, append_row(Row, Grid, NumbersBinary))}
+     end, FreeCells),
+     process_cells(CellsInfo, Context).
 
--spec process_cells(CellsInfo :: cells_info(), Context :: #calc_context{}) -> #calc_context{}.
+-spec process_cells(CellsInfo :: cells_info(), Context :: #calc_context{}) -> calc_result().
 process_cells(CellsInfo, Context) ->
-    DigitsInfo = create_digits_info(CellsInfo),
-    process_digits(CellsInfo, DigitsInfo, Context).
+    NumbersInfo = create_numbers_info(CellsInfo),
+    process_cells(CellsInfo, NumbersInfo, Context).
 
--spec process_digits(CellsInfo :: cells_info(), DigitsInfo :: digits_info(), Context :: #calc_context{}) -> #calc_context{}.
-process_digits(CellsInfo, DigitsInfo, Context) ->
-    case choose_cell(CellsInfo, DigitsInfo) of
-        {true, Digit, {Row, Column}} ->
+-spec process_cells(CellsInfo :: cells_info(), NumbersInfo :: numbers_info(), Context :: #calc_context{}) -> calc_result().
+process_cells(CellsInfo, NumbersInfo, Context) ->
+    case choose_cell(CellsInfo, NumbersInfo) of
+        {true, Number, {Row, Column}} ->
             EmptyCount = Context#calc_context.empty_count,
-            UpdatedGrid = set_element(Row, Column, Digit, Context#calc_context.grid),
+            UpdatedGrid = set_element(Row, Column, Number, Context#calc_context.grid),
             UpdatedContext = #calc_context{empty_count = EmptyCount - 1, grid = UpdatedGrid},
-            {UpdatedCellsInfo, UpdatedDigitsInfo} = strikeout_cell(Row, Column, Digit, CellsInfo, DigitsInfo),
-            process_digits(UpdatedCellsInfo, UpdatedDigitsInfo, UpdatedContext);
-        false -> Context
+            {UpdatedCellsInfo, UpdatedNumbersInfo} = update_info({Row, Column}, Number, CellsInfo, NumbersInfo),
+            case check_calculation(UpdatedCellsInfo, UpdatedNumbersInfo) of
+                true -> process_cells(UpdatedCellsInfo, UpdatedNumbersInfo, UpdatedContext);
+                false -> false
+            end;
+        false -> {true, Context}
     end.
 
--spec process_calculation(Context :: #calc_context{}) -> {Completed :: boolean(), UpdatedContext :: #calc_context{}} | 'stop_calc'.
+-spec update_info(Cell :: coord(), Number :: numbers:digit(), CellsInfo :: cells_info(), NumbersInfo :: numbers_info()) ->
+    {CellsInfo :: cells_info(), NumbersInfo :: numbers_info()}.
+update_info(Cell, Number, CellsInfo, NumbersInfo) ->
+    UpdatedCellsInfo = lists:filter(fun(CellInfo) -> CellInfo#cell_info.cell /= Cell end, CellsInfo),
+    UpdatedNumbersInfo = array:map(fun(_Index, Cells) ->
+        if
+            Cells == undef -> undef;
+            Cells /= undef -> lists:delete(Cell, Cells)
+        end
+    end, array:set(Number - 1, undef, NumbersInfo)),
+    {UpdatedCellsInfo, UpdatedNumbersInfo}.
+
+-spec process_calculation(Context :: #calc_context{}) -> {Completed :: boolean(), UpdatedContext :: #calc_context{}} | 'stop'.
 process_calculation(Context) when Context#calc_context.empty_count == 0 -> {true, Context};
 process_calculation(ContextBefore) ->
-    ContextAfterRows = lists:foldl(fun(Row, Context) -> process_row(Row, Context) end, ContextBefore, lists:seq(1, ?GRID_SIDE)),
-    ContextAfterColumns = lists:foldl(fun(Column, Context) -> process_column(Column, Context) end, ContextAfterRows, lists:seq(1, ?GRID_SIDE)),
-    ContextAfter = lists:foldl(fun({CellRow, CellColumn}, Context) -> process_square(CellRow, CellColumn, Context) end, ContextAfterColumns, ?SQUARES),
-    CheckResult = check_calculation(ContextAfter#calc_context.grid),
-    if
-        CheckResult == false -> stop_calc;
-        ContextAfter#calc_context.empty_count < ContextBefore#calc_context.empty_count -> process_calculation(ContextAfter);
-        ContextAfter#calc_context.empty_count == ContextBefore#calc_context.empty_count -> {false, ContextAfter}
+    ResultAfterRows = lists:foldl(fun(Row, Result) -> process_row(Row, Result) end, {true, ContextBefore}, lists:seq(1, ?GRID_SIDE)),
+    ResultAfterColumns = lists:foldl(fun(Column, Result) -> process_column(Column, Result) end, ResultAfterRows, lists:seq(1, ?GRID_SIDE)),
+    ResultAfter = lists:foldl(fun({CellRow, CellColumn}, Result) -> process_square(CellRow, CellColumn, Result) end, ResultAfterColumns, ?SQUARES),
+    case ResultAfter of
+        false ->  stop;
+        {true, ContextAfter} when ContextAfter#calc_context.empty_count < ContextBefore#calc_context.empty_count -> process_calculation(ContextAfter);
+        {true, ContextAfter} when ContextAfter#calc_context.empty_count == ContextBefore#calc_context.empty_count -> {false, ContextAfter}
     end.
 
--spec check_calculation(Grid :: grid()) -> boolean().
-check_calculation(Grid) ->
-    RowsResult = lists:foldl(fun(Row, Result) -> check_calculation_row(Row, Grid) and Result end, true, lists:seq(1, ?GRID_SIDE)),
-    ColumnsResult = lists:foldl(fun(Column, Result) -> check_calculation_column(Column, Grid) and Result end, true, lists:seq(1, ?GRID_SIDE)),
-    SquaresResult = lists:foldl(fun({Row, Column}, Result) -> check_calculation_square(Row, Column, Grid) and Result end, true, ?SQUARES),
-    RowsResult and ColumnsResult and SquaresResult.
-
--spec check_calculation_row(SourceRow :: row(), Grid :: grid()) -> boolean().
-check_calculation_row(SourceRow, Grid) ->
-    {Cells, CellDigits} = scan_row(SourceRow, Grid),
-    ResultDigits = lists:foldl(fun({Row, Column}, Result) ->
-        Result bor append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, CellDigits))
-    end, 0, Cells),
-    ResultDigits == CellDigits.
-
--spec check_calculation_column(SourceColumn :: column(), Grid :: grid()) -> boolean().
-check_calculation_column(SourceColumn, Grid) ->
-    {Cells, CellDigits} = scan_column(SourceColumn, Grid),
-    ResultDigits = lists:foldl(fun({Row, Column}, Result) ->
-        Result bor append_square_digits(Row, Column, Grid, append_row_digits(Row, Grid, CellDigits))
-    end, 0, Cells),
-    ResultDigits == CellDigits.
-
--spec check_calculation_square(SourceRow :: row(), SourceColumn :: column(), Grid :: grid()) -> boolean().
-check_calculation_square(SourceRow, SourceColumn, Grid) ->
-    {Cells, CellDigits} = scan_square(SourceRow, SourceColumn, Grid),
-    ResultDigits = lists:foldl(fun({Row, Column}, Result) ->
-        Result bor append_column_digits(Column, Grid, append_row_digits(Row, Grid, CellDigits))
-    end, 0, Cells),
-    ResultDigits == CellDigits.
-
--spec create_context(Grid :: grid()) -> #calc_context{}.
-create_context(Grid) ->
-    EmptyCount = array:foldl(fun(_Index, Value, Result) ->
-        if
-            Value == 0 -> Result + 1;
-            Value > 0 -> Result
-        end
-    end, 0, Grid),
+-spec create_calc_context(Grid :: grid()) -> #calc_context{}.
+create_calc_context(Grid) ->
+    EmptyCount = array:foldl(fun(_Index, Value, Result) -> Result + (if Value == 0 -> 1; Value > 0 -> 0 end) end, 0, Grid),
     #calc_context{empty_count = EmptyCount, grid = Grid}.
 
--spec find_predict_object(Grid :: grid()) -> search_result().
+-spec find_predict_object(Grid :: grid()) -> scan_result().
 find_predict_object(Grid) ->
-    FoundRow = lists:foldl(fun(Row, Result) -> merge_predict_object(Result, scan_row(Row, Grid)) end, {[], 0}, lists:seq(1, ?GRID_SIDE)),
-    FoundColumn = lists:foldl(fun(Column, Result) -> merge_predict_object(Result, scan_column(Column, Grid)) end, FoundRow, lists:seq(1, ?GRID_SIDE)),
-    lists:foldl(fun({Row, Column}, Result) -> merge_predict_object(Result, scan_square(Row, Column, Grid)) end, FoundColumn, ?SQUARES).
+    InitObj = {[], #numbers_binary{value = 0}},
+    RowObj = lists:foldl(fun(Row, Result) -> merge_predict_object(Result, scan_row(Row, Grid)) end, InitObj, lists:seq(1, ?GRID_SIDE)),
+    ColumnObj = lists:foldl(fun(Column, Result) -> merge_predict_object(Result, scan_column(Column, Grid)) end, RowObj, lists:seq(1, ?GRID_SIDE)),
+    lists:foldl(fun({Row, Column}, Result) -> merge_predict_object(Result, scan_square(Row, Column, Grid)) end, ColumnObj, ?SQUARES).
 
--spec merge_predict_object(OldFoundObject :: search_result(), NewFoundObject :: search_result()) -> search_result().
-merge_predict_object({[], 0}, {[], 0}) -> {[], 0};
-merge_predict_object({[], 0}, NewFoundObject) -> NewFoundObject;
-merge_predict_object(OldFoundObject, {[], 0}) -> OldFoundObject;
-merge_predict_object({OldCells, OldDigits}, {NewCells, _NewDigits}) when length(OldCells) =< length(NewCells) -> {OldCells, OldDigits};
-merge_predict_object(_OldFoundObject, NewFoundObject) -> NewFoundObject.
+-spec merge_predict_object(LeftObj :: scan_result(), RightObj :: scan_result()) -> scan_result().
+merge_predict_object({[], #numbers_binary{value = 0}}, {[], #numbers_binary{value = 0}}) -> {[], #numbers_binary{value = 0}};
+merge_predict_object({[], #numbers_binary{value = 0}}, RightObj) -> RightObj;
+merge_predict_object(LeftObj, {[], #numbers_binary{value = 0}}) -> LeftObj;
+merge_predict_object({LeftCells, LeftNumbersBinary}, {RightCells, _RightNumbersBinary}) when length(LeftCells) =< length(RightCells) -> {LeftCells, LeftNumbersBinary};
+merge_predict_object(_LeftObj, RightObj) -> RightObj.
 
 -spec create_predict_context(Grid :: grid()) -> #predict_context{}.
 create_predict_context(Grid) ->
-    {Cells, DigitsBinary} = find_predict_object(Grid),
-    create_predict_context(Cells, DigitsBinary, Grid).
+    {Cells, NumbersBinary} = find_predict_object(Grid),
+    create_predict_context(Grid, Cells, NumbersBinary).
 
--spec create_predict_context(Cells :: coords(), DigitsBinary :: non_neg_integer(), Grid :: grid()) -> #predict_context{}.
-create_predict_context(Cells, DigitsBinary, Grid) ->
-    Digits = get_free_digits_list(DigitsBinary),
+-spec create_predict_context(Grid :: grid(), Cells :: coords(), NumbersBinary :: #numbers_binary{}) -> #predict_context{}.
+create_predict_context(Grid, Cells, NumbersBinary) ->
+    Numbers = lists:filter(fun(Number) -> contains_number(NumbersBinary, Number) end, lists:seq(1, ?GRID_SIDE)),
     CellsInfo = lists:map(fun({Row, Column}) ->
-        Constraint = append_square_digits(Row, Column, Grid, append_column_digits(Column, Grid, append_row_digits(Row, Grid, DigitsBinary))),
-        #cell_info{row = Row, column = Column, constraint = Constraint}
+        #cell_info{cell = {Row, Column}, constraint = append_square(Row, Column, Grid, append_column(Column, Grid, append_row(Row, Grid, NumbersBinary)))}
     end, Cells),
-    SupLexNumber = permutations:get_lexicographical_number_sup(array:from_list(Digits)),
-    #predict_context{cells = CellsInfo, digits = Digits, lex_number = -1, sup_lex_number = SupLexNumber - 1, grid = Grid}.
+    SupLexNumber = permutations:get_lexicographical_number_sup(array:from_list(Numbers)),
+    #predict_context{cells = CellsInfo, numbers = array:fix(array:from_list(Numbers)), lex_number = -1, sup_lex_number = SupLexNumber - 1, grid = Grid}.
 
--spec select_next_combination(Context :: #predict_context{}) ->
-    {Digits :: numbers:digits(), UpdatedContext :: #predict_context{}} | 'finish'.
+-spec select_next_combination(Context :: #predict_context{}) -> {Numbers :: [numbers:digit()], UpdatedContext :: #predict_context{}} | 'finish'.
 select_next_combination(#predict_context{lex_number = Number, sup_lex_number = Number}) -> finish;
 select_next_combination(Context) ->
     NextLexNumber = Context#predict_context.lex_number + 1,
-    NextDigitCombination = permutations:get_permutation(NextLexNumber, array:fix(array:from_list(Context#predict_context.digits))),
+    NextNumbersCombination = permutations:get_permutation(NextLexNumber, Context#predict_context.numbers),
     UpdatedContext = Context#predict_context{lex_number = NextLexNumber},
-    case check_digit_combination(Context#predict_context.cells, NextDigitCombination) of
-        true -> {NextDigitCombination, UpdatedContext};
+    case check_combination(Context#predict_context.cells, NextNumbersCombination) of
+        true -> {NextNumbersCombination, UpdatedContext};
         false -> select_next_combination(UpdatedContext)
     end.
 
--spec check_digit_combination(CellsInfo :: cells_info(), Digits :: numbers:digits()) -> boolean().
-check_digit_combination([], []) -> true;
-check_digit_combination([], _Digits) -> false;
-check_digit_combination([#cell_info{constraint = Constraint} | CellsInfoRest], [Digit | DigitsRest]) ->
-    CheckDigit = Constraint band (1 bsl (Digit - 1)),
-    if
-        CheckDigit == 0 -> false;
-        CheckDigit /= 0 -> check_digit_combination(CellsInfoRest, DigitsRest)
+-spec check_combination(CellsInfo :: cells_info(), Numbers :: [numbers:digit()]) -> boolean().
+check_combination([], []) -> true;
+check_combination([], _Numbers) -> false;
+check_combination([#cell_info{constraint = Constraint} | CellsInfoRest], [Number | NumbersRest]) ->
+    case contains_number(Constraint, Number) of
+        true -> check_combination(CellsInfoRest, NumbersRest);
+        false -> false
     end.
 
--spec create_prediction(PredictionStack :: prediction_stack(),
-                        CalcContext :: #calc_context{} | 'stop_calc') -> prediction() | no_return().
-create_prediction([], stop_calc) -> error(invalid_operation);
-create_prediction([PredictContext | PredictionStackRest], stop_calc) ->
+-spec create_prediction(PredictionStack :: prediction_stack(), CalcContext :: #calc_context{} | 'stop') -> prediction() | no_return().
+create_prediction([], stop) -> error(invalid_operation);
+create_prediction([PredictContext | PredictionStackRest], stop) ->
     case select_next_combination(PredictContext) of
-        finish -> create_prediction(PredictionStackRest, stop_calc);
-        {DigitCombination, UpdatedPredictContext} -> {DigitCombination, UpdatedPredictContext, [UpdatedPredictContext] ++ PredictionStackRest}
+        finish -> create_prediction(PredictionStackRest, stop);
+        {NumbersCombination, UpdatedPredictContext} -> {NumbersCombination, UpdatedPredictContext, [UpdatedPredictContext] ++ PredictionStackRest}
     end;
 create_prediction([], CalcContext) ->
-    {DigitCombination, PredictContext} = select_next_combination(create_predict_context(CalcContext#calc_context.grid)),
-    {DigitCombination, PredictContext, [PredictContext]};
+    {NumbersCombination, PredictContext} = select_next_combination(create_predict_context(CalcContext#calc_context.grid)),
+    {NumbersCombination, PredictContext, [PredictContext]};
 create_prediction(PredictionStack, CalcContext) ->
     case select_next_combination(create_predict_context(CalcContext#calc_context.grid)) of
-        finish -> create_prediction(PredictionStack, stop_calc);
-        {DigitCombination, NewPredictContext} -> {DigitCombination, NewPredictContext, [NewPredictContext] ++ PredictionStack}
+        finish -> create_prediction(PredictionStack, stop);
+        {NumbersCombination, NewPredictContext} -> {NumbersCombination, NewPredictContext, [NewPredictContext] ++ PredictionStack}
     end.
 
--spec apply_prediction(Digits :: numbers:digits(), PredictContext :: #predict_context{}, Grid :: grid()) -> grid().
-apply_prediction(DigitCombination, PredictContext, Grid) -> apply_prediction_impl(DigitCombination, PredictContext#predict_context.cells, Grid).
+-spec apply_prediction(NumbersCombination :: [numbers:digit()], PredictContext :: #predict_context{}, Grid :: grid()) -> grid().
+apply_prediction(NumbersCombination, PredictContext, Grid) -> apply_prediction_impl(NumbersCombination, PredictContext#predict_context.cells, Grid).
 
--spec apply_prediction_impl(Digits :: numbers:digits(), CellsInfo :: cells_info(), Grid :: grid()) -> grid().
+-spec apply_prediction_impl(NumbersCombination :: [numbers:digit()], CellsInfo :: cells_info(), Grid :: grid()) -> grid().
 apply_prediction_impl([], [], Grid) -> Grid;
-apply_prediction_impl([Digit | DigitsRest], [#cell_info{row = Row, column = Column} | CellsInfoRest], Grid) ->
-    apply_prediction_impl(DigitsRest, CellsInfoRest, set_element(Row, Column, Digit, Grid)).
+apply_prediction_impl([Number | NumbersRest], [#cell_info{cell = {Row, Column}} | CellsInfoRest], Grid) ->
+    apply_prediction_impl(NumbersRest, CellsInfoRest, set_element(Row, Column, Number, Grid)).
