@@ -30,6 +30,7 @@
 -record(numbers_binary, {value :: non_neg_integer()}).
 
 %% TODO (std_string) : move into common and use such approach in all other cases
+%% TODO (std_string) : think about using records instead of tuples
 -type grid() :: array:array(numbers:digit()).
 -type row() :: 1..?GRID_SIDE.
 -type column() :: 1..?GRID_SIDE.
