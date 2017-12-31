@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% Three distinct points are plotted at random on a Cartesian plane, for which -1000 ≤ x, y ≤ 1000, such that a triangle is formed.
 %% Consider the following two triangles:
 %% A(-340,495), B(-153,-910), C(835,-947)
@@ -11,12 +13,18 @@
 
 -behaviour(numerical_task_behaviour).
 
-get_check_data() ->
-    [{"problem_102.dat", 228}].
+%% ====================================================================
+%% API functions
+%% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_102.dat", 228}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_number_table(filename:join(ModuleSourceDir, Filename), ",").
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(VertexTable) ->
     VertexTable,
     CollectFun = fun(Row, Count) ->
@@ -26,6 +34,10 @@ solve(VertexTable) ->
         end
     end,
     lists:foldl(CollectFun, 0, VertexTable).
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 -spec check_triangle(Triangle :: [integer()]) -> boolean().
 check_triangle([X1, Y1, X2, Y2, X3, Y3]) ->

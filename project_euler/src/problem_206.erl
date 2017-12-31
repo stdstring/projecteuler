@@ -10,13 +10,16 @@
 -define(INF, 101010103).
 -define(SUP, 138902661).
 
+-type check_result() :: {'true', NumberRest :: pos_integer()} | 'false'.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{none, 1389019170}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 1389019170}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 %% notes:
@@ -32,9 +35,8 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 %% Max(Number') = 138902662,...
 %% Square' = 1_2_3_4_5_6_7_809, 1_2_3_4_5_6_7_829, 1_2_3_4_5_6_7_849, 1_2_3_4_5_6_7_869, 1_2_3_4_5_6_7_889  due to properties of the square numbers
 %% Number' = XXXXXXXX3, XXXXXXXX7 due to Square' finished on digit 9
-solve(none) ->
-    Number = process_number(?INF, 4),
-    10 * Number.
+-spec solve(PreparedInput :: term()) -> term().
+solve(none) -> 10 * process_number(?INF, 4).
 
 %% ====================================================================
 %% Internal functions
@@ -57,11 +59,11 @@ check_number(Number) ->
         false -> false
     end.
 
--spec check_last_digits(Number :: pos_integer()) -> {'true', NumberRest :: pos_integer()} | 'false'.
+-spec check_last_digits(Number :: pos_integer()) -> check_result().
 check_last_digits(Number) ->
     Rem = Number rem 100,
     if
-        (Rem == 09) or (Rem == 29) or (Rem == 49) or (Rem == 69) or (Rem == 89) -> {true, Number div 100};
+        Rem == 09; Rem == 29; Rem == 49; Rem == 69; Rem == 89 -> {true, Number div 100};
         true -> false
     end.
 

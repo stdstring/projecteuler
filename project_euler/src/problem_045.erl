@@ -16,13 +16,14 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{{1, 1, 1}, 40755}, {{285, 165, 143}, 1533776805}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{1, 1, 1}, 40755}, {{285, 165, 143}, 1533776805}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve({_TriangleN, PentagonalN, HexagonalN}) ->
-    process_numbers(PentagonalN + 1, HexagonalN).
+-spec solve(PreparedInput :: term()) -> term().
+solve({_TriangleN, PentagonalN, HexagonalN}) -> process_numbers(PentagonalN + 1, HexagonalN).
 
 %% ====================================================================
 %% Internal functions

@@ -14,32 +14,26 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{"problem_081_example.dat", 2427}, {"problem_081.dat", 427337}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_081_example.dat", 2427}, {"problem_081.dat", 427337}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_number_table(filename:join(ModuleSourceDir, Filename), ",").
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(GridData) ->
     Grid = grid_helper:create(GridData),
     InitPoints = [{1, 1}],
     ResultPoints = [{grid_helper:get_row_count(Grid), grid_helper:get_column_count(Grid)}],
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
-    ValueComparator = fun compare_values/2,
+    ValueComparator = fun compare:compare_asc/2,
     {Value, _Path} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
     Value.
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
--spec compare_values(LValue :: pos_integer(), RValue :: pos_integer()) -> 'left' | 'equal' | 'right'.
-compare_values(LValue, RValue) ->
-    if
-        LValue < RValue -> left;
-        LValue == RValue -> equal;
-        LValue > RValue -> right
-    end.
 
 -spec get_next_points(Point :: point_type(), XMax :: pos_integer(), YMax :: pos_integer()) -> [point_type()].
 get_next_points({RowMax, ColumnMax}, RowMax, ColumnMax) -> [];

@@ -1,6 +1,8 @@
+%% @author std-string
+
 %% A googol (10^100) is a massive number: one followed by one-hundred zeros; 100^100 is almost unimaginably large: one followed by two-hundred zeros.
 %% Despite their size, the sum of the digits in each number is only 1.
-%% Considering natural numbers of the form, ab, where a, b < 100, what is the maximum digital sum?
+%% Considering natural numbers of the form, a^b, where a, b < 100, what is the maximum digital sum?
 
 -module(problem_056).
 -export([get_check_data/0, prepare_data/2, solve/1]).
@@ -10,13 +12,22 @@
 -define(MIN_BASE, 2).
 -define(MIN_EXP, 2).
 
-get_check_data() ->
-    [{{100, 100}, 972}].
+%% ====================================================================
+%% API functions
+%% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{100, 100}, 972}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve({MaxBase, MaxExp}) ->
-    process_base(?MIN_BASE, MaxBase, MaxExp, 1).
+-spec solve(PreparedInput :: term()) -> term().
+solve({MaxBase, MaxExp}) -> process_base(?MIN_BASE, MaxBase, MaxExp, 1).
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 -spec process_base(Base :: pos_integer(), MaxBase :: pos_integer(), MaxExp :: pos_integer(), Result :: pos_integer()) -> pos_integer().
 process_base(Base, MaxBase, _MaxExp, Result) when Base > MaxBase -> Result;
@@ -35,5 +46,4 @@ process_exp(Base, Exp, MaxExp, Result) ->
     end.
 
 -spec calc_digits_sum(Number :: pos_integer()) -> pos_integer().
-calc_digits_sum(Number) ->
-    lists:sum(numbers:get_digits(Number)).
+calc_digits_sum(Number) -> lists:sum(numbers:get_digits(Number)).

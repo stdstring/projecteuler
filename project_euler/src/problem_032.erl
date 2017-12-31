@@ -1,4 +1,7 @@
-%% We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
+%% @author std-string
+
+%% We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once;
+%% for example, the 5-digit number, 15234, is 1 through 5 pandigital.
 %% The product 7254 is unusual, as the identity, 39 × 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
 %% Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
 %% HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum.
@@ -8,17 +11,26 @@
 
 -behaviour(numerical_task_behaviour).
 
-get_check_data() ->
-    [{none, 45228}].
+-type product_storage() :: sets:set(Product :: pos_integer()).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 45228}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
-solve(none) ->
-    lists:sum(sets:to_list(process_number())).
+-spec solve(PreparedInput :: term()) -> term().
+solve(none) -> lists:sum(sets:to_list(process_number([1, 2, 3, 4], sets:new()))).
 
-process_number() ->
-    process_number([1, 2, 3, 4], sets:new()).
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
+-spec process_number(ResultProbe :: numbers:digits(), Storage :: product_storage()) -> product_storage().
 process_number(ResultProbe, Storage) ->
     case choose_result_number(ResultProbe) of
         stop -> Storage;
@@ -28,9 +40,15 @@ process_number(ResultProbe, Storage) ->
             process_number([Digit1, Digit2, Digit3, Digit4 + 1], UpdatedStorage)
     end.
 
-process_small_factor(Result, ResultValue, Storage) ->
-    process_small_factor(Result, ResultValue, [2], Storage).
+-spec process_small_factor(Result :: numbers:digits(),
+                           ResultValue :: pos_integer(),
+                           Storage :: product_storage()) -> product_storage().
+process_small_factor(Result, ResultValue, Storage) -> process_small_factor(Result, ResultValue, [2], Storage).
 
+-spec process_small_factor(Result :: numbers:digits(),
+                           ResultValue :: pos_integer(),
+                           SmallFactorProbe :: numbers:digits(),
+                           Storage :: product_storage()) -> product_storage().
 process_small_factor(Result, ResultValue, SmallFactorProbe, Storage) ->
     case choose_small_factor(Result, SmallFactorProbe) of
         stop -> Storage;
@@ -38,22 +56,32 @@ process_small_factor(Result, ResultValue, SmallFactorProbe, Storage) ->
         [Digit5, Digit6] -> process_small_factor(Result, ResultValue, [Digit5, Digit6], 10 * Digit5 + Digit6, [Digit5, Digit6 + 1], Storage)
     end.
 
+-spec process_small_factor(Result :: numbers:digits(),
+                           ResultValue :: pos_integer(),
+                           SmallFactor :: numbers:digits(),
+                           SmallFactorValue :: pos_integer(),
+                           NextSmallFactorProbe :: numbers:digits(),
+                           Storage :: product_storage()) -> product_storage().
 process_small_factor(Result, ResultValue, SmallFactor, SmallFactorValue, NextSmallFactorProbe, Storage) ->
     case check_big_factor(Result, ResultValue, SmallFactor, SmallFactorValue) of
         false -> process_small_factor(Result, ResultValue, NextSmallFactorProbe, Storage);
         true -> process_small_factor(Result, ResultValue, NextSmallFactorProbe, sets:add_element(ResultValue, Storage))
     end.
 
+-spec check_big_factor(Result :: numbers:digits(),
+                       ResultValue :: pos_integer(),
+                       SmallFactor :: numbers:digits(),
+                       SmallFactorValue :: pos_integer()) -> boolean().
 check_big_factor(Result, ResultValue, SmallFactor, SmallFactorValue) ->
-    Rem = ResultValue rem SmallFactorValue,
-    if
-        Rem /= 0 -> false;
-        Rem == 0 ->
+    case ResultValue rem SmallFactorValue of
+        0 ->
             BigFactorValue = ResultValue div SmallFactorValue,
             BigFactor = numbers:get_digits(BigFactorValue),
-            check_big_factor(Result, SmallFactor, BigFactor)
+            check_big_factor(Result, SmallFactor, BigFactor);
+        _Other -> false
     end.
 
+-spec check_big_factor(ResultDigits :: numbers:digits(), SmallFactorDigits :: numbers:digits(), BigFactorDigits :: numbers:digits()) -> boolean().
 %% unsuitable length
 check_big_factor([_Digit1, _Digit2, _Digit3, _Digit4], [_Digit5], [_Digit7, _Digit8, _Digit9]) -> false;
 check_big_factor([_Digit1, _Digit2, _Digit3, _Digit4], [_Digit5, _Digit6], [_Digit8, _Digit9]) -> false;
@@ -124,6 +152,7 @@ check_big_factor([_Digit1, _Digit2, _Digit3, _Digit4], [_Digit5, _Digit6], [_Dig
 check_big_factor([_Digit1, _Digit2, _Digit3, _Digit4], [_Digit5], [_Digit6, _Digit7, _Digit8, _Digit9]) -> true;
 check_big_factor([_Digit1, _Digit2, _Digit3, _Digit4], [_Digit5, _Digit6], [_Digit7, _Digit8, _Digit9]) -> true.
 
+-spec choose_small_factor(ResultDigits :: numbers:digits(), SmallFactorDigits :: numbers:digits()) -> numbers:digits() | 'stop'.
 choose_small_factor([_Digit1, _Digit2, _Digit3, _Digit4], [10, 1]) -> stop;
 choose_small_factor([Digit1, Digit2, Digit3, Digit4], [10]) ->
     choose_small_factor([Digit1, Digit2, Digit3, Digit4], [1, 2]);
@@ -140,6 +169,7 @@ choose_small_factor([Digit1, Digit2, Digit3, Digit4], [Digit5, Digit6]) ->
         Result -> Result
     end.
 
+-spec check_small_factor(ResultDigits :: numbers:digits(), SmallFactorDigits :: numbers:digits()) -> numbers:digits() | 'false'.
 %% check digit in 1-digits small factor
 check_small_factor([Digit, _Digit2, _Digit3, _Digit4], [Digit]) -> false;
 check_small_factor([_Digit1, Digit, _Digit3, _Digit4], [Digit]) -> false;
@@ -161,6 +191,7 @@ check_small_factor([_Digit1, _Digit2, _Digit3, _Digit4], [Digit, Digit]) -> fals
 check_small_factor([_Digit1, _Digit2, _Digit3, _Digit4], [Digit5]) -> [Digit5];
 check_small_factor([_Digit1, _Digit2, _Digit3, _Digit4], [Digit5, Digit6]) -> [Digit5, Digit6].
 
+-spec choose_result_number(Digits :: numbers:digits()) -> numbers:digits() | 'stop'.
 choose_result_number([10, 1, 1, 1]) -> stop;
 choose_result_number([Digit1, 10, 1, 1]) -> choose_result_number([Digit1 + 1, 1, 1, 1]);
 choose_result_number([Digit1, Digit2, 10, 1]) -> choose_result_number([Digit1, Digit2 + 1, 1, 1]);
@@ -171,6 +202,8 @@ choose_result_number([Digit1, Digit2, Digit3, Digit4]) ->
         Result -> Result
     end.
 
+-spec check_result_number(Digits :: numbers:digits()) -> numbers:digits() | 'false'.
+check_result_number([Digit, Digit, _Digit3, _Digit4]) -> false;
 check_result_number([Digit, Digit, _Digit3, _Digit4]) -> false;
 check_result_number([Digit, _Digit2, Digit, _Digit4]) -> false;
 check_result_number([Digit, _Digit2, _Digit3, Digit]) -> false;

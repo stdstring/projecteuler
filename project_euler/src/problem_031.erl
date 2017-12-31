@@ -15,31 +15,18 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{{10, [1, 2, 5]}, 10}, {{200, [1, 2, 5, 10, 20, 50, 100, 200]}, 73682}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{10, [1, 2, 5]}, 10}, {{200, [1, 2, 5, 10, 20, 50, 100, 200]}, 73682}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({Sum, AvailableCoins}) ->
     SortedCoins = lists:sort(AvailableCoins),
-    WayStorage = calc_ways(Sum, SortedCoins),
-    array:get(Sum, WayStorage).
+    Storage = partition:create_partition_storage(Sum, SortedCoins),
+    partition:get_partition_count(Sum, Storage).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
-
-%% TODO (std_string) : move into common libs
-calc_ways(MaxNumber, [FirstItem | _] = Items) ->
-    WayStorage = array:new([{size, MaxNumber + 1}, {fixed, true}, {default, 0}]),
-    calc_ways(FirstItem, MaxNumber, Items, array:set(0, 1, WayStorage)).
-
-calc_ways(Number, MaxNumber, [_HeadItem | ItemsRest], WayStorage) when Number > MaxNumber ->
-    case ItemsRest of
-        [] -> WayStorage;
-        [NextHeadItem | _] -> calc_ways(NextHeadItem, MaxNumber, ItemsRest, WayStorage)
-    end;
-calc_ways(Number, MaxNumber, [HeadItem | _] = Items, WayStorage) ->
-    CurrentValue = array:get(Number, WayStorage),
-    PrevValue = array:get(Number - HeadItem, WayStorage),
-    calc_ways(Number + 1, MaxNumber, Items, array:set(Number, CurrentValue + PrevValue, WayStorage)).

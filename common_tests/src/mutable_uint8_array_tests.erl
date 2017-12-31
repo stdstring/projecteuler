@@ -1,3 +1,5 @@
+%% @author std-string
+
 -module(mutable_uint8_array_tests).
 
 -include_lib("eunit/include/eunit.hrl").

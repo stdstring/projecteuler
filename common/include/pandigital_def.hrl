@@ -1,5 +1,6 @@
-%% pandigital definitions
+%% @author std-string
 
+%% pandigital definitions
 -define(PANDIGITAL2_MIN, 12).
 -define(PANDIGITAL2_MAX, 21).
 -define(PANDIGITAL3_MIN, 123).

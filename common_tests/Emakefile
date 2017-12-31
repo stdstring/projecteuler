@@ -1,4 +1,5 @@
 {'src/collections_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/compare_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/control_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/eratos_sieve_tests', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
 {'src/grid_helper_tests', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
@@ -8,5 +9,7 @@
 {'src/number_dividers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pandigital_numbers_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/partition_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/pell_equation_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/permutations_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/rational_tests', [warnings_as_errors, {outdir, "ebin"}]}.

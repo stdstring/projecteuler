@@ -11,22 +11,27 @@
 
 -behaviour(numerical_task_behaviour).
 
--type digit_type() :: 0..9.
-
 -define(MAX_NUMBER, 10000000-1).
 -define(RANGE_START, 10).
 -define(DIGITS_COUNT, 2).
 -define(YOUNG_POSSIBLE_DIGITS, [1, 3, 7, 9]).
 
+%% TODO (std_string) : probably, move into separate module
+-type digits_pos() :: [DigitPos :: non_neg_integer()].
+-type digits_info() :: array:array(digits_pos()).
+-type process_result() :: {'true', Number :: pos_integer()} | 'false'.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{6, 13}, {7, 56003}, {8, 121313}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{6, 13}, {7, 56003}, {8, 121313}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(FamilySize) ->
     Primes = eratos_sieve:get_sieve(?MAX_NUMBER),
     case process_numbers(?RANGE_START, ?DIGITS_COUNT, FamilySize, Primes) of
@@ -38,7 +43,7 @@ solve(FamilySize) ->
 %% Internal functions
 %% ====================================================================
 
--spec create_digits_info(Number :: pos_integer(), DigitsCount :: pos_integer()) -> array:array([non_neg_integer()]).
+-spec create_digits_info(Number :: pos_integer(), DigitsCount :: pos_integer()) -> digits_info().
 create_digits_info(Number, DigitsCount) ->
     Digits = numbers:get_digits(Number),
     InfoInit = array:new([{size, 10}, {fixed, true}, {default, []}]),
@@ -46,13 +51,13 @@ create_digits_info(Number, DigitsCount) ->
     {InfoFinal, _} = lists:foldl(fun(Digit, {Info, Pos}) -> {array:set(Digit, [Pos] ++ array:get(Digit, Info), Info), Pos - 1} end, AccInit, Digits),
     InfoFinal.
 
--spec select_possible_variants(DigitsInfo :: array:array([non_neg_integer()]), FamilySize :: pos_integer()) -> [digit_type()].
+-spec select_possible_variants(DigitsInfo :: digits_info(), FamilySize :: pos_integer()) -> numbers:digits().
 select_possible_variants(DigitsInfo, FamilySize) -> select_possible_variants(DigitsInfo, FamilySize, 0, []).
 
--spec select_possible_variants(DigitsInfo :: array:array([non_neg_integer()]),
+-spec select_possible_variants(DigitsInfo :: digits_info(),
                                FamilySize :: pos_integer(),
-                               Digit :: digit_type(),
-                               Storage :: [digit_type()]) -> [digit_type()].
+                               Digit :: numbers:digit(),
+                               Storage :: numbers:digits()) -> numbers:digits().
 select_possible_variants(_DigitsInfo, _FamilySize, Digit, Storage) when Digit > 9 -> Storage;
 select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
     PosList = array:get(Digit, DigitsInfo),
@@ -61,27 +66,25 @@ select_possible_variants(DigitsInfo, FamilySize, Digit, Storage) ->
         true -> select_possible_variants(DigitsInfo, FamilySize, Digit + 1, [Digit] ++ Storage)
     end.
 
--spec check_possible_variant(PosList :: [non_neg_integer()], Digit :: digit_type(), FamilySize :: pos_integer()) -> boolean().
+-spec check_possible_variant(PosList :: digits_pos(), Digit :: numbers:digit(), FamilySize :: pos_integer()) -> boolean().
 check_possible_variant([], _Digit, _FamilySize) -> false;
 %% last (younger) digit must be 1, 3, 7, 9
 check_possible_variant([0 | _Rest], 1, FamilySize) -> FamilySize =< 4;
 check_possible_variant([0 | _Rest], 3, FamilySize) -> FamilySize =< 3;
 check_possible_variant([0 | _Rest], 7, FamilySize) -> FamilySize =< 2;
 check_possible_variant([0 | _Rest], 9, FamilySize) -> FamilySize =< 1;
-check_possible_variant(_PosList, Digit, FamilySize) -> FamilySize =< 10 - Digit.
+check_possible_variant(_PosList, Digit, FamilySize) -> FamilySize =< (10 - Digit).
 
--spec calc_number_part(Digit :: digit_type(), PosList :: [non_neg_integer()]) -> non_neg_integer().
+-spec calc_number_part(Digit :: numbers:digit(), PosList :: digits_pos()) -> non_neg_integer().
 calc_number_part(0, _PosList) -> 0;
 calc_number_part(_Digit, []) -> 0;
-calc_number_part(Digit, PosList) ->
-    Digit * lists:sum(lists:map(fun(Pos) -> numbers:power(10, Pos) end, PosList)).
+calc_number_part(Digit, PosList) -> Digit * lists:sum(lists:map(fun(Pos) -> numbers:power(10, Pos) end, PosList)).
 
--spec create_number(DigitsInfo :: array:array([non_neg_integer()])) -> non_neg_integer().
-create_number(DigitsInfo) ->
-    array:foldl(fun(Digit, PosList, Number) -> calc_number_part(Digit, PosList) + Number end, 0, DigitsInfo).
+-spec create_number(DigitsInfo :: digits_info()) -> non_neg_integer().
+create_number(DigitsInfo) -> array:foldl(fun(Digit, PosList, Number) -> calc_number_part(Digit, PosList) + Number end, 0, DigitsInfo).
 
--spec check_family(DigitsInfo :: array:array([non_neg_integer()]),
-                   Digit :: digit_type(),
+-spec check_family(DigitsInfo :: digits_info(),
+                   Digit :: numbers:digit(),
                    FamilySize :: pos_integer(),
                    Primes :: eratos_sieve:sieve()) -> boolean().
 check_family(DigitsInfo, Digit, FamilySize, Primes) ->
@@ -98,8 +101,8 @@ check_family(DigitsInfo, Digit, FamilySize, Primes) ->
     end.
 
 -spec check_family_impl(InvNumberPart :: non_neg_integer(),
-                        Digits :: [digit_type()],
-                        PosList :: [non_neg_integer()],
+                        Digits :: numbers:digits(),
+                        PosList :: digits_pos(),
                         FamilySizeRest :: integer(),
                         Primes :: eratos_sieve:sieve()) -> boolean().
 check_family_impl(_InvNumberPart, Digits, _PosList, FamilySizeRest, _Primes) when length(Digits) < FamilySizeRest -> false;
@@ -111,8 +114,8 @@ check_family_impl(InvNumberPart, [Digit | DigitsRest], PosList, FamilySizeRest, 
         false -> check_family_impl(InvNumberPart, DigitsRest, PosList, FamilySizeRest, Primes)
     end.
 
--spec check_possible_families(DigitsInfo :: array:array([non_neg_integer()]),
-                              Variants :: [digit_type()],
+-spec check_possible_families(DigitsInfo :: digits_info(),
+                              Variants :: numbers:digits(),
                               FamilySize :: pos_integer(),
                               Primes :: eratos_sieve:sieve()) -> boolean().
 check_possible_families(_DigitsInfo, [], _FamilySize, _Primes) -> false;
@@ -126,7 +129,7 @@ check_possible_families(DigitsInfo, [Variant | VariantsRest], FamilySize, Primes
                     Max :: pos_integer(),
                     DigitsCount :: pos_integer(),
                     FamilySize :: pos_integer(),
-                    Primes :: eratos_sieve:sieve()) -> {'true', Number :: pos_integer()} | 'false'.
+                    Primes :: eratos_sieve:sieve()) -> process_result().
 process_range(Current, Max, _DigitsCount, _FamilySize, _Primes) when Current > Max -> false;
 process_range(Current, Max, DigitsCount, FamilySize, Primes) ->
     case eratos_sieve:is_prime(Current, Primes) of
@@ -143,7 +146,7 @@ process_range(Current, Max, DigitsCount, FamilySize, Primes) ->
 -spec process_numbers(RangeStart :: pos_integer(),
                       DigitsCount :: pos_integer(),
                       FamilySize :: pos_integer(),
-                      Primes :: eratos_sieve:sieve()) -> {'true', Number :: pos_integer()} | 'false'.
+                      Primes :: eratos_sieve:sieve()) -> process_result().
 process_numbers(RangeStart, _DigitsCount, _FamilySize, _Primes) when RangeStart > ?MAX_NUMBER -> false;
 process_numbers(RangeStart, DigitsCount, FamilySize, Primes) ->
     RangeFinish = 10 * RangeStart - 3,

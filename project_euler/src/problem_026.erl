@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
 %% 1/2 = 0.5
 %% 1/3 = 0.(3)
@@ -16,9 +18,18 @@
 
 -behaviour(numerical_task_behaviour).
 
-get_check_data() ->
-    [{10, 7}, {1000, 983}].
+-type process_result() :: {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}.
+-type process_number_result() :: {'true', CycleLength :: non_neg_integer()} | 'false'.
+-type remainder_array() :: array:array(Remainder :: non_neg_integer()).
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{10, 7}, {1000, 983}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 %% Solution:
@@ -27,12 +38,16 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 %% For number N : 10^n < N < 10^(n + 1) we can state the following:
 %% Rem1 = 10^(n + 1) rem N, Rem2 = 10^(n + 2) rem N, ...Remp = 10^(n + Lp) rem N, RemC1 = 10^(n + Lp + 1) rem N, ..., RemCN = 10^(n + Lp + Lc) rem N
 %% Rem1 /= Rem2 /= ..., RemC1 == RemCn, Lp + Lc < = N
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxDenominator) ->
     {Number, _CycleLength} = process_numbers(MaxDenominator, 10, {1, 0}),
     Number.
 
--spec process_numbers(Number :: pos_integer(), Numerator :: pos_integer(), PrevValue :: {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}) ->
-    {SavedNumber :: pos_integer(), SavedCycleLength :: non_neg_integer()}.
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec process_numbers(Number :: pos_integer(), Numerator :: pos_integer(), PrevValue :: process_result()) -> process_result().
 process_numbers(1, _Numerator, {SavedNumber, SavedCycleLength}) -> {SavedNumber, SavedCycleLength};
 process_numbers(Number, _Numerator, {SavedNumber, SavedCycleLength}) when SavedCycleLength > Number -> {SavedNumber, SavedCycleLength};
 process_numbers(Number, Numerator, {SavedNumber, SavedCycleLength}) ->
@@ -42,7 +57,7 @@ process_numbers(Number, Numerator, {SavedNumber, SavedCycleLength}) ->
         {true, _CycleLength} -> process_numbers(Number - 1, Numerator, {SavedNumber, SavedCycleLength})
     end.
 
--spec process_number(Number :: pos_integer(), Numerator :: pos_integer()) -> 'false' | {'true', CycleLength :: non_neg_integer()}.
+-spec process_number(Number :: pos_integer(), Numerator :: pos_integer()) -> process_number_result().
 process_number(Numerator, Numerator) -> false;
 process_number(Number, Numerator) when Numerator rem Number == 0 -> {true, 0};
 process_number(Number, Numerator) ->
@@ -50,7 +65,10 @@ process_number(Number, Numerator) ->
     CycleLength = process_number(Number, Numerator, 0, RemArray),
     {true, CycleLength}.
 
--spec process_number(Number :: pos_integer(), Numerator :: pos_integer(), Index :: non_neg_integer(), RemArray :: array:array(non_neg_integer())) -> non_neg_integer().
+-spec process_number(Number :: pos_integer(),
+                     Numerator :: pos_integer(),
+                     Index :: non_neg_integer(),
+                     RemArray :: remainder_array()) -> non_neg_integer().
 process_number(Number, Numerator, Index, RemArray) ->
     RemValue = Numerator rem Number,
     case array:get(RemValue, RemArray) of

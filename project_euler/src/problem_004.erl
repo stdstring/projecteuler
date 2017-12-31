@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 * 99.
 %% Find the largest palindrome made from the product of two 3-digit numbers.
 
@@ -8,15 +10,25 @@
 
 -define(PORTION_DIVIDER, 10).
 
-get_check_data() ->
-    [{{10, 99}, 9009}, {{100, 999}, 906609}].
+%% ====================================================================
+%% API functions
+%% ====================================================================
 
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{10, 99}, 9009}, {{100, 999}, 906609}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({NumberMin, NumberMax}) ->
     ResultNumberMax = NumberMax * NumberMax,
     Delta = ResultNumberMax div ?PORTION_DIVIDER,
     process_search(ResultNumberMax - Delta, ResultNumberMax, NumberMin, NumberMax, Delta, 0).
+
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
 
 -spec process_search(RangeMin :: non_neg_integer(),
                      RangeMax :: pos_integer(),

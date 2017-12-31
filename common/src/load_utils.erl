@@ -1,7 +1,12 @@
+%% @author std-string
+
 -module(load_utils).
 
--export([read_erlang_term/1, read_strings/1, read_number_table/2]).
--export([read_from_file/2]).
+-export([read_erlang_term/1, read_strings/1, read_number_table/2, read_from_file/2]).
+
+%% ====================================================================
+%% API functions
+%% ====================================================================
 
 -spec read_erlang_term(Filename :: string()) -> term().
 read_erlang_term(Filename) ->
@@ -22,7 +27,12 @@ read_number_table(Filename, NumberDelimiter) ->
 read_from_file(Filename, Loader) ->
     read_from_file_impl(file:open(Filename, [read]), Loader).
 
--spec read_from_file_impl(OpenResult :: {'ok', IoDevice :: file:io_device()} | {'error', Reason :: term()}, Loader :: fun((file:io_device()) -> term())) -> term().
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec read_from_file_impl(OpenResult :: {'ok', IoDevice :: file:io_device()} | {'error', Reason :: term()},
+                          Loader :: fun((file:io_device()) -> term())) -> term().
 read_from_file_impl({ok, IoDevice}, Loader) ->
     try Loader(IoDevice)
     after

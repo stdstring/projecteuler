@@ -1,5 +1,9 @@
-%% The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7.
-%% Similarly we can work from right to left: 3797, 379, 37, and 3. Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+%% @author std-string
+
+%% The number 3797 has an interesting property.
+%% Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7.
+%% Similarly we can work from right to left: 3797, 379, 37, and 3.
+%% Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
 %% NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
 
 -module(problem_037).
@@ -9,20 +13,32 @@
 
 -define(EXPECTED_COUNT, 11).
 
-get_check_data() ->
-    [{none, 748317}].
+-type number_data() :: {Digits :: numbers:digits(), DigitsCount :: pos_integer()}.
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 748317}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
 %% for suitable number d0d1...dN :
 %% d0 in [2, 3, 5, 7] due to source number is reduced to d0
 %% dN in [3, 7] due to source number is prime and is reduced to dN
 %% d1... in [1, 3, 7, 9] due to source number is reduced to prime number
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     Result = process_numbers({[2, 3], 2}, [], 0),
     lists:sum(Result).
 
--spec process_numbers({Digits :: [0..9], DigitsCount :: pos_integer()}, Found :: [pos_integer()], FoundCount :: non_neg_integer()) -> [pos_integer()].
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec process_numbers(NumberData :: number_data(), Found :: [pos_integer()], FoundCount :: non_neg_integer()) -> [pos_integer()].
 process_numbers({NumberDigits, NumberDigitsCount}, Found, FoundCount) ->
     Number = numbers:get_number(NumberDigits),
     case check_number(Number, NumberDigitsCount) of
@@ -36,14 +52,17 @@ process_numbers({NumberDigits, NumberDigitsCount}, Found, FoundCount) ->
             end
     end.
 
--spec generate_next_number(Digits :: [0..9], DigitsCount :: pos_integer()) -> [0..9].
+-spec generate_next_number(Digits :: numbers:digits(), DigitsCount :: pos_integer()) -> number_data().
 generate_next_number(PrevNumberDigits, PrevNumberDigitsCount) ->
     case lists:reverse(PrevNumberDigits) of
         [3 | DigitsRest] -> generate_next_number(DigitsRest, PrevNumberDigitsCount, false, [7]);
         [7 | DigitsRest] -> generate_next_number(DigitsRest, PrevNumberDigitsCount, true, [3])
     end.
 
--spec generate_next_number(Digits :: [0..9], DigitsCount :: pos_integer(), TransferAddition :: boolean(), Result :: [0..9]) -> [0..9].
+-spec generate_next_number(Digits :: numbers:digits(),
+                           DigitsCount :: pos_integer(),
+                           TransferAddition :: boolean(),
+                           Result :: numbers:digits()) -> number_data().
 generate_next_number([], DigitsCount, false, Result) -> {Result, DigitsCount};
 generate_next_number([Digit | DigitsRest], DigitsCount, false, Result) -> generate_next_number(DigitsRest, DigitsCount, false, [Digit] ++ Result);
 generate_next_number([2], DigitsCount, true, Result) -> {[3] ++ Result, DigitsCount};
@@ -78,6 +97,6 @@ check_left_reduce(Number, Dividend) ->
 check_right_reduce(0) -> true;
 check_right_reduce(Number) ->
     case number_dividers:is_prime(Number) of
-        true -> check_right_reduce(Number div 10);
-        false -> false
+        false -> false;
+        true -> check_right_reduce(Number div 10)
     end.

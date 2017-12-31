@@ -16,17 +16,30 @@
 
 -define(ALPHABET_SIZE, 26).
 
+%% TODO (std_string) : probably, move into separate module
+-type word() :: string().
+-type words() :: [string()].
+-type word_pair() :: {Word1 :: word(), Word2 :: word()}.
+-type word_pairs() :: [word_pair()].
+-type digits_array() :: array:array(Digit :: numbers:digit()).
+-type chars_array() :: array:array(Character :: char()).
+-type squares() :: [Square :: pos_integer()].
+-type squares_set() :: sets:set(Square :: pos_integer()).
+-type match_word_result() :: {'true', LetterMatchStorage :: digits_array()} | 'false'.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{"problem_098.dat", 18769}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_098.dat", 18769}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     WordList = load_utils:read_strings(filename:join(ModuleSourceDir, Filename)),
     split_words(WordList).
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(WordList) ->
     WordsDict = lists:foldl(fun(Word, Dict) -> dict:update(lists:sort(Word), fun(Value) -> [Word] ++ Value end, [Word], Dict) end, dict:new(), WordList),
     FilteredList = dict:to_list(dict:filter(fun(_Key, Value) -> length(Value) == 2 end, WordsDict)),
@@ -43,50 +56,48 @@ solve(WordList) ->
 %% Internal functions
 %% ====================================================================
 
--spec split_words(WordList :: string()) -> [string()].
+-spec split_words(WordList :: string()) -> words().
 split_words(WordList) ->
     string:tokens(string:join(WordList, ""), [$", $,]).
 
--spec generate_square_list(Number :: pos_integer(), SquareSup :: pos_integer(), SquareList :: [pos_integer()]) -> [pos_integer()].
+-spec generate_square_list(Number :: pos_integer(), SquareSup :: pos_integer(), SquareList :: squares()) -> squares().
 generate_square_list(Number, SquareSup, SquareList) when (Number * Number) > SquareSup -> SquareList;
 generate_square_list(Number, SquareSup, SquareList) ->
     generate_square_list(Number + 1, SquareSup, [Number * Number] ++ SquareList).
 
--spec match_word(Word :: string(), Number :: pos_integer()) ->
-    {'true', LetterMatchStorage :: array:array(0..9)} | 'false'.
+-spec match_word(Word :: word(), Number :: pos_integer()) -> match_word_result().
 match_word(Word, Number) ->
     LetterMatchStorage = array:new([{size, ?ALPHABET_SIZE}, {fixed, true}, {default, undef}]),
     DigitMatchStorage = array:new([{size, 10}, {fixed, true}, {default, undef}]),
     match_word(Word, numbers:get_digits(Number), LetterMatchStorage, DigitMatchStorage).
 
--spec match_word(Word :: string(), Digits :: [0..9], LetterMatchStorage :: array:array(0..9), DigitMatchStorage :: array:array(char())) ->
-    {'true', LetterMatchStorage :: array:array(0..9)} | 'false'.
+-spec match_word(Word :: word(), Digits :: numbers:digits(), LetterMatchStorage :: digits_array(), DigitMatchStorage :: chars_array()) -> match_word_result().
 match_word([], [], LetterMatchStorage, _DigitMatchStorage) -> {true, LetterMatchStorage};
 match_word([Letter | WordRest], [Digit | DigitsRest], LetterMatchStorage, DigitMatchStorage) ->
     LetterMatchValue = array:get(Letter - $A, LetterMatchStorage),
     DigitMatchValue = array:get(Digit, DigitMatchStorage),
     if
-        (LetterMatchValue == undef) and (DigitMatchValue == undef) ->
+        LetterMatchValue == undef, DigitMatchValue == undef ->
             NewLetterMatchStorage = array:set(Letter - $A, Digit, LetterMatchStorage),
             NewDigitMatchStorage = array:set(Digit, Letter, DigitMatchStorage),
             match_word(WordRest, DigitsRest, NewLetterMatchStorage, NewDigitMatchStorage);
-        (LetterMatchValue == Digit) and (DigitMatchValue == Letter) ->
+        LetterMatchValue == Digit, DigitMatchValue == Letter ->
             match_word(WordRest, DigitsRest, LetterMatchStorage, DigitMatchStorage);
         true -> false
     end.
 
--spec generate_number(Word :: string(), LetterMatchStorage :: array:array(0..9)) -> pos_integer().
+-spec generate_number(Word :: word(), LetterMatchStorage :: digits_array()) -> pos_integer().
 generate_number(Word, LetterMatchStorage) ->
     numbers:get_number(lists:map(fun(Letter) -> array:get(Letter - $A, LetterMatchStorage) end, Word)).
 
--spec check_word(Word :: string(), LetterMatchStorage :: array:array(0..9), SquareSet :: sets:set(pos_integer())) -> boolean().
+-spec check_word(Word :: word(), LetterMatchStorage :: digits_array(), SquareSet :: squares_set()) -> boolean().
 check_word([FirstLetter | _] = Word, LetterMatchStorage, SquareSet) ->
     case array:get(FirstLetter - $A, LetterMatchStorage) of
         0 -> false;
         _Other -> sets:is_element(generate_number(Word, LetterMatchStorage), SquareSet)
     end.
 
--spec check_word_pair(Number :: pos_integer(), Word1 :: string(), Word2 :: string(), SquareSet :: sets:set(pos_integer())) -> boolean().
+-spec check_word_pair(Number :: pos_integer(), Word1 :: word(), Word2 :: word(), SquareSet :: squares_set()) -> boolean().
 check_word_pair(Number, Word1, Word2, SquareSet) ->
     case match_word(Word1, Number) of
         {true, MatchStorage} -> check_word(Word2, MatchStorage, SquareSet);
@@ -97,7 +108,7 @@ check_word_pair(Number, Word1, Word2, SquareSet) ->
             end
     end.
 
--spec check_number(Number :: pos_integer(), WordPairs :: [{Word1 :: string(), Word2 :: string()}], SquareSet :: sets:set(pos_integer())) -> boolean().
+-spec check_number(Number :: pos_integer(), WordPairs :: word_pairs(), SquareSet :: squares_set()) -> boolean().
 check_number(_Number, [], _SquareSet) -> false;
 check_number(Number, [{Word1, Word2} | WordPairRest], SquareSet) ->
     case check_word_pair(Number, Word1, Word2, SquareSet) of
@@ -105,10 +116,7 @@ check_number(Number, [{Word1, Word2} | WordPairRest], SquareSet) ->
         true -> true
     end.
 
--spec process_number_range(NumberList :: [pos_integer()],
-                           MinRangeValue :: non_neg_integer(),
-                           WordPairs :: [{Word1 :: string(), Word2 :: string()}],
-                           SquareSet :: sets:set(pos_integer())) ->
+-spec process_number_range(NumberList :: [pos_integer()], MinRangeValue :: non_neg_integer(), WordPairs :: word_pairs(), SquareSet :: squares_set()) ->
     {'true', Number :: pos_integer()} | {'false', SquareListRest :: [pos_integer()]}.
 process_number_range([Number | _Rest] = SquareListRest, MinRangeValue, _WordPairs, _SquareSet) when Number < MinRangeValue ->
     {false, SquareListRest};
@@ -123,11 +131,10 @@ skip_numbers([Number | _Rest]  = SquareListRest, MinRangeValue) when Number < Mi
 skip_numbers([_Number | NumbersRest], MinRangeValue) -> skip_numbers(NumbersRest, MinRangeValue).
 
 -spec process_number(Numbers :: [pos_integer()],
-                     WordPairStorage :: array:array([{Word1 :: string(), Word2 :: string()}]),
+                     WordPairStorage :: array:array(word_pairs()),
                      Index :: integer(),
                      MinRangeValue :: non_neg_integer(),
-                     SquareSet :: sets:set(pos_integer())) ->
-    pos_integer() | no_return().
+                     SquareSet :: squares_set()) -> pos_integer() | no_return().
 process_number(_Numbers, _WordPairStorage, -1, 0, _SquareSet) -> error(logic_error);
 process_number(Numbers, WordPairStorage, Index, MinRangeValue, SquareSet) ->
     case array:get(Index, WordPairStorage) of

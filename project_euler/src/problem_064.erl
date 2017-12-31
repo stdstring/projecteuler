@@ -32,11 +32,13 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{13, 4}, {10000, 1322}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{13, 4}, {10000, 1322}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxNumber) -> process_numbers(?NUMBER_START, MaxNumber, ?A0_START, 0).
 
 %% ====================================================================
@@ -57,7 +59,7 @@ process_numbers(Number, MaxNumber, A0, Count) ->
             end
     end.
 
-%% TODO (std_string) : probably move to common libs
+%% TODO (std_string) : probably, move this algorithm into separate module
 %% Algorithm (from https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Continued_fraction_expansion):
 %% N - source number
 %% m0 = 0, d0 = 1, a0 = integer(N^(1/2))

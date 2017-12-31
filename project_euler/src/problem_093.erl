@@ -18,23 +18,15 @@
 
 -behaviour(numerical_task_behaviour).
 
-%% TODO (std_string) : move into rational module
--type non_zero_integer() :: pos_integer() | neg_integer().
--type rational_fraction() :: {Numerator :: integer(), Denominator :: non_zero_integer()}.
--type rational_number() :: IntegerNumber :: integer() | rational_fraction().
-%% TODO (std_string) : move into numbers module
--type digit() :: 0..9.
--type digits() :: [digit()].
-
--type digits_combinations() :: digits() | 'stop'.
+-type digits_processing() :: numbers:digits() | 'stop'.
 -type operator() :: char().
 -type operators() :: [operator()].
--type operators_combinations() :: operators() | 'stop'.
--type value() :: rational_number() | 'nan'.
+-type operators_processing() :: operators() | 'stop'.
+-type value() :: rational:rational_number() | 'nan'.
 -type values() :: [value()].
 -type values_bunch() :: [values()].
 -type values_storage() :: array:array(boolean()).
--type result() :: {Count :: non_neg_integer(), Digits :: digits()}.
+-type result() :: {Count :: non_neg_integer(), Digits :: number:digits()}.
 
 %% ====================================================================
 %% API functions
@@ -55,21 +47,20 @@ solve(none) ->
 %% Internal functions
 %% ====================================================================
 
--spec process_digits(Digits :: digits_combinations(), ProcessResult :: result()) -> result().
+-spec process_digits(Digits :: digits_processing(), ProcessResult :: result()) -> result().
 process_digits(stop, ProcessResult) -> ProcessResult;
 process_digits(Digits, ProcessResult) -> process_digits(get_next_digits_combination(Digits), process_operators(Digits, ProcessResult)).
 
--spec process_operators(Digits :: digits(), ProcessResult :: result()) -> result().
+-spec process_operators(Digits :: numbers:digits(), ProcessResult :: result()) -> result().
 process_operators(Digits, ProcessResult) ->
     Alphabet = array:from_list(Digits),
-    %% TODO (std_string) : use permutations:get_lexicographical_number_sup/1
-    LexNumberSup = numbers:factorial(array:size(Alphabet)),
+    LexNumberSup = permutations:get_lexicographical_number_sup(Alphabet),
     DigitsCombinations = lists:map(fun(LexNumber) -> permutations:get_permutation(LexNumber, Alphabet) end, lists:seq(0, LexNumberSup - 1)),
     process_operators(Digits, DigitsCombinations, [$+, $+, $+], array:new([{default, false}]), ProcessResult).
 
--spec process_operators(Digits :: digits(),
-                        DigitsCombinations :: [digits()],
-                        Operators :: operators_combinations(),
+-spec process_operators(Digits :: numbers:digits(),
+                        DigitsCombinations :: [numbers:digits()],
+                        Operators :: operators_processing(),
                         Storage :: values_storage(),
                         ProcessResult :: result()) -> result().
 process_operators(Digits, _DigitsCombinations, stop, Storage, {SavedCount, _SavedDigits} = ProcessResult) ->
@@ -96,7 +87,7 @@ process_values(Index, Size, Storage, Count) ->
         false -> Count
     end.
 
--spec calc_digits_values(Digits :: digits(), Operators :: operators()) -> values().
+-spec calc_digits_values(Digits :: numbers:digits(), Operators :: operators()) -> values().
 calc_digits_values([Digit1, Digit2, Digit3, Digit4], [Operator1, Operator2, Operator3]) ->
     [
     %% Digit1 Operator1 Digit2 Operator2 Digit3 Operator3 Digit4
@@ -167,14 +158,14 @@ calc_value(Value1, Operator1, Value2, Operator2, Value3) -> calc_value(calc_valu
 -spec calc_value(Value1 :: value(), Operator :: operator(), Value2 :: value()) -> value().
 calc_value(nan, _Operator, _Value2) -> nan;
 calc_value(_Value1, _Operator, nan) -> nan;
-calc_value(Value1, $+, Value2) -> rational_add(Value1, Value2);
-calc_value(Value1, $-, Value2) -> rational_sub(Value1, Value2);
-calc_value(Value1, $*, Value2) -> rational_mul(Value1, Value2);
+calc_value(Value1, $+, Value2) -> rational:add(Value1, Value2);
+calc_value(Value1, $-, Value2) -> rational:sub(Value1, Value2);
+calc_value(Value1, $*, Value2) -> rational:mult(Value1, Value2);
 calc_value(_Value1, $/, 0) -> nan;
-calc_value(Value1, $/, Value2) -> rational_div(Value1, Value2).
+calc_value(Value1, $/, Value2) -> rational:divide(Value1, Value2).
 
 %% TODO (std_string) : think about generalization this functionality
--spec get_next_digits_combination(Digits :: digits()) -> digits_combinations().
+-spec get_next_digits_combination(Digits :: numbers:digits()) -> digits_processing().
 get_next_digits_combination([6]) -> stop;
 get_next_digits_combination([Digit1]) -> [Digit1 + 1, Digit1 + 2, Digit1 + 3, Digit1 + 4];
 get_next_digits_combination([Digit1, 7]) -> get_next_digits_combination([Digit1]);
@@ -188,7 +179,7 @@ get_next_digits_combination([Digit1, Digit2, Digit3, Digit4]) ->
         false -> get_next_digits_combination([Digit1, Digit2, Digit3, Digit4 + 1])
     end.
 
--spec check_digits(Digits :: digits()) -> boolean().
+-spec check_digits(Digits :: numbers:digits()) -> boolean().
 check_digits([Digit, Digit, _Digit3, _Digit4]) -> false;
 check_digits([Digit, _Digit2, Digit, _Digit4]) -> false;
 check_digits([Digit, _Digit2, _Digit3, Digit]) -> false;
@@ -199,7 +190,7 @@ check_digits([_Digit1, _Digit2, _Digit3, _Digit4]) -> true.
 
 %% TODO (std_string) : think about generalization this functionality
 %% order of operators: +, -, *, /
--spec get_next_operator_combination(Operators :: operators())-> operators_combinations().
+-spec get_next_operator_combination(Operators :: operators())-> operators_processing() | no_return().
 get_next_operator_combination([$+])-> get_next_operator_combination([$-, $+, $+]);
 get_next_operator_combination([$-])-> get_next_operator_combination([$*, $+, $+]);
 get_next_operator_combination([$*])-> get_next_operator_combination([$/, $+, $+]);
@@ -213,41 +204,3 @@ get_next_operator_combination([Operator1, Operator2, $+]) -> [Operator1, Operato
 get_next_operator_combination([Operator1, Operator2, $-]) -> [Operator1, Operator2, $*];
 get_next_operator_combination([Operator1, Operator2, $*]) -> [Operator1, Operator2, $/];
 get_next_operator_combination([Operator1, Operator2, $/]) -> get_next_operator_combination([Operator1, Operator2]).
-
-%% TODO (std_string) : move into rational module
-rational_add({N1, D}, {N2, D}) -> rational_create(N1 + N2, D);
-rational_add({0, _D1}, {N2, D2}) -> rational_create(N2, D2);
-rational_add({N1, D1}, {0, _D2}) -> rational_create(N1, D1);
-rational_add({N1, D1}, {N2, D2}) -> rational_create(N1 * D2 + N2 * D1, D1 * D2);
-rational_add({N1, D1}, N2) -> rational_create(N1 + N2 * D1, D1);
-rational_add(N1, {N2, D2}) -> rational_create(N1 * D2 + N2, D2);
-rational_add(N1, N2) -> N1 + N2.
-
-%% TODO (std_string) : move into rational module
-rational_sub({N1, D}, {N2, D}) -> rational_create(N1 - N2, D);
-rational_sub({0, _D1}, {N2, D2}) -> rational_create(N2, D2);
-rational_sub({N1, D1}, {0, _D2}) -> rational_create(N1, D1);
-rational_sub({N1, D1}, {N2, D2}) -> rational_create(N1 * D2 - N2 * D1, D1 * D2);
-rational_sub({N1, D1}, N2) -> rational_create(N1 - N2 * D1, D1);
-rational_sub(N1, {N2, D2}) -> rational_create(N1 * D2 - N2, D2);
-rational_sub(N1, N2) -> N1 - N2.
-
-%% TODO (std_string) : move into rational module
-rational_mul(0, {_N2, _D2}) -> 0;
-rational_mul({_N1, _D1}, 0) -> 0;
-rational_mul({N1, D1}, {N2, D2}) -> rational_create(N1 * N2, D1 * D2);
-rational_mul({N1, D1}, N2) -> rational_create(N1 * N2, D1);
-rational_mul(N1, {N2, D2}) -> rational_create(N1 * N2, D2);
-rational_mul(N1, N2) -> N1 * N2.
-
-%% TODO (std_string) : move into rational module
-rational_div({N1, D1}, {N2, D2}) -> rational_create(N1 * D2, D1 * N2);
-rational_div({N1, D1}, N2) -> rational_create(N1, D1 * N2);
-rational_div(N1, {N2, D2}) -> rational_create(N1 * D2, N2);
-rational_div(N1, N2) -> rational_create(N1, N2).
-
-%% TODO (std_string) : move into rational module
-rational_create(0, _D) -> 0;
-rational_create(N, 1) -> N;
-rational_create(N, D) when N rem D == 0 -> N div D;
-rational_create(N, D) -> {N, D}.

@@ -5,7 +5,8 @@
 %% 192 * 2 = 384
 %% 192 * 3 = 576
 %% By concatenating each product we get the 1 to 9 pandigital, 192384576. We will call 192384576 the concatenated product of 192 and (1,2,3)
-%% The same can be achieved by starting with 9 and multiplying by 1, 2, 3, 4, and 5, giving the pandigital, 918273645, which is the concatenated product of 9 and (1,2,3,4,5).
+%% The same can be achieved by starting with 9 and multiplying by 1, 2, 3, 4, and 5,
+%% giving the pandigital, 918273645, which is the concatenated product of 9 and (1,2,3,4,5).
 %% What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?
 
 -module(problem_038).
@@ -15,13 +16,15 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type factor() :: 1..9.
+-type process_result() :: {'true', Result :: pos_integer()} | 'false'.
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{none, 932718654}].
+get_check_data() -> [{none, 932718654}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -48,9 +51,9 @@ process_number(Number, SavedResult) ->
             end
     end.
 
--spec process_number(Number :: pos_integer(), Factor :: 1..9, Result :: non_neg_integer()) -> {'true', Result :: pos_integer()} | 'false'.
+-spec process_number(Number :: pos_integer(), Factor :: factor(), Result :: non_neg_integer()) -> process_result().
 process_number(_Number, _Factor, Result) when Result > ?PANDIGITAL9_MAX -> false;
-process_number(_Number, _Factor, Result) when (Result >= ?PANDIGITAL9_MIN) and (Result =< ?PANDIGITAL9_MAX) ->
+process_number(_Number, _Factor, Result) when Result >= ?PANDIGITAL9_MIN, Result =< ?PANDIGITAL9_MAX ->
     case pandigital_numbers:is_pandigital(Result) of
         true -> {true, Result};
         false -> false

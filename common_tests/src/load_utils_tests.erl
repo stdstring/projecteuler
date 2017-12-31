@@ -1,8 +1,14 @@
+%% @author std-string
+
 -module(load_utils_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
 -define(SOURCE, "ebin\\src").
+
+%% ====================================================================
+%% Test functions
+%% ====================================================================
 
 read_erlang_term_test_() ->
     [success_read_erlang_term_entry("{a, 4}.", "read {a, 4}", {a, 4}),
@@ -30,29 +36,41 @@ read_from_file_test_() ->
     [success_read_from_file_entry("", "read empty source", 0),
      success_read_from_file_entry("abc", "read nonempty source", 3)].
 
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec prepare_source(SourceData :: string()) -> 'ok'.
 prepare_source(SourceData) ->
     AbsFilename = filename:absname(?SOURCE),
     ok = file:write_file(AbsFilename, SourceData).
 
+-spec delete_source(State :: term()) -> 'ok'.
 delete_source(_State) ->
     AbsFilename = filename:absname(?SOURCE),
     ok = file:delete(AbsFilename).
 
+-spec success_read_erlang_term_entry(Source :: string(), Description :: string(), Expected :: term()) -> tuple().
 success_read_erlang_term_entry(Source, Description, Expected) ->
     {setup, fun() -> prepare_source(Source) end, fun delete_source/1, [{Description, ?_assertEqual(Expected, load_utils:read_erlang_term(?SOURCE))}]}.
 
+-spec failed_read_erlang_term_entry(Source :: string(), Description :: string()) -> tuple().
 failed_read_erlang_term_entry(Source, Description) ->
     {setup, fun() -> prepare_source(Source) end, fun delete_source/1, [{Description, ?_assertError({badmatch, _}, load_utils:read_erlang_term(?SOURCE))}]}.
 
+-spec success_read_strings_entry(Source :: string(), Description :: string(), Expected :: [string()]) -> tuple().
 success_read_strings_entry(Source, Description, Expected) ->
     {setup, fun() -> prepare_source(Source) end, fun delete_source/1, [{Description, ?_assertEqual(Expected, load_utils:read_strings(?SOURCE))}]}.
 
+-spec success_read_number_table_entry(Source :: string(), Description :: string(), Expected :: [[integer()]]) -> tuple().
 success_read_number_table_entry(Source, Description, Expected) ->
     {setup, fun() -> prepare_source(Source) end, fun delete_source/1, [{Description, ?_assertEqual(Expected, load_utils:read_number_table(?SOURCE, " "))}]}.
 
+-spec failed_read_number_table_entry(Source :: string(), Description :: string()) -> tuple().
 failed_read_number_table_entry(Source, Description) ->
     {setup, fun() -> prepare_source(Source) end, fun delete_source/1, [{Description, ?_assertError(badarg, load_utils:read_number_table(?SOURCE, " "))}]}.
 
+-spec success_read_from_file_entry(Source :: string(), Description :: string(), Expected :: non_neg_integer()) -> tuple().
 success_read_from_file_entry(Source, Description, Expected) ->
     Collector = fun CollectFun(IoDevice, Count) ->
         case file:read(IoDevice, 1) of

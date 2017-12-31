@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% You are given the following information, but you may prefer to do some research for yourself.
 %% 1 Jan 1900 was a Monday. Thirty days has September, April, June and November.
 %% All the rest have thirty-one, Saving February alone, which has twenty-eight, rain or shine. And on leap years, twenty-nine.
@@ -12,38 +14,52 @@
 -define(USUAL_YEAR, [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]).
 -define(LEAP_YEAR, [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]).
 
-get_check_data() ->
-    [{none, 171}].
+-type process_result() :: {DayNumber :: pos_integer(), Count :: non_neg_integer()}.
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{none, 171}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(none) ->
     %% 1900 is not the leap year
-    %% 1 Jan 1900 - Monday => InitRem = 1
-    InitRem = 1,
-    StartRem = (InitRem + 365) rem 7,
-    {Rem, Count} = solve_impl(1901, 2000, StartRem, 0),
-    correct_last_sunday(Rem, Count).
+    %% 1 Jan 1900 - Monday => InitDayNumber = 1
+    InitDayNumber = 1,
+    StartDayNumber = (InitDayNumber + 365) rem 7,
+    {_DayNumber, Count} = correct_last_sunday(solve_impl(1901, 2000, {StartDayNumber, 0})),
+    Count.
 
-solve_impl(CurrentYear, FinishYear, CurrentRem, Count) when CurrentYear > FinishYear -> {CurrentRem, Count};
-solve_impl(CurrentYear, FinishYear, CurrentRem, Count) ->
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec solve_impl(CurrentYear :: pos_integer(), FinishYear :: pos_integer(), Result :: process_result()) -> process_result().
+solve_impl(CurrentYear, FinishYear, Result) when CurrentYear > FinishYear -> Result;
+solve_impl(CurrentYear, FinishYear, Result) ->
     Year = case is_leap_year(CurrentYear) of
         true -> ?LEAP_YEAR;
         false -> ?USUAL_YEAR
     end,
-    {NewRem, NewCount} = process_year(Year, CurrentRem, Count),
-    solve_impl(CurrentYear + 1, FinishYear, NewRem, NewCount).
+    solve_impl(CurrentYear + 1, FinishYear, process_year(Year, Result)).
 
-process_year([], Rem, Count) -> {Rem, Count};
-process_year([Month | Rest], Rem, Count) ->
-    NewRem = (Rem + Month) rem 7,
-    if
-        NewRem == 0 -> process_year(Rest, NewRem, Count + 1);
-        NewRem /= 0 -> process_year(Rest, NewRem, Count)
+-spec process_year(MonthsList :: [pos_integer()], Result :: process_result()) -> process_result().
+process_year([], Result) -> Result;
+process_year([Month | Rest], {DayNumber, Count}) ->
+    NewDayNumber = (DayNumber + Month) rem 7,
+    case NewDayNumber of
+        0 ->  process_year(Rest, {NewDayNumber, Count + 1});
+        _Other -> process_year(Rest, {NewDayNumber, Count})
     end.
 
-is_leap_year(Year) ->
-    (Year rem 4 == 0) and ((Year rem 100 /= 0) or (Year rem 400 == 0)).
+-spec is_leap_year(Year :: pos_integer()) -> boolean().
+is_leap_year(Year) -> (Year rem 4 == 0) and ((Year rem 100 /= 0) or (Year rem 400 == 0)).
 
-correct_last_sunday(0, Count) -> Count - 1;
-correct_last_sunday(_Rem, Count) -> Count.
+-spec correct_last_sunday(Result :: process_result()) -> process_result().
+correct_last_sunday({0, Count}) -> {0, Count - 1};
+correct_last_sunday(Result) -> Result.

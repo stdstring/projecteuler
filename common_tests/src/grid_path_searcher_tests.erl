@@ -1,3 +1,5 @@
+%% @author std-string
+
 -module(grid_path_searcher_tests).
 
 -include_lib("eunit/include/eunit.hrl").

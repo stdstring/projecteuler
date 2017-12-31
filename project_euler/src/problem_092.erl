@@ -14,18 +14,23 @@
 -behaviour(numerical_task_behaviour).
 
 -define(STORAGE_MIN_SIZE, 1000).
+-define(KNOWN_HAPPY, [1]).
+-define(KNOWN_UNHAPPY, [4, 16, 37, 58, 89, 145, 42, 20]).
 
--type storage_type() :: array:array('happy' | 'unhappy' | 'undef').
+-type number_storage() :: array:array('happy' | 'unhappy' | 'undef').
+-type search_result() :: {'true', NextNumber :: pos_integer()} | 'false'.
 
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{100, 80}, {1000, 857}, {10000000 - 1, 8581146}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{100, 80}, {1000, 857}, {10000000 - 1, 8581146}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(MaxNumber) ->
     StorageSize = calc_storage_size(MaxNumber),
     EmptyStorage = array:new([{size, StorageSize}, {fixed, true}, {default, undef}]),
@@ -41,15 +46,15 @@ solve(MaxNumber) ->
 calc_storage_size(MaxNumber) when MaxNumber < ?STORAGE_MIN_SIZE -> ?STORAGE_MIN_SIZE;
 calc_storage_size(MaxNumber) -> MaxNumber.
 
--spec set_known_happy(SourceStorage :: storage_type()) -> storage_type().
+-spec set_known_happy(SourceStorage :: number_storage()) -> number_storage().
 set_known_happy(SourceStorage) ->
-    lists:foldl(fun(Number, Storage) -> array:set(Number - 1, happy, Storage) end, SourceStorage, [1]).
+    lists:foldl(fun(Number, Storage) -> array:set(Number - 1, happy, Storage) end, SourceStorage, ?KNOWN_HAPPY).
 
--spec set_known_unhappy(SourceStorage :: storage_type()) -> storage_type().
+-spec set_known_unhappy(SourceStorage :: number_storage()) -> number_storage().
 set_known_unhappy(SourceStorage) ->
-    lists:foldl(fun(Number, Storage) -> array:set(Number - 1, unhappy, Storage) end, SourceStorage, [4, 16, 37, 58, 89, 145, 42, 20]).
+    lists:foldl(fun(Number, Storage) -> array:set(Number - 1, unhappy, Storage) end, SourceStorage, ?KNOWN_UNHAPPY).
 
--spec process_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: storage_type()) -> storage_type().
+-spec process_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: number_storage()) -> number_storage().
 process_number(Number, MaxNumber, Storage) ->
     {Result, Chain} = process_chain(Number, [], Storage),
     NewStorage = collect_result(Chain, Result, Storage),
@@ -58,8 +63,7 @@ process_number(Number, MaxNumber, Storage) ->
         {true, NextNumber} -> process_number(NextNumber, MaxNumber, NewStorage)
     end.
 
--spec find_next_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: storage_type()) ->
-    {'true', NextNumber :: pos_integer()} | 'false'.
+-spec find_next_number(Number :: pos_integer(), MaxNumber :: pos_integer(), Storage :: number_storage()) -> search_result().
 find_next_number(Number, MaxNumber, _Storage) when Number > MaxNumber -> false;
 find_next_number(Number, MaxNumber, Storage) ->
     case is_known(Number, Storage) of
@@ -67,7 +71,7 @@ find_next_number(Number, MaxNumber, Storage) ->
         true -> find_next_number(Number + 1, MaxNumber, Storage)
     end.
 
--spec process_chain(Number :: pos_integer(), Chain :: [pos_integer()], Storage :: storage_type()) ->
+-spec process_chain(Number :: pos_integer(), Chain :: [pos_integer()], Storage :: number_storage()) ->
     {Result :: 'happy' | 'unhappy', Chain :: [pos_integer()]}.
 process_chain(Number, Chain, Storage) ->
     NextNumber = process_step(Number),
@@ -76,7 +80,7 @@ process_chain(Number, Chain, Storage) ->
         false -> process_chain(NextNumber, [Number] ++ Chain, Storage)
     end.
 
--spec collect_result(Chain :: [pos_integer()], Result :: 'happy' | 'unhappy', Storage :: storage_type()) -> storage_type().
+-spec collect_result(Chain :: [pos_integer()], Result :: 'happy' | 'unhappy', Storage :: number_storage()) -> number_storage().
 collect_result([], _Result, Storage) ->Storage;
 collect_result([Number | Rest], Result, Storage) ->
     collect_result(Rest, Result, array:set(Number - 1, Result, Storage)).
@@ -85,14 +89,14 @@ collect_result([Number | Rest], Result, Storage) ->
 process_step(Number) ->
     lists:foldl(fun(Digit, Sum) -> Digit * Digit + Sum end, 0, numbers:get_digits(Number)).
 
--spec is_known(Number :: pos_integer(), Storage :: storage_type()) -> boolean().
+-spec is_known(Number :: pos_integer(), Storage :: number_storage()) -> boolean().
 is_known(Number, Storage) ->
     array:get(Number - 1, Storage) /= undef.
 
--spec process_storage(Storage :: storage_type(), MaxNumber :: pos_integer()) -> non_neg_integer().
+-spec process_storage(Storage :: number_storage(), MaxNumber :: pos_integer()) -> non_neg_integer().
 process_storage(Storage, MaxNumber) -> process_storage(Storage, 0, MaxNumber, 0).
 
--spec process_storage(Storage :: storage_type(), Index :: non_neg_integer(), MaxNumber :: pos_integer(), UnhappyCount :: non_neg_integer()) -> non_neg_integer().
+-spec process_storage(Storage :: number_storage(), Index :: non_neg_integer(), MaxNumber :: pos_integer(), UnhappyCount :: non_neg_integer()) -> non_neg_integer().
 process_storage(_Storage, MaxNumber, MaxNumber, UnhappyCount) -> UnhappyCount;
 process_storage(Storage, Index, MaxNumber, UnhappyCount) ->
     case array:get(Index, Storage) of

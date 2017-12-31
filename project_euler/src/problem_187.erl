@@ -11,13 +11,14 @@
 
 -define(MIN_PRIME, 2).
 
+-type primes() :: array:array(Prime :: pos_integer()).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
 
 -spec get_check_data() -> [{Input :: term(), Output :: term()}].
-get_check_data() ->
-    [{30, 10}, {100000000, 17427258}].
+get_check_data() -> [{30, 10}, {100000000, 17427258}].
 
 -spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
@@ -33,7 +34,7 @@ solve(MaxNumber) ->
 %% Internal functions
 %% ====================================================================
 
--spec process(Primes :: array:array(),
+-spec process(Primes :: primes(),
               FromIndex :: non_neg_integer(),
               ToIndex :: non_neg_integer(),
               MaxNumber :: pos_integer(),
@@ -46,7 +47,7 @@ process(Primes, FromIndex, ToIndex, MaxNumber, Sum) ->
     NewToIndex = find_to_index(Primes, NewFromNumber, ToIndex, MaxNumber),
     process(Primes, NewFromIndex, NewToIndex, MaxNumber, Sum + Count).
 
--spec find_to_index(Primes :: array:array(), FromNumber :: pos_integer(), ToIndex :: non_neg_integer(), MaxNumber :: pos_integer()) -> non_neg_integer().
+-spec find_to_index(Primes :: primes(), FromNumber :: pos_integer(), ToIndex :: non_neg_integer(), MaxNumber :: pos_integer()) -> non_neg_integer().
 find_to_index(Primes, FromNumber, ToIndex, MaxNumber) ->
     ToNumber = array:get(ToIndex, Primes),
     if

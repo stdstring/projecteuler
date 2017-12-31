@@ -15,11 +15,13 @@
 %% API functions
 %% ====================================================================
 
-get_check_data() ->
-    [{{8, {3, 7}}, 2}, {{1000000, {3, 7}}, 428570}].
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{{8, {3, 7}}, 2}, {{1000000, {3, 7}}, 428570}].
 
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(_ModuleSourceDir, Input) -> Input.
 
+-spec solve(PreparedInput :: term()) -> term().
 solve({MaxDenominator, Fraction}) ->
     {Numerator, _Denominator} = process_denominator(2, {1, MaxDenominator}, MaxDenominator, Fraction),
     Numerator.
@@ -29,10 +31,9 @@ solve({MaxDenominator, Fraction}) ->
 %% ====================================================================
 
 -spec process_denominator(Denominator :: pos_integer(),
-                          SavedFraction :: {Numerator :: pos_integer(), Denominator :: pos_integer()},
+                          SavedFraction :: rational:rational_fraction(),
                           MaxDenominator :: pos_integer(),
-                          Fraction :: {Numerator :: pos_integer(), Denominator :: pos_integer()}) ->
-    {Numerator :: pos_integer(), Denominator :: pos_integer()}.
+                          Fraction :: rational:rational_fraction()) -> rational:rational_fraction().
 process_denominator(Denominator, SavedFraction, MaxDenominator, _Fraction) when Denominator > MaxDenominator -> SavedFraction;
 process_denominator(Denominator, SavedFraction, MaxDenominator, Fraction) ->
     LeftNeighbour = find_left_neighbour(Denominator, Fraction),
@@ -46,20 +47,14 @@ process_denominator(Denominator, SavedFraction, MaxDenominator, Fraction) ->
             end
     end.
 
--spec find_left_neighbour(Denominator :: pos_integer(), Fraction :: {Numerator :: pos_integer(), Denominator :: pos_integer()}) ->
-    {Numerator :: pos_integer(), Denominator :: pos_integer()}.
+-spec find_left_neighbour(Denominator :: pos_integer(), Fraction :: rational:rational_fraction()) -> rational:rational_fraction().
 find_left_neighbour(Denominator, {FractionNumerator, FractionDenominator}) ->
     %% Numerator * FractionDenominator <= FractionNumerator * Denominator < (Numerator + 1) * FractionDenominator
     %% Numerator = FractionNumerator * Denominator div FractionDenominator
     {(FractionNumerator * Denominator) div FractionDenominator, Denominator}.
 
--spec compare_fractions(Left :: {Numerator :: pos_integer(), Denominator :: pos_integer()}, Right :: {Numerator :: pos_integer(), Denominator :: pos_integer()}) ->
-    'left' | 'equal' | 'right'.
+-spec compare_fractions(Left :: rational:rational_fraction(), Right :: rational:rational_fraction()) -> compare:compare_result().
 compare_fractions({LeftNumerator, LeftDenominator}, {RightNumerator, RightDenominator}) ->
     LeftResult = LeftNumerator * RightDenominator,
     RightResult = RightNumerator * LeftDenominator,
-    if
-        LeftResult < RightResult -> right;
-        LeftResult > RightResult -> left;
-        LeftResult == RightResult -> equal
-    end.
+    compare:compare_desc(LeftResult, RightResult).

@@ -1,3 +1,5 @@
+%% @author std-string
+
 %% In the card game poker, a hand consists of five cards and are ranked, from lowest to highest, in the following way:
 %%
 %% 1) High Card: Highest value card.
@@ -57,12 +59,25 @@
 -define(STRAIGHT_FLUSH, 9).
 -define(ROYAL_FLUSH, 10).
 
-get_check_data() ->
-    [{"problem_054.dat", 376}].
+-type card() :: {Value :: pos_integer(), Suit :: char()}.
+-type cards() :: [card()].
+-type hands_pair() :: {Hand1 :: cards(), Hand2 :: cards()}.
+-type cards_rank() :: 1..10.
+-type cards_rank_result() :: {Rank :: cards_rank(), MaxValue :: non_neg_integer(), MinValue :: non_neg_integer()}.
+-type hands_compare_result() :: 'undefined' | 'first' | 'second'.
 
+%% ====================================================================
+%% API functions
+%% ====================================================================
+
+-spec get_check_data() -> [{Input :: term(), Output :: term()}].
+get_check_data() -> [{"problem_054.dat", 376}].
+
+-spec prepare_data(ModuleSourceDir :: string(), Input :: term()) -> term().
 prepare_data(ModuleSourceDir, Filename) ->
     load_utils:read_strings(filename:join(ModuleSourceDir, Filename)).
 
+-spec solve(PreparedInput :: term()) -> term().
 solve(HandsTable) ->
     CollectFun = fun(HandsRow, Count) ->
         Hands = prepare_hands(HandsRow),
@@ -73,18 +88,22 @@ solve(HandsTable) ->
     end,
     lists:foldl(CollectFun, 0, HandsTable).
 
--spec prepare_hands(HandsSource :: string()) -> {Hand1 :: [{Value :: pos_integer(), Suit :: char()}], Hand2 :: [{Value :: pos_integer(), Suit :: char()}]}.
+%% ====================================================================
+%% Internal functions
+%% ====================================================================
+
+-spec prepare_hands(HandsSource :: string()) -> hands_pair().
 prepare_hands(HandsSource) ->
     HandsData = string:tokens(HandsSource, " "),
     {Hand1, Hand2} = parse_hands(HandsData),
     {sort_cards(Hand1), sort_cards(Hand2)}.
 
--spec parse_hands(HandsData :: [string()]) -> {Hand1 :: [{Value :: pos_integer(), Suit :: char()}], Hand2 :: [{Value :: pos_integer(), Suit :: char()}]}.
+-spec parse_hands(HandsData :: [string()]) -> hands_pair().
 parse_hands([Player1Card1, Player1Card2, Player1Card3, Player1Card4, Player1Card5, Player2Card1, Player2Card2, Player2Card3, Player2Card4, Player2Card5]) ->
     {[parse_card(Player1Card1), parse_card(Player1Card2), parse_card(Player1Card3),parse_card(Player1Card4), parse_card(Player1Card5)],
      [parse_card(Player2Card1), parse_card(Player2Card2), parse_card(Player2Card3),parse_card(Player2Card4), parse_card(Player2Card5)]}.
 
--spec parse_card(Card :: string()) -> {Value :: pos_integer(), Suit :: char()}.
+-spec parse_card(Card :: string()) -> card().
 parse_card([?TEN_CHAR, Suit]) -> {?TEN, Suit};
 parse_card([?JACK_CHAR, Suit]) -> {?JACK, Suit};
 parse_card([?QUEEN_CHAR, Suit]) -> {?QUEEN, Suit};
@@ -92,12 +111,12 @@ parse_card([?KING_CHAR, Suit]) -> {?KING, Suit};
 parse_card([?ACE_CHAR, Suit]) -> {?ACE, Suit};
 parse_card([Value, Suit]) -> {Value - $0, Suit}.
 
--spec sort_cards(Hand :: [{Value :: pos_integer(), Suit :: char()}]) -> [{Value :: pos_integer(), Suit :: char()}].
+-spec sort_cards(Hand :: cards()) -> cards().
 sort_cards(Hand) ->
     %% sorting in back order
     lists:sort(fun({Value1, _Suit1}, {Value2, _Suit2}) -> Value1 > Value2 end, Hand).
 
--spec calc_hand_rank([{Value :: pos_integer(), Suit :: char()}]) -> {Rank :: 1..10, MaxValue :: non_neg_integer(), MinValue :: non_neg_integer()}.
+-spec calc_hand_rank(Hand :: cards()) -> cards_rank_result().
 %% ROYAL FLUSH
 calc_hand_rank([{?ACE, Suit}, {?KING, Suit}, {?QUEEN, Suit}, {?JACK, Suit}, {?TEN, Suit}]) -> {?ROYAL_FLUSH, 0, 0};
 %% STRAIGHT FLUSH
@@ -134,7 +153,7 @@ calc_hand_rank([{_Value1, _Suit1}, {_Value2, _Suit2}, {_Value3, _Suit3}, {Value,
 %% HIGH CARD
 calc_hand_rank([_Card1, _Card2, _Card3, _Card4, _Card5]) -> {?HIGH_CARD, 0, 0}.
 
--spec check_hands({Hand1 :: [{Value :: pos_integer(), Suit :: char()}], Hand2 :: [{Value :: pos_integer(), Suit :: char()}]}) -> 'undefined' | 'first' | 'second'.
+-spec check_hands(Hands :: hands_pair()) -> hands_compare_result().
 check_hands({Hand1, Hand2}) ->
     Rank1 = calc_hand_rank(Hand1),
     Rank2 = calc_hand_rank(Hand2),
@@ -144,7 +163,7 @@ check_hands({Hand1, Hand2}) ->
         Rank1 == Rank2 -> check_hands_cards(Hand1, Hand2)
     end.
 
--spec check_hands_cards(Card1 :: {Value :: pos_integer(), Suit :: char()}, Card2 :: {Value :: pos_integer(), Suit :: char()}) -> 'undefined' | 'first' | 'second'.
+-spec check_hands_cards(Card1 :: card(), Card2 :: card()) -> hands_compare_result().
 check_hands_cards([], []) -> undefined;
 check_hands_cards([{Value1, _Suit1} | _Rest1], [{Value2, _Suit2} | _Rest2]) when Value1 > Value2 -> first;
 check_hands_cards([{Value1, _Suit1} | _Rest1], [{Value2, _Suit2} | _Rest2]) when Value1 < Value2 -> second;
