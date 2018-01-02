@@ -2,6 +2,7 @@
 {'src/compare', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/control', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/eratos_sieve', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
+{'src/grid', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/grid_helper', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/grid_path_searcher', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/load_utils', [warnings_as_errors, {outdir, "ebin"}]}.
