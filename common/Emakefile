@@ -4,7 +4,7 @@
 {'src/eratos_sieve', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
 {'src/grid', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/grid_helper', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
-{'src/grid_path_searcher', [warnings_as_errors, {outdir, "ebin"}, {i, "include"}]}.
+{'src/grid_path_searcher', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/load_utils', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/mutable_uint8_array', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/numbers', [warnings_as_errors, {outdir, "ebin"}]}.

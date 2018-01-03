@@ -9,8 +9,6 @@
 
 -behaviour(numerical_task_behaviour).
 
--include("grid_def.hrl").
-
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -24,9 +22,9 @@ prepare_data(ModuleSourceDir, Filename) ->
 
 -spec solve(PreparedInput :: term()) -> term().
 solve(GridData) ->
-    Grid = grid_helper:create(GridData),
-    RowCount = grid_helper:get_row_count(Grid),
-    ColumnCount = grid_helper:get_row_count(Grid),
+    Grid = grid:copy(GridData),
+    RowCount = grid:get_row_count(Grid),
+    ColumnCount = grid:get_row_count(Grid),
     RowSeq = lists:seq(1, RowCount),
     InitPoints = lists:map(fun(Number) -> {Number, 1} end, RowSeq),
     ResultPoints = lists:map(fun(Number) -> {Number, ColumnCount} end, RowSeq),
@@ -39,7 +37,8 @@ solve(GridData) ->
 %% Internal functions
 %% ====================================================================
 
--spec get_next_points(Point :: point_type(), _RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [point_type()].
+%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
+-spec get_next_points(Point :: grid:point_type(), _RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_next_points({_Row, ColumnMax}, _RowMax, ColumnMax) -> [];
 get_next_points({1, Column}, _RowMax, _ColumnMax) -> [{1, Column + 1}, {2, Column}];
 get_next_points({RowMax, Column}, RowMax, _ColumnMax) -> [{RowMax, Column + 1}, {RowMax - 1, Column}];

@@ -6,14 +6,14 @@
 {'src/problem_007', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_008', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_010', [warnings_as_errors, {outdir, "ebin"}]}.
-{'src/problem_011', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
+{'src/problem_011', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_012', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_013', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_014', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_015', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_016', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_017', [warnings_as_errors, {outdir, "ebin"}]}.
-{'src/problem_018_067', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
+{'src/problem_018_067', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_019', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_020', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_021', [warnings_as_errors, {outdir, "ebin"}]}.
@@ -63,9 +63,9 @@
 {'src/problem_074', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_076', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_080', [warnings_as_errors, {outdir, "ebin"}]}.
-{'src/problem_081', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
-{'src/problem_082', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
-{'src/problem_083', [warnings_as_errors, {outdir, "ebin"}, {i, "../common/include"}]}.
+{'src/problem_081', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_082', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_083', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_087', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_089', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_092', [warnings_as_errors, {outdir, "ebin"}]}.

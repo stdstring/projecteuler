@@ -7,8 +7,6 @@
 
 -behaviour(numerical_task_behaviour).
 
--include("grid_def.hrl").
-
 -type direction() :: 'horizontal' | 'vertical' | 'direct_diagonal' | 'reverse_diagonal'.
 
 %% ====================================================================
@@ -24,23 +22,23 @@ prepare_data(ModuleSourceDir, {Filename, TermCount}) ->
     {Grid, TermCount}.
 
 -spec solve(PreparedInput :: term()) -> term().
-solve({GridData, TermCount}) -> traverse_grid(grid_helper:create(GridData), TermCount).
+solve({GridData, TermCount}) -> traverse_grid(grid:copy(GridData), TermCount).
 
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
--spec traverse_grid(Grid :: grid_type(), TermCount :: pos_integer()) -> pos_integer().
+-spec traverse_grid(Grid :: grid:grid(), TermCount :: pos_integer()) -> pos_integer().
 traverse_grid(Grid, TermCount) -> traverse_grid(1, 1, Grid, TermCount, 0).
 
--spec traverse_grid(Row :: pos_integer(),
-                    Column :: pos_integer(),
-                    Grid :: grid_type(),
+-spec traverse_grid(Row :: grid:row_type(),
+                    Column :: grid:column_type(),
+                    Grid :: grid:grid(),
                     TermCount :: pos_integer(),
                     MaxValue :: pos_integer()) -> pos_integer().
 traverse_grid(Row, Column, Grid, TermCount, MaxValue) ->
-    RowCount = grid_helper:get_row_count(Grid),
-    ColumnCount = grid_helper:get_column_count(Grid),
+    RowCount = grid:get_row_count(Grid),
+    ColumnCount = grid:get_column_count(Grid),
     if
         Row > RowCount -> MaxValue;
         Column > ColumnCount -> traverse_grid(Row + 1, 1, Grid, TermCount, MaxValue);
@@ -53,9 +51,9 @@ traverse_grid(Row, Column, Grid, TermCount, MaxValue) ->
             traverse_grid(Row, Column + 1, Grid, TermCount, NewMaxValue)
     end.
 
--spec calc_direction_product(Row :: pos_integer(),
-                             Column :: pos_integer(),
-                             Grid :: grid_type(),
+-spec calc_direction_product(Row :: grid:row_type(),
+                             Column :: grid:column_type(),
+                             Grid :: grid:grid(),
                              Direction :: direction(),
                              TermCount :: pos_integer()) -> non_neg_integer().
 calc_direction_product(Row, Column, Grid, horizontal, TermCount) ->
@@ -67,11 +65,11 @@ calc_direction_product(Row, Column, Grid, direct_diagonal, TermCount) ->
 calc_direction_product(Row, Column, Grid, reverse_diagonal, TermCount) ->
     control:for(TermCount, 1, fun(Index, Acc) -> get_cell_value(Row + Index, Column - Index, Grid) * Acc end).
 
--spec get_cell_value(Row :: pos_integer(), Column :: pos_integer(), Grid :: grid_type()) -> integer().
+-spec get_cell_value(Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid()) -> integer().
 get_cell_value(Row, Column, Grid) ->
-    RowCount = grid_helper:get_row_count(Grid),
-    ColumnCount = grid_helper:get_column_count(Grid),
+    RowCount = grid:get_row_count(Grid),
+    ColumnCount = grid:get_column_count(Grid),
     if
         Row > RowCount; Column > ColumnCount; Row < 1; Column < 1 -> 0;
-        true -> grid_helper:get_value(Row, Column, Grid)
+        true -> grid:get_value(Row, Column, Grid)
     end.
