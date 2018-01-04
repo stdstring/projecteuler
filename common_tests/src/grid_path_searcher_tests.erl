@@ -11,7 +11,6 @@
 
 two_way_test() ->
     Grid = generate_source_grid(),
-    ?debugFmt("Grid: ~p~n", [Grid]),
     InitPoints = [{1, 1}],
     ResultPoints = [{grid:get_row_count(Grid), grid:get_column_count(Grid)}],
     {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_two_way_next_points/3),

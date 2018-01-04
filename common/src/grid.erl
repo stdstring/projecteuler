@@ -31,7 +31,7 @@ copy([Head | _Tail] = Data) ->
     RowCount = length(Data),
     ColumnCount = length(Head),
     %% TODO (std_string) : think about this check
-    case lists:all(fun(Row) -> length(Row) == ColumnCount end, Data) of
+    case lists:all(fun(Row) -> is_list(Row) andalso length(Row) == ColumnCount end, Data) of
         true -> copy(RowCount, ColumnCount, lists:flatten(Data));
         false -> error(badarg)
     end.
@@ -55,6 +55,7 @@ get_value({Row, Column}, Grid) -> get_value(Row, Column, Grid).
 -spec get_value(Row :: row_type(), Column :: column_type(), Grid :: grid()) -> grid_element_type().
 get_value(Row, Column, _Grid) when not is_integer(Row); Row =< 0; not is_integer(Column); Column =< 0 -> error(badarg);
 get_value(_Row, _Column, Grid) when not is_record(Grid, grid) -> error(badarg);
+get_value(Row, Column, Grid) when Row > Grid#grid.row_count; Column > Grid#grid.column_count -> error(badarg);
 get_value(Row, Column, Grid) -> array:get(get_index(Row, Column, Grid), Grid#grid.grid).
 
 -spec set_value(Point :: point_type(), Value :: grid_element_type(), Grid :: grid()) -> grid().
@@ -63,6 +64,7 @@ set_value({Row, Column}, Value, Grid) -> set_value(Row, Column, Value, Grid).
 -spec set_value(Row :: row_type(), Column :: column_type(), Value :: grid_element_type(), Grid :: grid()) -> grid().
 set_value(Row, Column, _Value, _Grid) when not is_integer(Row); Row =< 0; not is_integer(Column); Column =< 0 -> error(badarg);
 set_value(_Row, _Column, _Value, Grid) when not is_record(Grid, grid) -> error(badarg);
+set_value(Row, Column, _Value, Grid) when Row > Grid#grid.row_count; Column > Grid#grid.column_count -> error(badarg);
 set_value(Row, Column, Value, Grid) -> Grid#grid{grid = array:set(get_index(Row, Column, Grid), Value, Grid#grid.grid)}.
 
 %% ====================================================================
