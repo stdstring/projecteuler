@@ -28,12 +28,12 @@ solve({GridData, TermCount}) -> traverse_grid(grid:copy(GridData), TermCount).
 %% Internal functions
 %% ====================================================================
 
--spec traverse_grid(Grid :: grid:grid(), TermCount :: pos_integer()) -> pos_integer().
+-spec traverse_grid(Grid :: grid:grid(pos_integer()), TermCount :: pos_integer()) -> pos_integer().
 traverse_grid(Grid, TermCount) -> traverse_grid(1, 1, Grid, TermCount, 0).
 
 -spec traverse_grid(Row :: grid:row_type(),
                     Column :: grid:column_type(),
-                    Grid :: grid:grid(),
+                    Grid :: grid:grid(pos_integer()),
                     TermCount :: pos_integer(),
                     MaxValue :: pos_integer()) -> pos_integer().
 traverse_grid(Row, Column, Grid, TermCount, MaxValue) ->
@@ -53,7 +53,7 @@ traverse_grid(Row, Column, Grid, TermCount, MaxValue) ->
 
 -spec calc_direction_product(Row :: grid:row_type(),
                              Column :: grid:column_type(),
-                             Grid :: grid:grid(),
+                             Grid :: grid:grid(pos_integer()),
                              Direction :: direction(),
                              TermCount :: pos_integer()) -> non_neg_integer().
 calc_direction_product(Row, Column, Grid, horizontal, TermCount) ->
@@ -65,7 +65,7 @@ calc_direction_product(Row, Column, Grid, direct_diagonal, TermCount) ->
 calc_direction_product(Row, Column, Grid, reverse_diagonal, TermCount) ->
     control:for(TermCount, 1, fun(Index, Acc) -> get_cell_value(Row + Index, Column - Index, Grid) * Acc end).
 
--spec get_cell_value(Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid()) -> integer().
+-spec get_cell_value(Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid(pos_integer())) -> integer().
 get_cell_value(Row, Column, Grid) ->
     RowCount = grid:get_row_count(Grid),
     ColumnCount = grid:get_column_count(Grid),

@@ -43,7 +43,8 @@ solve(Data) ->
 
 %% TODO (std_string) : think about refactoring this
 %%-spec fill(Data :: [[pos_integer]], Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid(pos_integer() | 'undef')) -> grid_type(pos_integer() | 'undef').
--spec fill(Data :: [[pos_integer]], Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid()) -> grid:grid().
+-spec fill(Data :: [[pos_integer()]], Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid(pos_integer() | 'undef')) ->
+    grid:grid(pos_integer() | 'undef').
 fill([], _Row, _Column, Grid) -> Grid;
 fill([[] | Rows], Row, _Column, Grid) -> fill(Rows, Row + 1, 1, Grid);
 fill([[Value | RowRest] | Rows], Row, Column, Grid) ->

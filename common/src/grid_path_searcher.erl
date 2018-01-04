@@ -1,17 +1,19 @@
 %% @author std-string
 
-%% TODO (std_string) : think about renaming to grid_path
+%% TODO(std_string) : think about renaming to grid_path
 -module(grid_path_searcher).
 -export([search/6]).
 
 -type value_builder_fun() :: fun((AccValue :: term(), PointValue :: term()) -> term()).
+%% TODO(std_string) : think about moving this into compare module
 -type value_comparator_fun() :: fun((LValue :: term(), RValue :: term()) -> compare:compare_result()).
 -type next_points_provider_type() :: fun((Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()]).
 %%-type result_item_type() :: {Path :: [grid:point_type()], Value :: term()}.
 %%-type result_type() :: array:array(array:array(result_item_type() | 'undef')).
--type result_type() :: grid:grid().
+-type result_item_type() :: {Path :: [grid:point_type()], Value :: term()}.
+-type result_type() :: grid:grid(result_item_type() | 'undef').
 
--record(process_data, {grid :: grid:grid(),
+-record(process_data, {grid :: grid:grid(term()),
                        row_max :: pos_integer(),
                        column_max :: pos_integer(),
                        value_builder :: value_builder_fun(),
@@ -22,7 +24,7 @@
 %% API functions
 %% ====================================================================
 
--spec search(Grid :: grid:grid(),
+-spec search(Grid :: grid:grid(term()),
              InitPoints :: [grid:point_type()],
              ResultPoints :: [grid:point_type()],
              ValueBuilder :: value_builder_fun(),
@@ -51,7 +53,7 @@ search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, NextPoints
 %% Internal functions
 %% ====================================================================
 
--spec init_result_storage(InitPoints :: [grid:point_type()], Grid :: grid:grid(), Result :: result_type()) -> result_type().
+-spec init_result_storage(InitPoints :: [grid:point_type()], Grid :: grid:grid(term()), Result :: result_type()) -> result_type().
 init_result_storage(Points, Grid, Result) ->
     InitFun = fun({Row, Column}, Storage) -> grid:set_value(Row, Column, {grid:get_value(Row, Column, Grid), [{Row, Column}]}, Storage) end,
     lists:foldl(InitFun, Result, Points).

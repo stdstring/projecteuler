@@ -141,7 +141,7 @@ set_value_for_point_test_() ->
 %% Internal functions
 %% ====================================================================
 
--spec check_grid(RowCount :: pos_integer(), ColumnCount :: pos_integer(), Data :: [grid:grid_element_type()], Grid :: grid:grid()) -> 'ok'.
+-spec check_grid(RowCount :: pos_integer(), ColumnCount :: pos_integer(), Data :: [integer()], Grid :: grid:grid(integer())) -> 'ok'.
 check_grid(RowCount, ColumnCount, Data, Grid) ->
     %% TODO (std_string) : think about correct check of the data
     {grid, ActualRowCount, ActualColumnCount, ActualData} = Grid,

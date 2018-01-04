@@ -57,7 +57,7 @@ reverse_triangle_test() ->
 %% Internal functions
 %% ====================================================================
 
--spec generate_source_grid() -> grid:grid().
+-spec generate_source_grid() -> grid:grid(integer()).
 generate_source_grid() ->
     grid:copy(5, 5, [131, 673, 234, 103, 18, 201, 96, 342, 965, 150, 630, 803, 746, 422, 111, 537, 699, 497, 121, 956, 805, 732, 524, 37, 331]).
 
@@ -90,7 +90,7 @@ get_four_way_next_points({Row, 1}, _RowMax, _ColumnMax) -> [{Row - 1, 1}, {Row +
 get_four_way_next_points({Row, ColumnMax}, _RowMax, ColumnMax) -> [{Row - 1, ColumnMax}, {Row + 1, ColumnMax}, {Row, ColumnMax - 1}];
 get_four_way_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row - 1, Column}, {Row + 1, Column}, {Row, Column - 1}, {Row, Column + 1}].
 
--spec generate_triangle_source_grid() -> grid:grid().
+-spec generate_triangle_source_grid() -> grid:grid(integer()).
 generate_triangle_source_grid() ->
     grid:copy(4, 4, [3, 0, 0, 0, 7, 4, 0, 0, 2, 4, 6, 0, 8, 5, 9, 3]).
 
