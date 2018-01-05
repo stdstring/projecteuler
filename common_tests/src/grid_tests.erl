@@ -137,14 +137,21 @@ set_value_for_point_test_() ->
      {"Grid[2, 1] value", ?_test(check_grid(2, 2, [666, 666, 13, 666], grid:set_value({2, 1}, 13, grid:create(2, 2, 666))))},
      {"Grid[2, 2] value", ?_test(check_grid(2, 2, [666, 666, 666, 13], grid:set_value({2, 2}, 13, grid:create(2, 2, 666))))}].
 
+to_list_error_test_() ->
+    [{"Bad grid data", ?_assertError(badarg, grid:to_list({2, 2, [3, 4, 3, 4]}))}].
+
+to_list_test_() ->
+    [{"Grid 1 x 1", ?_assertEqual([666], grid:to_list(grid:copy([[666]])))},
+     {"Grid 1 x 2", ?_assertEqual([666, 777], grid:to_list(grid:copy([[666, 777]])))},
+     {"Grid 2 x 1", ?_assertEqual([666, 777], grid:to_list(grid:copy([[666], [777]])))},
+     {"Grid 2 x 2", ?_assertEqual([666, 777, 888, 999], grid:to_list(grid:copy([[666, 777], [888, 999]])))}].
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
 
 -spec check_grid(RowCount :: pos_integer(), ColumnCount :: pos_integer(), Data :: [integer()], Grid :: grid:grid(integer())) -> 'ok'.
 check_grid(RowCount, ColumnCount, Data, Grid) ->
-    %% TODO (std_string) : think about correct check of the data
-    {grid, ActualRowCount, ActualColumnCount, ActualData} = Grid,
-    ?assertEqual(RowCount, ActualRowCount),
-    ?assertEqual(ColumnCount, ActualColumnCount),
-    ?assertEqual(Data, array:to_list(ActualData)).
+    ?assertEqual(RowCount, grid:get_row_count(Grid)),
+    ?assertEqual(ColumnCount, grid:get_column_count(Grid)),
+    ?assertEqual(Data, grid:to_list(Grid)).

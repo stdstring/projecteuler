@@ -1,7 +1,7 @@
 %% @author std-string
 
 -module(grid).
--export([create/3, copy/1, copy/3, get_row_count/1, get_column_count/1, get_value/2, get_value/3, set_value/3, set_value/4]).
+-export([create/3, copy/1, copy/3, get_row_count/1, get_column_count/1, get_value/2, get_value/3, set_value/3, set_value/4, to_list/1]).
 
 -type row_type()::pos_integer().
 -type column_type()::pos_integer().
@@ -68,6 +68,10 @@ set_value(Row, Column, _Value, _Grid) when not is_integer(Row); Row =< 0; not is
 set_value(_Row, _Column, _Value, Grid) when not is_record(Grid, grid) -> error(badarg);
 set_value(Row, Column, _Value, Grid) when Row > Grid#grid.row_count; Column > Grid#grid.column_count -> error(badarg);
 set_value(Row, Column, Value, Grid) -> Grid#grid{grid = array:set(get_index(Row, Column, Grid), Value, Grid#grid.grid)}.
+
+-spec to_list(Grid :: grid(ElementType)) -> [ElementType].
+to_list(Grid) when not is_record(Grid, grid) -> error(badarg);
+to_list(#grid{grid = Grid}) -> array:to_list(Grid).
 
 %% ====================================================================
 %% Internal functions
