@@ -34,7 +34,7 @@ solve(Data) ->
     ResultPoints = lists:map(fun(Number) -> {RowCount, Number} end, lists:seq(1, RowCount)),
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
     ValueComparator = fun compare:compare_desc/2,
-    {Value, _Path} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
+    {Value, _Path} = grid_path:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
     Value.
 
 %% ====================================================================

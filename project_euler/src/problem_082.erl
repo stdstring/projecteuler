@@ -30,7 +30,7 @@ solve(GridData) ->
     ResultPoints = lists:map(fun(Number) -> {Number, ColumnCount} end, RowSeq),
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
     ValueComparator = fun compare:compare_asc/2,
-    {Value, _Path} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
+    {Value, _Path} = grid_path:search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, fun get_next_points/3),
     Value.
 
 %% ====================================================================

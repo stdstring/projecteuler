@@ -1,7 +1,6 @@
 %% @author std-string
 
-%% TODO (std_string) : think about renaming to grid_path_tests
--module(grid_path_searcher_tests).
+-module(grid_path_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -13,7 +12,7 @@ two_way_test() ->
     Grid = generate_source_grid(),
     InitPoints = [{1, 1}],
     ResultPoints = [{grid:get_row_count(Grid), grid:get_column_count(Grid)}],
-    {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_two_way_next_points/3),
+    {ActualValue, ActualPath} = grid_path:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_two_way_next_points/3),
     ?assertEqual(2427, ActualValue),
     ?assertEqual([{1, 1}, {2, 1}, {2, 2}, {2, 3}, {3, 3}, {3, 4}, {4, 4}, {5, 4}, {5, 5}], ActualPath).
 
@@ -23,7 +22,7 @@ three_way_test() ->
     ColumnMax = grid:get_column_count(Grid),
     InitPoints = lists:map(fun(Number) -> {Number, 1} end, lists:seq(1, RowMax)),
     ResultPoints = lists:map(fun(Number) -> {Number, ColumnMax} end, lists:seq(1, RowMax)),
-    {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_three_way_next_points/3),
+    {ActualValue, ActualPath} = grid_path:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_three_way_next_points/3),
     ?assertEqual(994, ActualValue),
     ?assertEqual([{2, 1}, {2, 2}, {2, 3}, {1, 3}, {1, 4}, {1, 5}], ActualPath).
 
@@ -31,7 +30,7 @@ four_way_test() ->
     Grid = generate_source_grid(),
     InitPoints = [{1, 1}],
     ResultPoints = [{grid:get_row_count(Grid), grid:get_column_count(Grid)}],
-    {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_four_way_next_points/3),
+    {ActualValue, ActualPath} = grid_path:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_asc/2, fun get_four_way_next_points/3),
     ?assertEqual(2297, ActualValue),
     ?assertEqual([{1, 1}, {2, 1}, {2, 2}, {2, 3}, {1, 3}, {1, 4}, {1, 5}, {2, 5}, {3, 5}, {3, 4}, {4, 4}, {5, 4}, {5, 5}], ActualPath).
 
@@ -40,7 +39,7 @@ direct_triangle_test() ->
     InitPoints = [{1, 1}],
     RowMax = grid:get_row_count(Grid),
     ResultPoints = lists:map(fun(Number) -> {RowMax, Number} end, lists:seq(1, RowMax)),
-    {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_desc/2, fun get_direct_triangle_next_points/3),
+    {ActualValue, ActualPath} = grid_path:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_desc/2, fun get_direct_triangle_next_points/3),
     ?assertEqual(23, ActualValue),
     ?assertEqual([{1, 1}, {2, 1}, {3, 2}, {4, 3}], ActualPath).
 
@@ -49,7 +48,7 @@ reverse_triangle_test() ->
     RowMax = grid:get_row_count(Grid),
     InitPoints = lists:map(fun(Number) -> {RowMax, Number} end, lists:seq(1, RowMax)),
     ResultPoints = [{1, 1}],
-    {ActualValue, ActualPath} = grid_path_searcher:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_desc/2, fun get_reverse_triangle_next_points/3),
+    {ActualValue, ActualPath} = grid_path:search(Grid, InitPoints, ResultPoints, fun build_next_value/2, fun compare:compare_desc/2, fun get_reverse_triangle_next_points/3),
     ?assertEqual(23, ActualValue),
     ?assertEqual([{4, 3}, {3, 2}, {2, 1}, {1, 1}], ActualPath).
 

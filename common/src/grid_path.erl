@@ -1,7 +1,6 @@
 %% @author std-string
 
-%% TODO(std_string) : think about renaming to grid_path
--module(grid_path_searcher).
+-module(grid_path).
 -export([search/6]).
 
 -type value_builder_fun() :: fun((AccValue :: term(), PointValue :: term()) -> term()).
