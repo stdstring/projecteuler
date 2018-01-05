@@ -3,15 +3,17 @@
 -module(grid).
 -export([create/3, copy/1, copy/3, get_row_count/1, get_column_count/1, get_value/2, get_value/3, set_value/3, set_value/4]).
 
--type row_type()::pos_integer(). %% interface
--type column_type()::pos_integer(). %% interface
+-type row_type()::pos_integer().
+-type column_type()::pos_integer().
 %% TODO (std_string) : think about using of record instead of tuple
--type point_type() :: {Row :: row_type(), Column :: column_type()}. %% interface
+-type point_type() :: {Row :: row_type(), Column :: column_type()}.
 
--type grid_type(ElementType) :: array:array(ElementType). %% impl
--record(grid, {row_count :: pos_integer(), column_count :: pos_integer(), grid :: grid_type(term())}). %% impl
+-type grid_type(ElementType) :: array:array(ElementType).
+-record(grid, {row_count :: pos_integer(), column_count :: pos_integer(), grid :: grid_type(term())}).
 
--type grid(ElementType) :: #grid{grid :: grid_type(ElementType)}. %% interface
+-type grid(ElementType) :: #grid{grid :: grid_type(ElementType)}.
+
+-export_type ([row_type/0, column_type/0, point_type/0, grid/1]).
 
 %% ====================================================================
 %% API functions

@@ -4,6 +4,9 @@
 -export([compare_asc/2, compare_desc/2]).
 
 -type compare_result() :: 'left' | 'equal' | 'right'.
+-type comparator_fun() :: fun((LValue :: term(), RValue :: term()) -> compare_result()).
+
+-export_type ([comparator_fun/0]).
 
 %% ====================================================================
 %% API functions

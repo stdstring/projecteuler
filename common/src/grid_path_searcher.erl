@@ -5,19 +5,15 @@
 -export([search/6]).
 
 -type value_builder_fun() :: fun((AccValue :: term(), PointValue :: term()) -> term()).
-%% TODO(std_string) : think about moving this into compare module
--type value_comparator_fun() :: fun((LValue :: term(), RValue :: term()) -> compare:compare_result()).
--type next_points_provider_type() :: fun((Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()]).
-%%-type result_item_type() :: {Path :: [grid:point_type()], Value :: term()}.
-%%-type result_type() :: array:array(array:array(result_item_type() | 'undef')).
+-type next_points_provider_type() :: fun((Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()]).
 -type result_item_type() :: {Path :: [grid:point_type()], Value :: term()}.
 -type result_type() :: grid:grid(result_item_type() | 'undef').
 
 -record(process_data, {grid :: grid:grid(term()),
-                       row_max :: pos_integer(),
-                       column_max :: pos_integer(),
+                       row_max :: grid:row_type(),
+                       column_max :: grid:column_type(),
                        value_builder :: value_builder_fun(),
-                       value_comparator :: value_comparator_fun(),
+                       value_comparator :: compare:comparator_fun(),
                        next_points_provider :: next_points_provider_type()}).
 
 %% ====================================================================
@@ -28,22 +24,17 @@
              InitPoints :: [grid:point_type()],
              ResultPoints :: [grid:point_type()],
              ValueBuilder :: value_builder_fun(),
-             ValueComparator :: value_comparator_fun(),
+             ValueComparator :: compare:comparator_fun(),
              NextPointsProvider :: next_points_provider_type()) -> [grid:point_type()].
 search(Grid, InitPoints, ResultPoints, ValueBuilder, ValueComparator, NextPointsProvider) ->
-    %%RowMax = grid:get_row_count(Grid),
     RowCount = grid:get_row_count(Grid),
-    %%ColumnMax = grid:get_column_count(Grid),
     ColumnCount = grid:get_column_count(Grid),
     ProcessData = #process_data{grid = Grid,
-                                %%row_max = RowMax,
                                 row_max = RowCount,
-                                %%column_max = ColumnMax,
                                 column_max = ColumnCount,
                                 value_builder = ValueBuilder,
                                 value_comparator = ValueComparator,
                                 next_points_provider = NextPointsProvider},
-    %%InitResult = init_result_storage(InitPoints, Grid, create_result_storage(RowMax, ColumnMax)),
     InitResult = init_result_storage(InitPoints, Grid, grid:create(RowCount, ColumnCount, undef)),
     Result = process_grid(InitPoints, ProcessData, InitResult),
     {Value, Path} = process_result(ResultPoints, Result, ValueComparator, undef),
@@ -115,7 +106,7 @@ process_next_point({ActualValue, ActualPath}, {NextValue, _NextPath}, {RowNext, 
 
 -spec process_result(Points :: [grid:point_type()],
                      Result :: result_type(),
-                     ValueComparator :: value_comparator_fun(),
+                     ValueComparator :: compare:comparator_fun(),
                      ResultValue :: {Value :: term(), Path :: [grid:point_type()]} | 'undef') ->
     {Value :: term(), Path :: [grid:point_type()]}.
 process_result([], _Result, _ValueComparator, Value) -> Value;

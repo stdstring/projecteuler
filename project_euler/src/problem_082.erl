@@ -37,8 +37,7 @@ solve(GridData) ->
 %% Internal functions
 %% ====================================================================
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_next_points(Point :: grid:point_type(), _RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
+-spec get_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_next_points({_Row, ColumnMax}, _RowMax, ColumnMax) -> [];
 get_next_points({1, Column}, _RowMax, _ColumnMax) -> [{1, Column + 1}, {2, Column}];
 get_next_points({RowMax, Column}, RowMax, _ColumnMax) -> [{RowMax, Column + 1}, {RowMax - 1, Column}];

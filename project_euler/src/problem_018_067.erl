@@ -29,7 +29,7 @@ prepare_data(ModuleSourceDir, Filename) ->
 -spec solve(PreparedInput :: term()) -> term().
 solve(Data) ->
     RowCount = length(Data),
-    Grid = fill(Data, 1, 1, grid:create(RowCount, RowCount, undef)),
+    Grid = grid:copy(lists:map(fun(Row) -> Row ++ lists:duplicate(RowCount - length(Row), undef) end, Data)),
     InitPoints = [{1, 1}],
     ResultPoints = lists:map(fun(Number) -> {RowCount, Number} end, lists:seq(1, RowCount)),
     ValueBuilder = fun(AccValue, PointValue) -> AccValue + PointValue end,
@@ -41,16 +41,6 @@ solve(Data) ->
 %% Internal functions
 %% ====================================================================
 
-%% TODO (std_string) : think about refactoring this
-%%-spec fill(Data :: [[pos_integer]], Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid(pos_integer() | 'undef')) -> grid_type(pos_integer() | 'undef').
--spec fill(Data :: [[pos_integer()]], Row :: grid:row_type(), Column :: grid:column_type(), Grid :: grid:grid(pos_integer() | 'undef')) ->
-    grid:grid(pos_integer() | 'undef').
-fill([], _Row, _Column, Grid) -> Grid;
-fill([[] | Rows], Row, _Column, Grid) -> fill(Rows, Row + 1, 1, Grid);
-fill([[Value | RowRest] | Rows], Row, Column, Grid) ->
-    fill([RowRest] ++ Rows, Row, Column + 1, grid:set_value(Row, Column, Value, Grid)).
-
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
 -spec get_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_next_points({RowMax, _Column}, RowMax, _ColumnMax) -> [];
 get_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row + 1, Column}, {Row + 1, Column + 1}].

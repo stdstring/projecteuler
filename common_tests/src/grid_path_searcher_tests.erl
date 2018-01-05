@@ -64,22 +64,19 @@ generate_source_grid() ->
 -spec build_next_value(AccValue :: pos_integer(), PointValue :: pos_integer()) -> pos_integer().
 build_next_value(AccValue, PointValue) -> AccValue + PointValue.
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_two_way_next_points(Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()].
+-spec get_two_way_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_two_way_next_points({RowMax, ColumnMax}, RowMax, ColumnMax) -> [];
 get_two_way_next_points({RowMax, Column}, RowMax, _ColumnMax) -> [{RowMax, Column + 1}];
 get_two_way_next_points({Row, ColumnMax}, _RowMax, ColumnMax) -> [{Row + 1, ColumnMax}];
 get_two_way_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row + 1, Column}, {Row, Column + 1}].
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_three_way_next_points(Point :: grid:point_type(), _RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()].
+-spec get_three_way_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_three_way_next_points({_Row, ColumnMax}, _RowMax, ColumnMax) -> [];
 get_three_way_next_points({1, Column}, _RowMax, _ColumnMax) -> [{1, Column + 1}, {2, Column}];
 get_three_way_next_points({RowMax, Column}, RowMax, _ColumnMax) -> [{RowMax, Column + 1}, {RowMax - 1, Column}];
 get_three_way_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row + 1, Column}, {Row - 1, Column}, {Row, Column + 1}].
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_four_way_next_points(Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()].
+-spec get_four_way_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_four_way_next_points({RowMax, ColumnMax}, RowMax, ColumnMax) -> [];
 get_four_way_next_points({1, 1}, _RowMax, _ColumnMax) -> [{1, 2}, {2, 1}];
 get_four_way_next_points({1, ColumnMax}, _RowMax, ColumnMax) -> [{2, ColumnMax}, {1, ColumnMax - 1}];
@@ -94,13 +91,11 @@ get_four_way_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row - 1, Colum
 generate_triangle_source_grid() ->
     grid:copy(4, 4, [3, 0, 0, 0, 7, 4, 0, 0, 2, 4, 6, 0, 8, 5, 9, 3]).
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_direct_triangle_next_points(Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()].
+-spec get_direct_triangle_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_direct_triangle_next_points({RowMax, _Column}, RowMax, _ColumnMax) -> [];
 get_direct_triangle_next_points({Row, Column}, _RowMax, _ColumnMax) -> [{Row + 1, Column}, {Row + 1, Column + 1}].
 
-%% TODO (std_string) : think about using RowCount & ColumnCount instead of RowMax & ColumnMax
--spec get_reverse_triangle_next_points(Point :: grid:point_type(), RowMax :: pos_integer(), ColumnMax :: pos_integer()) -> [grid:point_type()].
+-spec get_reverse_triangle_next_points(Point :: grid:point_type(), RowMax :: grid:row_type(), ColumnMax :: grid:column_type()) -> [grid:point_type()].
 get_reverse_triangle_next_points({1, 1}, _RowMax, _ColumnMax) -> [];
 get_reverse_triangle_next_points({Row, 1}, _RowMax, _ColumnMax) -> [{Row - 1, 1}];
 get_reverse_triangle_next_points({Row, Row}, _RowMax, _ColumnMax) -> [{Row - 1, Row - 1}];
