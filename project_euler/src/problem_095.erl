@@ -13,6 +13,8 @@
 
 -behaviour(numerical_task_behaviour).
 
+-type result_storage() :: array:array('undef' | non_neg_integer()).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -40,11 +42,14 @@ solve(MaxNumber) ->
 %% ====================================================================
 
 
-%% TODO (std_string) : think about name
+-spec process(MaxNumber :: pos_integer(), DividerStorage :: number_dividers:dividers_storage()) -> result_storage().
 process(MaxNumber, DividerStorage) ->
     process_number(2, MaxNumber, DividerStorage, array:new([{size, MaxNumber - 1}, {fixed, true}, {default, undef}])).
 
-%% TODO (std_string) : think about name
+-spec process_number(Number :: pos_integer(),
+                     MaxNumber :: pos_integer(),
+                     DividerStorage :: number_dividers:dividers_storage(),
+                     ResultStorage :: result_storage()) -> result_storage().
 process_number(Number, MaxNumber, _DividerStorage, ResultStorage) when Number > MaxNumber -> ResultStorage;
 process_number(Number, MaxNumber, DividerStorage, ResultStorage) ->
     case array:get(Number - 2, ResultStorage) of
@@ -52,11 +57,15 @@ process_number(Number, MaxNumber, DividerStorage, ResultStorage) ->
         _Other -> process_number(Number + 1, MaxNumber, DividerStorage, ResultStorage)
     end.
 
-%% TODO (std_string) : think about name
+-spec process_chain(Number :: pos_integer(),
+                    MaxNumber :: pos_integer(),
+                    Chain :: [pos_integer()],
+                    DividersStorage :: number_dividers:dividers_storage(),
+                    ResultStorage :: result_storage()) -> result_storage().
 process_chain(Number, MaxNumber, Chain, _DividersStorage, ResultStorage) when Number > MaxNumber->
-    set_chain_values(Chain, 0, 0, ResultStorage);
+    set_chain_values(Chain, 0, ResultStorage);
 process_chain(1, _MaxNumber, Chain, _DividersStorage, ResultStorage) ->
-    set_chain_values(Chain, 0, 0, ResultStorage);
+    set_chain_values(Chain, 0, ResultStorage);
 process_chain(Number, MaxNumber, Chain, DividersStorage, ResultStorage) ->
     case array:get(Number - 2, ResultStorage) of
         undef ->
@@ -64,21 +73,21 @@ process_chain(Number, MaxNumber, Chain, DividersStorage, ResultStorage) ->
                 false -> process_chain(generate_next_number(Number, DividersStorage), MaxNumber, [Number] ++ Chain, DividersStorage, ResultStorage);
                 {true, Size} ->
                     {CyclePart, NonCyclePart} = lists:split(Size + 1, Chain),
-                    set_chain_values(NonCyclePart, 0, 0, set_chain_values(CyclePart, Size, 0, ResultStorage))
+                    set_chain_values(NonCyclePart, 0, set_chain_values(CyclePart, Size, ResultStorage))
             end;
-        _Size -> set_chain_values(Chain, 0, 0, ResultStorage)
+        _Size -> set_chain_values(Chain, 0, ResultStorage)
     end.
 
-%% TODO (std_string) : think about name
-set_chain_values([], _Value, _Delta, ResultStorage) -> ResultStorage;
-set_chain_values([Number | Rest], Value, Delta, ResultStorage) ->
-    set_chain_values(Rest, Value + Delta, Delta, array:set(Number - 2, Value, ResultStorage)).
+-spec set_chain_values(Chain :: [pos_integer()], Value :: non_neg_integer(), ResultStorage :: result_storage()) -> result_storage().
+set_chain_values([], _Value, ResultStorage) -> ResultStorage;
+set_chain_values([Number | Rest], Value, ResultStorage) -> set_chain_values(Rest, Value, array:set(Number - 2, Value, ResultStorage)).
 
-%% TODO (std_string) : think about name
-generate_next_number(Number, DividersStorage) -> sets:fold(fun(Value, Dest) -> Value + Dest end, 0, array:get(Number - 2, DividersStorage)) - Number.
-%%generate_next_number(Number, DividersStorage) -> lists:sum(sets:to_list(array:get(Number - 2, DividersStorage))) - Number.
+-spec generate_next_number(Number :: pos_integer(), DividersStorage :: number_dividers:dividers_storage()) -> pos_integer().
+generate_next_number(Number, DividersStorage) ->
+    sets:fold(fun(Value, Dest) -> Value + Dest end, 0, array:get(Number - 2, DividersStorage)) - Number.
 
-%% TODO (std_string) : think about name
+-spec check_chain(Number :: pos_integer(), Chain :: [pos_integer()], Size :: non_neg_integer()) ->
+    {'true', Size :: pos_integer()} | 'false'.
 check_chain(_Number, [], _Size) -> false;
 check_chain(Number, [Number | _Rest], Size) -> {true, Size};
 check_chain(Number, [_OtherNumber | Rest], Size) -> check_chain(Number, Rest, Size + 1).

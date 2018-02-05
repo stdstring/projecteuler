@@ -12,6 +12,9 @@
 
 -export_type ([dividers/0, dividers_storage/0]).
 
+-type create_dividers_for_prime_fun() :: fun((Prime :: pos_integer()) -> dividers()).
+-type add_divider_fun() :: fun((Divider :: pos_integer(), Number :: pos_integer(), Dividers :: dividers()) -> dividers()).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
@@ -49,24 +52,29 @@ calc_gcd(A, B) ->
     end.
 
 -spec create_dividers(MaxNumber :: pos_integer()) -> dividers_storage().
+create_dividers(MaxNumber) when not is_integer(MaxNumber); MaxNumber < 1 -> error(badarg);
 create_dividers(MaxNumber) ->
     Sieve = eratos_sieve:get_sieve(MaxNumber),
     calc_dividers(MaxNumber, Sieve).
 
 -spec calc_dividers(MaxNumber :: pos_integer(), Sieve :: eratos_sieve:sieve()) -> dividers_storage().
+calc_dividers(MaxNumber, _Sieve) when not is_integer(MaxNumber); MaxNumber < 1 -> error(badarg);
 calc_dividers(MaxNumber, Sieve) ->
     calc_dividers_impl(2, MaxNumber, Sieve, array:new([{size, MaxNumber - 1}, {fixed, true}]), fun(Prime) -> sets:from_list([1, Prime]) end, fun add_divider/3).
 
 -spec create_prime_dividers(MaxNumber :: pos_integer()) -> dividers_storage().
+create_prime_dividers(MaxNumber) when not is_integer(MaxNumber); MaxNumber < 1 -> error(badarg);
 create_prime_dividers(MaxNumber) ->
     Sieve = eratos_sieve:get_sieve(MaxNumber),
     calc_prime_dividers(MaxNumber, Sieve).
 
 -spec calc_prime_dividers(MaxNumber :: pos_integer(), Sieve :: eratos_sieve:sieve()) -> dividers_storage().
+calc_prime_dividers(MaxNumber, _Sieve) when not is_integer(MaxNumber); MaxNumber < 1 -> error(badarg);
 calc_prime_dividers(MaxNumber, Sieve) ->
     calc_dividers_impl(2, MaxNumber, Sieve, array:new([{size, MaxNumber - 1}, {fixed, true}]), fun(Prime) -> sets:from_list([Prime]) end, fun add_prime_divider/3).
 
 -spec get_number_dividers(Number :: pos_integer(), Storage :: dividers_storage()) -> dividers() | no_return().
+get_number_dividers(Number, _Storage) when not is_integer(Number); Number < 1 -> error(badarg);
 get_number_dividers(1, _Storage) -> sets:from_list([1]);
 get_number_dividers(Number, Storage) -> array:get(Number - 2, Storage).
 
@@ -97,13 +105,25 @@ is_prime_impl(Number, Factor) ->
         Rem /= 0 -> is_prime_impl(Number, Factor + 2)
     end.
 
+-spec set_number_dividers(Number :: pos_integer(), Dividers :: dividers(), Storage :: dividers_storage()) -> dividers_storage().
 set_number_dividers(Number, Dividers, Storage) -> array:set(Number - 2, Dividers, Storage).
 
+-spec calc_dividers_impl(Number :: pos_integer(),
+                         MaxNumber :: pos_integer(),
+                         Sieve :: eratos_sieve:sieve(),
+                         Storage :: dividers_storage(),
+                         CreateForPrimeFun :: create_dividers_for_prime_fun(),
+                         AddDividerFun :: add_divider_fun()) -> dividers_storage().
 calc_dividers_impl(Number, MaxNumber, _Sieve, Storage, _CreateForPrimeFun, _AddDividerFun) when Number > MaxNumber -> Storage;
 calc_dividers_impl(Number, MaxNumber, Sieve, Storage, CreateForPrimeFun, AddDividerFun) ->
     Dividers = calc_number_dividers_impl(Number, Sieve, Storage, CreateForPrimeFun, AddDividerFun),
     calc_dividers_impl(Number + 1, MaxNumber, Sieve, set_number_dividers(Number, Dividers, Storage), CreateForPrimeFun, AddDividerFun).
 
+-spec calc_number_dividers_impl(Number :: pos_integer(),
+                                Sieve :: eratos_sieve:sieve(),
+                                Storage :: dividers_storage(),
+                                CreateForPrimeFun :: create_dividers_for_prime_fun(),
+                                AddDividerFun :: add_divider_fun()) -> dividers().
 calc_number_dividers_impl(2, _Sieve, _Storage, CreateForPrimeFun, _AddDividerFun) -> CreateForPrimeFun(2);
 calc_number_dividers_impl(Number, _Sieve, Storage, _CreateForPrimeFun, AddDividerFun) when Number rem 2 == 0 ->
     AddDividerFun(2, Number, get_number_dividers(Number div 2, Storage));
@@ -116,14 +136,16 @@ calc_number_dividers_impl(Number, Sieve, Storage, CreateForPrimeFun, AddDividerF
     end.
 
 -spec search_odd_divider(Number :: pos_integer(), Divider :: pos_integer()) -> pos_integer().
-search_odd_divider(Number, Divider) when Divider >= Number -> error(badarg);
+search_odd_divider(Number, Divider) when Divider >= Number -> error(invalid_operation);
 search_odd_divider(Number, Divider) ->
     case Number rem Divider of
         0 -> Divider;
         _Other -> search_odd_divider(Number, Divider + 2)
     end.
 
+-spec add_prime_divider(Divider :: pos_integer(), Number :: pos_integer(), Dividers :: dividers()) -> dividers().
 add_prime_divider(Divider, _Number, Dividers) -> sets:add_element(Divider, Dividers).
 
+-spec add_divider(Divider :: pos_integer(), Number :: pos_integer(), Dividers :: dividers()) -> dividers().
 add_divider(Divider, Number, Dividers) ->
     sets:add_element(Number, sets:fold(fun(Value, Dest) -> sets:add_element(Value * Divider, Dest) end, Dividers, Dividers)).
