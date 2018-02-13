@@ -123,11 +123,8 @@ create_get_next_prime_entries(Sieve, MaxNumber) ->
      {format("next prime number for ~p", [MaxNumber + 1]), ?_assertEqual(undef, eratos_sieve:get_next_prime(MaxNumber + 1, Sieve))},
      {format("next prime number for ~p", [2 * MaxNumber]), ?_assertEqual(undef, eratos_sieve:get_next_prime(2 * MaxNumber, Sieve))}].
 
-%% TODO (std_string) : move into separate module
--spec format(FormatString :: string(), Args :: [term()]) -> string().
-format(FormatString, Args) -> lists:flatten(io_lib:format(FormatString, Args)).
-
--spec create_check_sieve_entries(SieveFunName :: string(), SieveFun :: fun((pos_integer()) -> eratos_sieve:sieve())) -> [tuple()].
+-spec create_check_sieve_entries(SieveFunName :: string(),
+                                 SieveFun :: fun((MaxNumber :: pos_integer()) -> eratos_sieve:sieve())) -> [tuple()].
 create_check_sieve_entries(SieveFunName, SieveFun) ->
     [{format("~s for 2", [SieveFunName]), ?_assert(check_sieve(2, [], SieveFun(2)))},
      {format("~s for 3", [SieveFunName]), ?_assert(check_sieve(3, [1], SieveFun(3)))},
@@ -144,7 +141,12 @@ create_check_sieve_entries(SieveFunName, SieveFun) ->
      {format("~s for 19", [SieveFunName]), ?_assert(check_sieve(19, [1, 1, 1, 0, 1, 1, 0, 1, 1], SieveFun(19)))},
      {format("~s for 21", [SieveFunName]), ?_assert(check_sieve(21, [1, 1, 1, 0, 1, 1, 0, 1, 1, 0], SieveFun(21)))}].
 
--spec check_sieve(ExpectedMaxNumber :: pos_integer(), ExpectedData :: [non_neg_integer()], Sieve :: eratos_sieve:sieve()) -> boolean().
+-spec check_sieve(ExpectedMaxNumber :: pos_integer(),
+                  ExpectedData :: [non_neg_integer()], Sieve :: eratos_sieve:sieve()) -> boolean().
 check_sieve(2, _ExpectedData, {sieve, 2, none}) -> true;
 check_sieve(ExpectedMaxNumber, ExpectedData, {sieve, ActualMaxNumber, SieveData}) ->
     (ExpectedMaxNumber == ActualMaxNumber) and (mutable_uint8_array:to_list(SieveData) == ExpectedData).
+
+%% TODO (std_string) : move into separate module
+-spec format(FormatString :: string(), Args :: [term()]) -> string().
+format(FormatString, Args) -> lists:flatten(io_lib:format(FormatString, Args)).
