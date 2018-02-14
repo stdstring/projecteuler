@@ -105,8 +105,8 @@ create_is_prime_entries(Sieve, MaxNumber) ->
      {"check that 9 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(9, Sieve))},
      {"check that 13 is prime number", ?_assertEqual(true, eratos_sieve:is_prime(13, Sieve))},
      {"check that 15 isn't prime number", ?_assertEqual(false, eratos_sieve:is_prime(15, Sieve))},
-     {format("check that result for ~p is undefined", [MaxNumber + 1]), ?_assertEqual(undef, eratos_sieve:is_prime(MaxNumber + 1, Sieve))},
-     {format("check that result for ~p is undefined", [2 * MaxNumber]), ?_assertEqual(undef, eratos_sieve:is_prime(2 * MaxNumber, Sieve))}].
+     {string_utils:format("check that result for ~p is undefined", [MaxNumber + 1]), ?_assertEqual(undef, eratos_sieve:is_prime(MaxNumber + 1, Sieve))},
+     {string_utils:format("check that result for ~p is undefined", [2 * MaxNumber]), ?_assertEqual(undef, eratos_sieve:is_prime(2 * MaxNumber, Sieve))}].
 
 -spec create_get_next_prime_entries(Sieve :: eratos_sieve:sieve(), MaxNumber :: pos_integer()) -> [tuple()].
 create_get_next_prime_entries(Sieve, MaxNumber) ->
@@ -119,34 +119,30 @@ create_get_next_prime_entries(Sieve, MaxNumber) ->
      {"next prime number for 9", ?_assertEqual(11, eratos_sieve:get_next_prime(9, Sieve))},
      {"next prime number for 10", ?_assertEqual(11, eratos_sieve:get_next_prime(10, Sieve))},
      {"next prime number for 11", ?_assertEqual(13, eratos_sieve:get_next_prime(11, Sieve))},
-     {format("next prime number for ~p", [MaxNumber]), ?_assertEqual(undef, eratos_sieve:get_next_prime(MaxNumber, Sieve))},
-     {format("next prime number for ~p", [MaxNumber + 1]), ?_assertEqual(undef, eratos_sieve:get_next_prime(MaxNumber + 1, Sieve))},
-     {format("next prime number for ~p", [2 * MaxNumber]), ?_assertEqual(undef, eratos_sieve:get_next_prime(2 * MaxNumber, Sieve))}].
+     {string_utils:format("next prime number for ~p", [MaxNumber]), ?_assertEqual(undef, eratos_sieve:get_next_prime(MaxNumber, Sieve))},
+     {string_utils:format("next prime number for ~p", [MaxNumber + 1]), ?_assertEqual(undef, eratos_sieve:get_next_prime(MaxNumber + 1, Sieve))},
+     {string_utils:format("next prime number for ~p", [2 * MaxNumber]), ?_assertEqual(undef, eratos_sieve:get_next_prime(2 * MaxNumber, Sieve))}].
 
 -spec create_check_sieve_entries(SieveFunName :: string(),
                                  SieveFun :: fun((MaxNumber :: pos_integer()) -> eratos_sieve:sieve())) -> [tuple()].
 create_check_sieve_entries(SieveFunName, SieveFun) ->
-    [{format("~s for 2", [SieveFunName]), ?_assert(check_sieve(2, [], SieveFun(2)))},
-     {format("~s for 3", [SieveFunName]), ?_assert(check_sieve(3, [1], SieveFun(3)))},
-     {format("~s for 4", [SieveFunName]), ?_assert(check_sieve(4, [1], SieveFun(4)))},
-     {format("~s for 5", [SieveFunName]), ?_assert(check_sieve(5, [1, 1], SieveFun(5)))},
-     {format("~s for 6", [SieveFunName]), ?_assert(check_sieve(6, [1, 1], SieveFun(6)))},
-     {format("~s for 7", [SieveFunName]), ?_assert(check_sieve(7, [1, 1, 1], SieveFun(7)))},
-     {format("~s for 8", [SieveFunName]), ?_assert(check_sieve(8, [1, 1, 1], SieveFun(8)))},
-     {format("~s for 9", [SieveFunName]), ?_assert(check_sieve(9, [1, 1, 1, 0], SieveFun(9)))},
-     {format("~s for 11", [SieveFunName]), ?_assert(check_sieve(11, [1, 1, 1, 0, 1], SieveFun(11)))},
-     {format("~s for 13", [SieveFunName]), ?_assert(check_sieve(13, [1, 1, 1, 0, 1, 1], SieveFun(13)))},
-     {format("~s for 15", [SieveFunName]), ?_assert(check_sieve(15, [1, 1, 1, 0, 1, 1, 0], SieveFun(15)))},
-     {format("~s for 17", [SieveFunName]), ?_assert(check_sieve(17, [1, 1, 1, 0, 1, 1, 0, 1], SieveFun(17)))},
-     {format("~s for 19", [SieveFunName]), ?_assert(check_sieve(19, [1, 1, 1, 0, 1, 1, 0, 1, 1], SieveFun(19)))},
-     {format("~s for 21", [SieveFunName]), ?_assert(check_sieve(21, [1, 1, 1, 0, 1, 1, 0, 1, 1, 0], SieveFun(21)))}].
+    [{string_utils:format("~s for 2", [SieveFunName]), ?_assert(check_sieve(2, [], SieveFun(2)))},
+     {string_utils:format("~s for 3", [SieveFunName]), ?_assert(check_sieve(3, [1], SieveFun(3)))},
+     {string_utils:format("~s for 4", [SieveFunName]), ?_assert(check_sieve(4, [1], SieveFun(4)))},
+     {string_utils:format("~s for 5", [SieveFunName]), ?_assert(check_sieve(5, [1, 1], SieveFun(5)))},
+     {string_utils:format("~s for 6", [SieveFunName]), ?_assert(check_sieve(6, [1, 1], SieveFun(6)))},
+     {string_utils:format("~s for 7", [SieveFunName]), ?_assert(check_sieve(7, [1, 1, 1], SieveFun(7)))},
+     {string_utils:format("~s for 8", [SieveFunName]), ?_assert(check_sieve(8, [1, 1, 1], SieveFun(8)))},
+     {string_utils:format("~s for 9", [SieveFunName]), ?_assert(check_sieve(9, [1, 1, 1, 0], SieveFun(9)))},
+     {string_utils:format("~s for 11", [SieveFunName]), ?_assert(check_sieve(11, [1, 1, 1, 0, 1], SieveFun(11)))},
+     {string_utils:format("~s for 13", [SieveFunName]), ?_assert(check_sieve(13, [1, 1, 1, 0, 1, 1], SieveFun(13)))},
+     {string_utils:format("~s for 15", [SieveFunName]), ?_assert(check_sieve(15, [1, 1, 1, 0, 1, 1, 0], SieveFun(15)))},
+     {string_utils:format("~s for 17", [SieveFunName]), ?_assert(check_sieve(17, [1, 1, 1, 0, 1, 1, 0, 1], SieveFun(17)))},
+     {string_utils:format("~s for 19", [SieveFunName]), ?_assert(check_sieve(19, [1, 1, 1, 0, 1, 1, 0, 1, 1], SieveFun(19)))},
+     {string_utils:format("~s for 21", [SieveFunName]), ?_assert(check_sieve(21, [1, 1, 1, 0, 1, 1, 0, 1, 1, 0], SieveFun(21)))}].
 
 -spec check_sieve(ExpectedMaxNumber :: pos_integer(),
                   ExpectedData :: [non_neg_integer()], Sieve :: eratos_sieve:sieve()) -> boolean().
 check_sieve(2, _ExpectedData, {sieve, 2, none}) -> true;
 check_sieve(ExpectedMaxNumber, ExpectedData, {sieve, ActualMaxNumber, SieveData}) ->
     (ExpectedMaxNumber == ActualMaxNumber) and (mutable_uint8_array:to_list(SieveData) == ExpectedData).
-
-%% TODO (std_string) : move into separate module
--spec format(FormatString :: string(), Args :: [term()]) -> string().
-format(FormatString, Args) -> lists:flatten(io_lib:format(FormatString, Args)).

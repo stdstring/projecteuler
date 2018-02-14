@@ -131,30 +131,30 @@ get_number_dividers_test_() ->
 -spec create_check_dividers_entries(CreateFunName :: string(),
                                     CreateFun :: fun((MaxNumber :: pos_integer()) -> number_dividers:dividers_storage())) -> [tuple()].
 create_check_dividers_entries(CreateFunName, CreateFun) ->
-    [{format("~s for MaxNumber = 2", [CreateFunName]), ?_assert(check(?DIVIDERS2, CreateFun(2)))},
-     {format("~s for MaxNumber = 3", [CreateFunName]), ?_assert(check(?DIVIDERS3, CreateFun(3)))},
-     {format("~s for MaxNumber = 4", [CreateFunName]), ?_assert(check(?DIVIDERS4, CreateFun(4)))},
-     {format("~s for MaxNumber = 5", [CreateFunName]), ?_assert(check(?DIVIDERS5, CreateFun(5)))},
-     {format("~s for MaxNumber = 6", [CreateFunName]), ?_assert(check(?DIVIDERS6, CreateFun(6)))},
-     {format("~s for MaxNumber = 7", [CreateFunName]), ?_assert(check(?DIVIDERS7, CreateFun(7)))},
-     {format("~s for MaxNumber = 8", [CreateFunName]), ?_assert(check(?DIVIDERS8, CreateFun(8)))},
-     {format("~s for MaxNumber = 9", [CreateFunName]), ?_assert(check(?DIVIDERS9, CreateFun(9)))},
-     {format("~s for MaxNumber = 10", [CreateFunName]), ?_assert(check(?DIVIDERS10, CreateFun(10)))}].
+    [{string_utils:format("~s for MaxNumber = 2", [CreateFunName]), ?_assert(check(?DIVIDERS2, CreateFun(2)))},
+     {string_utils:format("~s for MaxNumber = 3", [CreateFunName]), ?_assert(check(?DIVIDERS3, CreateFun(3)))},
+     {string_utils:format("~s for MaxNumber = 4", [CreateFunName]), ?_assert(check(?DIVIDERS4, CreateFun(4)))},
+     {string_utils:format("~s for MaxNumber = 5", [CreateFunName]), ?_assert(check(?DIVIDERS5, CreateFun(5)))},
+     {string_utils:format("~s for MaxNumber = 6", [CreateFunName]), ?_assert(check(?DIVIDERS6, CreateFun(6)))},
+     {string_utils:format("~s for MaxNumber = 7", [CreateFunName]), ?_assert(check(?DIVIDERS7, CreateFun(7)))},
+     {string_utils:format("~s for MaxNumber = 8", [CreateFunName]), ?_assert(check(?DIVIDERS8, CreateFun(8)))},
+     {string_utils:format("~s for MaxNumber = 9", [CreateFunName]), ?_assert(check(?DIVIDERS9, CreateFun(9)))},
+     {string_utils:format("~s for MaxNumber = 10", [CreateFunName]), ?_assert(check(?DIVIDERS10, CreateFun(10)))}].
 
 -spec create_check_prime_dividers_entries(CreateFunName :: string(),
                                           CreateFun :: fun((MaxNumber :: pos_integer()) -> number_dividers:dividers_storage())) -> [tuple()].
 create_check_prime_dividers_entries(CreateFunName, CreateFun) ->
-    [{format("~s for MaxNumber = 2", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS2, CreateFun(2)))},
-     {format("~s for MaxNumber = 3", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS3, CreateFun(3)))},
-     {format("~s for MaxNumber = 4", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS4, CreateFun(4)))},
-     {format("~s for MaxNumber = 5", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS5, CreateFun(5)))},
-     {format("~s for MaxNumber = 6", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS6, CreateFun(6)))},
-     {format("~s for MaxNumber = 7", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS7, CreateFun(7)))},
-     {format("~s for MaxNumber = 8", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS8, CreateFun(8)))},
-     {format("~s for MaxNumber = 9", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS9, CreateFun(9)))},
-     {format("~s for MaxNumber = 10", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS10, CreateFun(10)))},
-     {format("~s for MaxNumber = 11", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS11, CreateFun(11)))},
-     {format("~s for MaxNumber = 12", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS12, CreateFun(12)))}].
+    [{string_utils:format("~s for MaxNumber = 2", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS2, CreateFun(2)))},
+     {string_utils:format("~s for MaxNumber = 3", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS3, CreateFun(3)))},
+     {string_utils:format("~s for MaxNumber = 4", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS4, CreateFun(4)))},
+     {string_utils:format("~s for MaxNumber = 5", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS5, CreateFun(5)))},
+     {string_utils:format("~s for MaxNumber = 6", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS6, CreateFun(6)))},
+     {string_utils:format("~s for MaxNumber = 7", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS7, CreateFun(7)))},
+     {string_utils:format("~s for MaxNumber = 8", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS8, CreateFun(8)))},
+     {string_utils:format("~s for MaxNumber = 9", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS9, CreateFun(9)))},
+     {string_utils:format("~s for MaxNumber = 10", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS10, CreateFun(10)))},
+     {string_utils:format("~s for MaxNumber = 11", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS11, CreateFun(11)))},
+     {string_utils:format("~s for MaxNumber = 12", [CreateFunName]), ?_assert(check(?PRIME_DIVIDERS12, CreateFun(12)))}].
 
 -spec check(Expected :: [{Number :: pos_integer(), ExpectedDividers :: [pos_integer()]}],
             Storage :: number_dividers:dividers_storage()) -> 'ok'.
@@ -169,7 +169,3 @@ check([{Number, ExpectedDividers} | Rest], Storage) ->
 -spec check_dividers(Expected :: [pos_integer()], Actual :: number_dividers:dividers()) -> boolean().
 check_dividers(Expected, Actual) ->
     Expected == lists:sort(sets:to_list(Actual)).
-
-%% TODO (std_string) : move into separate module
--spec format(FormatString :: string(), Args :: [term()]) -> string().
-format(FormatString, Args) -> lists:flatten(io_lib:format(FormatString, Args)).

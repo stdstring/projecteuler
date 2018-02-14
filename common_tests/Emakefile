@@ -13,3 +13,4 @@
 {'src/pell_equation_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/permutations_tests', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/rational_tests', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/string_utils_tests', [warnings_as_errors, {outdir, "ebin"}]}.
