@@ -59,6 +59,14 @@ several_array_test_()->
      {"read value from second array from cell with index 2", ?_assertEqual(77, mutable_uint8_array:get(2, SecondArray))},
      {"read value from second array from cell with index 3", ?_assertEqual(66, mutable_uint8_array:get(3, SecondArray))}].
 
+to_list_test() ->
+    ?assertEqual(ok, mutable_uint8_array:init()),
+    Array = mutable_uint8_array:create(6, 99),
+    mutable_uint8_array:set(0, 11, Array),
+    mutable_uint8_array:set(2, 22, Array),
+    mutable_uint8_array:set(4, 33, Array),
+    ?assertEqual([11, 99, 22, 99, 33, 99], mutable_uint8_array:to_list(Array)).
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================

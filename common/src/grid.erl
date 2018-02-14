@@ -13,7 +13,7 @@
 
 -type grid(ElementType) :: #grid{grid :: grid_type(ElementType)}.
 
--export_type ([row_type/0, column_type/0, point_type/0, grid/1]).
+-export_type([row_type/0, column_type/0, point_type/0, grid/1]).
 
 %% ====================================================================
 %% API functions
