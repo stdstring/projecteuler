@@ -65,6 +65,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 69. Totient maximum](https://projecteuler.net/problem=69)
 * [Problem 70. Totient permutation](https://projecteuler.net/problem=70)
 * [Problem 71. Ordered fractions](https://projecteuler.net/problem=71)
+* [Problem 72. Counting fractions](https://projecteuler.net/problem=72)
 * [Problem 73. Counting fractions in a range](https://projecteuler.net/problem=73)
 * [Problem 74. Digit factorial chains](https://projecteuler.net/problem=74)
 * [Problem 76. Counting summations](https://projecteuler.net/problem=76)
