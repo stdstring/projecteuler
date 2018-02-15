@@ -63,6 +63,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 67. Maximum path sum II](https://projecteuler.net/problem=67)
 * [Problem 68. Magic 5-gon ring](https://projecteuler.net/problem=68)
 * [Problem 69. Totient maximum](https://projecteuler.net/problem=69)
+* [Problem 70. Totient permutation](https://projecteuler.net/problem=70)
 * [Problem 71. Ordered fractions](https://projecteuler.net/problem=71)
 * [Problem 73. Counting fractions in a range](https://projecteuler.net/problem=73)
 * [Problem 74. Digit factorial chains](https://projecteuler.net/problem=74)
