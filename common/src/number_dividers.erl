@@ -2,7 +2,15 @@
 
 -module(number_dividers).
 
--export([get_dividers/1, is_prime/1, calc_gcd/2, create_dividers/1, calc_dividers/2, create_prime_dividers/1, calc_prime_dividers/2, get_number_dividers/2]).
+-export([get_dividers/1,
+         is_prime/1,
+         calc_gcd/2,
+         create_dividers/1,
+         calc_dividers/2,
+         create_prime_dividers/1,
+         calc_prime_dividers/2,
+         get_number_dividers/2,
+         calc_euler_function/2]).
 
 %% TODO (std_string) : think about this
 -include("primes_def.hrl").
@@ -77,6 +85,13 @@ calc_prime_dividers(MaxNumber, Sieve) ->
 get_number_dividers(Number, _Storage) when not is_integer(Number); Number < 1 -> error(badarg);
 get_number_dividers(1, _Storage) -> sets:from_list([1]);
 get_number_dividers(Number, Storage) -> array:get(Number - 2, Storage).
+
+-spec calc_euler_function(Number :: pos_integer(), PrimeDividers :: [pos_integer()]) -> pos_integer().
+calc_euler_function(Number, PrimeDividers) when not is_integer(Number); Number < 1; not is_list(PrimeDividers) -> error(badarg);
+calc_euler_function(1, _PrimeDividers) -> 1;
+calc_euler_function(Number, PrimeDividers) ->
+    {Numerator, Denominator} = lists:foldl(fun(Prime, {ResultN, ResultD}) -> {(Prime - 1) * ResultN, Prime * ResultD} end, {1, 1}, PrimeDividers),
+    Number * Numerator div Denominator.
 
 %% ====================================================================
 %% Internal functions

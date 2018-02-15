@@ -124,6 +124,85 @@ get_number_dividers_test_() ->
      {"get_number_dividers for 9", ?_assert(check_dividers([1, 3, 9], number_dividers:get_number_dividers(9, Storage)))},
      {"get_number_dividers for 10", ?_assert(check_dividers([1, 2, 5, 10], number_dividers:get_number_dividers(10, Storage)))}].
 
+calc_euler_function_error_test_() ->
+    [{"calc_euler_function for Number = -1", ?_assertError(badarg, number_dividers:calc_euler_function(-1, [2]))},
+     {"calc_euler_function for Number = 0", ?_assertError(badarg, number_dividers:calc_euler_function(0, [2]))},
+     {"calc_euler_function for Number = 3.1415926", ?_assertError(badarg, number_dividers:calc_euler_function(3.1415926, [2]))},
+     {"calc_euler_function for PrimeDividers = none", ?_assertError(badarg, number_dividers:calc_euler_function(2, none))}].
+
+calc_euler_function_test_() ->
+    MaxNumber = 99,
+    Storage = number_dividers:create_prime_dividers(MaxNumber),
+    [create_calc_euler_function_entry(1, Storage, 1),
+     create_calc_euler_function_entry(2, Storage, 1),
+     create_calc_euler_function_entry(3, Storage, 2),
+     create_calc_euler_function_entry(4, Storage, 2),
+     create_calc_euler_function_entry(5, Storage, 4),
+     create_calc_euler_function_entry(6, Storage, 2),
+     create_calc_euler_function_entry(7, Storage, 6),
+     create_calc_euler_function_entry(8, Storage, 4),
+     create_calc_euler_function_entry(9, Storage, 6),
+     create_calc_euler_function_entry(10, Storage, 4),
+     create_calc_euler_function_entry(11, Storage, 10),
+     create_calc_euler_function_entry(12, Storage, 4),
+     create_calc_euler_function_entry(13, Storage, 12),
+     create_calc_euler_function_entry(14, Storage, 6),
+     create_calc_euler_function_entry(15, Storage, 8),
+     create_calc_euler_function_entry(16, Storage, 8),
+     create_calc_euler_function_entry(17, Storage, 16),
+     create_calc_euler_function_entry(18, Storage, 6),
+     create_calc_euler_function_entry(19, Storage, 18),
+     create_calc_euler_function_entry(20, Storage, 8),
+     create_calc_euler_function_entry(21, Storage, 12),
+     create_calc_euler_function_entry(22, Storage, 10),
+     create_calc_euler_function_entry(23, Storage, 22),
+     create_calc_euler_function_entry(24, Storage, 8),
+     create_calc_euler_function_entry(25, Storage, 20),
+     create_calc_euler_function_entry(26, Storage, 12),
+     create_calc_euler_function_entry(27, Storage, 18),
+     create_calc_euler_function_entry(28, Storage, 12),
+     create_calc_euler_function_entry(29, Storage, 28),
+     create_calc_euler_function_entry(30, Storage, 8),
+     create_calc_euler_function_entry(31, Storage, 30),
+     create_calc_euler_function_entry(32, Storage, 16),
+     create_calc_euler_function_entry(33, Storage, 20),
+     create_calc_euler_function_entry(34, Storage, 16),
+     create_calc_euler_function_entry(35, Storage, 24),
+     create_calc_euler_function_entry(36, Storage, 12),
+     create_calc_euler_function_entry(37, Storage, 36),
+     create_calc_euler_function_entry(38, Storage, 18),
+     create_calc_euler_function_entry(39, Storage, 24),
+     create_calc_euler_function_entry(40, Storage, 16),
+     create_calc_euler_function_entry(41, Storage, 40),
+     create_calc_euler_function_entry(42, Storage, 12),
+     create_calc_euler_function_entry(43, Storage, 42),
+     create_calc_euler_function_entry(44, Storage, 20),
+     create_calc_euler_function_entry(45, Storage, 24),
+     create_calc_euler_function_entry(46, Storage, 22),
+     create_calc_euler_function_entry(47, Storage, 46),
+     create_calc_euler_function_entry(48, Storage, 16),
+     create_calc_euler_function_entry(49, Storage, 42),
+     create_calc_euler_function_entry(50, Storage, 20),
+     create_calc_euler_function_entry(51, Storage, 32),
+     create_calc_euler_function_entry(52, Storage, 24),
+     create_calc_euler_function_entry(53, Storage, 52),
+     create_calc_euler_function_entry(54, Storage, 18),
+     create_calc_euler_function_entry(55, Storage, 40),
+     create_calc_euler_function_entry(56, Storage, 24),
+     create_calc_euler_function_entry(57, Storage, 36),
+     create_calc_euler_function_entry(58, Storage, 28),
+     create_calc_euler_function_entry(59, Storage, 58),
+     create_calc_euler_function_entry(60, Storage, 16),
+     create_calc_euler_function_entry(61, Storage, 60),
+     create_calc_euler_function_entry(62, Storage, 30),
+     create_calc_euler_function_entry(63, Storage, 36),
+     create_calc_euler_function_entry(64, Storage, 32),
+     create_calc_euler_function_entry(65, Storage, 48),
+     create_calc_euler_function_entry(66, Storage, 20),
+     create_calc_euler_function_entry(67, Storage, 66),
+     create_calc_euler_function_entry(68, Storage, 32),
+     create_calc_euler_function_entry(69, Storage, 44)].
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
@@ -167,5 +246,11 @@ check([{Number, ExpectedDividers} | Rest], Storage) ->
     end.
 
 -spec check_dividers(Expected :: [pos_integer()], Actual :: number_dividers:dividers()) -> boolean().
-check_dividers(Expected, Actual) ->
-    Expected == lists:sort(sets:to_list(Actual)).
+check_dividers(Expected, Actual) -> Expected == lists:sort(sets:to_list(Actual)).
+
+-spec create_calc_euler_function_entry(Number :: pos_integer(),
+                                       Storage :: number_dividers:dividers_storage(),
+                                       ExpectedValue :: pos_integer()) -> tuple().
+create_calc_euler_function_entry(Number, Storage, ExpectedValue) ->
+    {string_utils:format("calc_euler_function for Number = ~p", [Number]),
+     ?_assertEqual(ExpectedValue, number_dividers:calc_euler_function(Number, sets:to_list(number_dividers:get_number_dividers(Number, Storage))))}.
