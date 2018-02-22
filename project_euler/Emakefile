@@ -85,6 +85,7 @@
 {'src/problem_100', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_102', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_104', [warnings_as_errors, {outdir, "ebin"}]}.
+{'src/problem_112', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_144', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_187', [warnings_as_errors, {outdir, "ebin"}]}.
 {'src/problem_206', [warnings_as_errors, {outdir, "ebin"}]}.
