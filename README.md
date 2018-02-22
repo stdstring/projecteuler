@@ -76,6 +76,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 85. Counting rectangles](https://projecteuler.net/problem=85)
 * [Problem 87. Prime power triples](https://projecteuler.net/problem=87)
 * [Problem 89. Roman numerals](https://projecteuler.net/problem=89)
+* [Problem 91. Right triangles with integer coordinates](https://projecteuler.net/problem=91)
 * [Problem 92. Square digit chains](https://projecteuler.net/problem=92)
 * [Problem 93. Arithmetic expressions](https://projecteuler.net/problem=93)
 * [Problem 94. Almost equilateral triangles](https://projecteuler.net/problem=94)
