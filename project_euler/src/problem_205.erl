@@ -39,7 +39,13 @@ solve({FirstDice, FirstCount, SecondDice, SecondCount}) ->
 %% Internal functions
 %% ====================================================================
 
-%% TODO (std_string): add description
+%% Description:
+%% Let we have a set of N identical dice (with K faces), then State - the result of some roll of all these dices.
+%% Let L - the set of all possible states for a set of N identical dice.
+%% For each element (state) of L, we calculate the sum of the values of the roll of all dice and
+%% sort the states in the set L according to the value of the sum in ascending order - get an ordered set L '.
+%% It is easy to show that the values of sum for all states are in the range [N, N * K] without any holes.
+%% Then, for any value, we can easily find out how many states have a sum less than this value (using an ordered set of L ').
 
 -spec process(FirstDice :: dice(), FirstDiceCount :: pos_integer(), SecondDice :: dice(), SecondDiceCount :: pos_integer()) -> non_neg_integer().
 process(FirstDice, FirstDiceCount, SecondDice, SecondDiceCount) ->
