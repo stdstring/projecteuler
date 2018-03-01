@@ -1,10 +1,21 @@
 %% @author std-string
 
 -module(numbers).
--export([power/2, factorial/1, get_digits/1, get_digits/2, get_number/1, get_number/2, calc_binomial_coeff/2, is_perfect_square/1]).
+-export([power/2,
+         factorial/1,
+         get_digits/1,
+         get_digits/2,
+         get_digits_count/1,
+         get_digits_count/2,
+         get_number/1,
+         get_number/2,
+         calc_binomial_coeff/2,
+         is_perfect_square/1]).
 
 -type digit() :: 0..9.
 -type digits() :: [digit()].
+
+-export_type([digit/0, digits/0]).
 
 %% ====================================================================
 %% API functions
@@ -31,8 +42,16 @@ get_digits(Number) -> get_digits(Number, 10).
 get_digits(Number, _Base) when not is_integer(Number); Number < 0 ->  error(badarg);
 get_digits(_Number, Base) when not is_integer(Base); Base < 2; Base > 10 ->  error(badarg);
 get_digits(0, _Base) -> [0];
-get_digits(Number, Base) ->
-    get_digits_impl(Number, Base, []).
+get_digits(Number, Base) -> get_digits_impl(Number, Base, []).
+
+-spec get_digits_count(Number :: pos_integer()) -> pos_integer().
+get_digits_count(Number) -> get_digits_count(Number, 10).
+
+-spec get_digits_count(Number :: pos_integer(), Base :: 2..10) -> pos_integer().
+get_digits_count(Number, _Base) when not is_integer(Number); Number < 0 ->  error(badarg);
+get_digits_count(_Number, Base) when not is_integer(Base); Base < 2; Base > 10 ->  error(badarg);
+get_digits_count(0, _Base) -> 1;
+get_digits_count(Number, Base) -> get_digits_count_impl(Number, Base, 0).
 
 -spec get_number(Digits :: digits()) -> non_neg_integer().
 get_number(Digits) -> get_number(Digits, 10).
@@ -74,8 +93,11 @@ factorial_impl(Number, Product) -> factorial_impl(Number - 1, Product * Number).
 
 -spec get_digits_impl(Number :: pos_integer(), Base :: 2..10, Digits :: [non_neg_integer()]) -> [non_neg_integer()].
 get_digits_impl(0, _Base, Digits) -> Digits;
-get_digits_impl(Number, Base, Digits) ->
-    get_digits_impl(Number div Base, Base, [Number rem Base] ++ Digits).
+get_digits_impl(Number, Base, Digits) -> get_digits_impl(Number div Base, Base, [Number rem Base] ++ Digits).
+
+-spec get_digits_count_impl(Number :: pos_integer(), Base :: pos_integer(), Count :: non_neg_integer()) -> pos_integer().
+get_digits_count_impl(0, _Base, Count) -> Count;
+get_digits_count_impl(Number, Base, Count) -> get_digits_count_impl(Number div Base, Base, Count + 1).
 
 -spec get_number_impl(Digits :: [non_neg_integer()], Base :: 2..10, Number :: non_neg_integer()) -> non_neg_integer().
 get_number_impl([], _Base, Number) -> Number;

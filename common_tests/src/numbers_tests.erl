@@ -52,6 +52,27 @@ get_digits_error_test_() ->
      {"get digits for base < 2", ?_assertError(badarg, numbers:get_digits(0, 1))},
      {"get digits for base > 10", ?_assertError(badarg, numbers:get_digits(0, 11))}].
 
+get_digits_count_base10_test_() ->
+    [{"get digits count for 0", ?_assertEqual(1, numbers:get_digits_count(0))},
+     {"get digits count for 1", ?_assertEqual(1, numbers:get_digits_count(1))},
+     {"get digits count for 7", ?_assertEqual(1, numbers:get_digits_count(7))},
+     {"get digits count for 10", ?_assertEqual(2, numbers:get_digits_count(10))},
+     {"get digits count for 79", ?_assertEqual(2, numbers:get_digits_count(79))},
+     {"get digits count for 231", ?_assertEqual(3, numbers:get_digits_count(231))},
+     {"get digits count for 1931", ?_assertEqual(4, numbers:get_digits_count(1931))}].
+
+get_digits_count_base2_test_() ->
+    [{"get digits count for 0", ?_assertEqual(1, numbers:get_digits_count(0, 2))},
+     {"get digits count for 1", ?_assertEqual(1, numbers:get_digits_count(1, 2))},
+     {"get digits count for 3", ?_assertEqual(2, numbers:get_digits_count(3, 2))},
+     {"get digits count for 5", ?_assertEqual(3, numbers:get_digits_count(5, 2))}].
+
+get_digits_count_error_test_() ->
+    [{"get digits count for 2.0 on the base 10", ?_assertError(badarg, numbers:get_digits_count(2.0))},
+     {"get digits count for 2.0 on the base 2", ?_assertError(badarg, numbers:get_digits_count(2.0, 2))},
+     {"get digits count for base < 2", ?_assertError(badarg, numbers:get_digits_count(0, 1))},
+     {"get digits count for base > 10", ?_assertError(badarg, numbers:get_digits_count(0, 11))}].
+
 get_number_base10_test_() ->
     [{"get digits for [0]", ?_assertEqual(0, numbers:get_number([0]))},
      {"get digits for [8]", ?_assertEqual(8, numbers:get_number([8]))},

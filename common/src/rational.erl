@@ -7,6 +7,8 @@
 -type rational_fraction() :: {Numerator :: integer(), Denominator :: non_zero_integer()}.
 -type rational_number() :: IntegerNumber :: integer() | rational_fraction().
 
+-export_type([non_zero_integer/0, rational_fraction/0, rational_number/0]).
+
 %% ====================================================================
 %% API functions
 %% ====================================================================
