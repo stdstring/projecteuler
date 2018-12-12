@@ -5,7 +5,7 @@ project(MutableUInt8ArrayNif CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories($ENV{OTP_ROOT}/erts-7.1/include)
+include_directories($ENV{OTP_ROOT}/erts-10.0.1/include)
 
 add_library(MutableUInt8ArrayNif SHARED dllmain.cpp MutableUInt8ArrayNif.cpp)
 

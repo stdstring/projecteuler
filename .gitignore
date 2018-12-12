@@ -1,7 +1,12 @@
-common/ebin/*
-common_tests/ebin/*
-numerical_task/ebin/*
-project_euler/ebin/*
-nif/bin/*
-nif/make/*
-erl_crash.dump
+# for erlang impl
+projecteuler.erlang/common/ebin/*
+projecteuler.erlang/common_tests/ebin/*
+projecteuler.erlang/numerical_task/ebin/*
+projecteuler.erlang/project_euler/ebin/*
+projecteuler.erlang/nif/bin/*
+projecteuler.erlang/nif/make/*
+projecteuler.erlang/erl_crash.dump
+# for fsharp impl
+projecteuler.fsharp/.vs
+projecteuler.fsharp/**/bin
+projecteuler.fsharp/**/obj
