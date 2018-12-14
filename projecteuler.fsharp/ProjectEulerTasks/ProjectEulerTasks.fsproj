@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Program.fs" />
+    <Compile Include="Utils\TimeThresholds.fs" />
+    <Compile Include="Utils\SolutionUtils.fs" />
+    <Compile Include="Problem001.fs" />
   </ItemGroup>
 
   <ItemGroup>
