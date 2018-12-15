@@ -12,7 +12,7 @@ type FibonacciData = {mutable Prev: int; mutable Current: int}
 [<TestFixture>]
 type Problem002() =
 
-    let solveImple (maxNumber: int) =
+    let solveImpl (maxNumber: int) =
         let data = {FibonacciData.Prev = 0; FibonacciData.Current = 1}
         let generator = fun index ->
             let next = data.Prev + data.Current
@@ -24,4 +24,4 @@ type Problem002() =
     [<TestCase(99, 44, TimeThresholds.HardTimeLimit)>]
     [<TestCase(3999999, 4613732, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(maxNumber: int, expectedAnswer: int, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImple maxNumber)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl maxNumber)
