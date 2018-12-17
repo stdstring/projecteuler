@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Data\problem_008.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Utils\TimeThresholds.fs" />
     <Compile Include="Utils\SolutionUtils.fs" />
     <Compile Include="Problem001.fs" />
@@ -21,6 +24,7 @@
     <Compile Include="Problem004.fs" />
     <Compile Include="Problem006.fs" />
     <Compile Include="Problem007.fs" />
+    <Compile Include="Problem008.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +34,7 @@
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.5.4" />
   </ItemGroup>
+
+  <ItemGroup />
 
 </Project>
