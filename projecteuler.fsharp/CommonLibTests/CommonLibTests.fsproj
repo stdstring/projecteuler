@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="EratosSieveTests.fs" />
     <Compile Include="NumbersTests.fs" />
     <Compile Include="NumbersRelationTests.fs" />
   </ItemGroup>

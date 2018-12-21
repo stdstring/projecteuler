@@ -25,6 +25,7 @@
     <Compile Include="Problem006.fs" />
     <Compile Include="Problem007.fs" />
     <Compile Include="Problem008.fs" />
+    <Compile Include="Problem010.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +35,5 @@
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.5.4" />
   </ItemGroup>
-
-  <ItemGroup />
 
 </Project>
