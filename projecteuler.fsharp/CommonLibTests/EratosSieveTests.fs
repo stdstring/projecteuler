@@ -125,6 +125,7 @@ type EratosSieveTests() =
 [<Category("Performance")>]
 type EratosSievePerformanceTests() =
 
+    // TODO (std_string) : think about moving into the common utils
     let measureExecutionTime (operation: unit -> unit) =
         let stopwatch = Stopwatch.StartNew()
         operation ()

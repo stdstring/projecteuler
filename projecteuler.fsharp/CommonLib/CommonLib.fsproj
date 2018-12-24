@@ -8,6 +8,7 @@
     <Compile Include="EratosSieve.fs" />
     <Compile Include="Numbers.fs" />
     <Compile Include="NumbersRelation.fs" />
+    <Compile Include="PythagoreanTriples.fs" />
   </ItemGroup>
 
   <ItemGroup>
