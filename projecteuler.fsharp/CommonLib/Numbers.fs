@@ -41,6 +41,18 @@ type Numbers =
         let radixBig = bigint radix
         digits |> List.fold (fun number digit -> number * radixBig + (bigint digit)) 0I
 
+    static member public CalcFactorial(number: int) =
+        number |> bigint |> Numbers.CalcFactorial
+
+    static member public CalcFactorial(number: int64) =
+        number |> bigint |> Numbers.CalcFactorial
+
+    static member public CalcFactorial(number: bigint) =
+        match number with
+        | _ when number < 0I -> raise (ArgumentOutOfRangeException("number"))
+        | _ when number = 0I -> 1I
+        | _ -> seq {1I .. number} |> Seq.fold (fun product number -> product * number) 1I
+
     static member private CheckRadix(radix: int) =
         match radix with
         | _ when radix < 2 -> raise (ArgumentOutOfRangeException("radix"))
