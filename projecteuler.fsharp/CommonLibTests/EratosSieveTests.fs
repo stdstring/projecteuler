@@ -120,27 +120,3 @@ type EratosSieveTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
         expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> convertOptionValue bigint, shift |> bigint |> (+) 2I |> sieve.GetNextPrime))
-
-[<TestFixture>]
-[<Category("Performance")>]
-type EratosSievePerformanceTests() =
-
-    // TODO (std_string) : think about moving into the common utils
-    let measureExecutionTime (operation: unit -> unit) =
-        let stopwatch = Stopwatch.StartNew()
-        operation ()
-        stopwatch.Stop()
-        stopwatch.ElapsedMilliseconds |> printf "Execution time = %d ms"
-
-    [<TestCase(10)>]
-    [<TestCase(100)>]
-    [<TestCase(1000)>]
-    [<TestCase(10000)>]
-    [<TestCase(100000)>]
-    [<TestCase(1000000)>]
-    [<TestCase(10000000)>]
-    [<TestCase(100000000)>]
-    [<TestCase(1000000000)>]
-    member public this.CreateSieve(maxNumber: int) =
-        let sieveBuilder = EratosSieveBuilder()
-        (fun () -> sieveBuilder.CreateSieve(maxNumber) |> ignore) |> measureExecutionTime

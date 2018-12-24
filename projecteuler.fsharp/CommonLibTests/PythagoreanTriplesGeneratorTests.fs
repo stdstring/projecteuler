@@ -98,36 +98,3 @@ type PythagoreanTriplesGeneratorTests() =
                          (10, 24, 26); (21, 20, 29); (18, 24, 30); (30, 16, 34);
                          (21, 28, 35); (35, 12, 37); (15, 36, 39); (9, 40, 41); (24, 32, 40)|]
         Assert.AreEqual(expexted |> Array.map (fun triple -> triple |> createTriple), actual)
-
-[<TestFixture>]
-[<Category("Performance")>]
-type PythagoreanTriplesGeneratorPerformanceTests() =
-
-    // TODO (std_string) : think about moving into the common utils
-    let measureExecutionTime (operation: unit -> unit) =
-        let stopwatch = Stopwatch.StartNew()
-        operation ()
-        stopwatch.Stop()
-        stopwatch.ElapsedMilliseconds |> printf "Execution time = %d ms"
-
-    [<TestCase(10)>]
-    [<TestCase(100)>]
-    [<TestCase(1000)>]
-    [<TestCase(10000)>]
-    [<TestCase(100000)>]
-    [<TestCase(1000000)>]
-    [<TestCase(10000000)>]
-    member public this.GeneratePrimitiveWithPerimeterSelector(perimeter: int) =
-        let generator = PythagoreanTriplesGenerator(fun triple -> triple.X + triple.Y + triple.Z)
-        (fun () -> generator.GeneratePrimitiveTriples(perimeter) |> ignore) |> measureExecutionTime
-
-    [<TestCase(10)>]
-    [<TestCase(100)>]
-    [<TestCase(1000)>]
-    [<TestCase(10000)>]
-    [<TestCase(100000)>]
-    [<TestCase(1000000)>]
-    [<TestCase(10000000)>]
-    member public this.GenerateWithPerimeterSelector(perimeter: int) =
-        let generator = PythagoreanTriplesGenerator(fun triple -> triple.X + triple.Y + triple.Z)
-        (fun () -> generator.GenerateTriples(perimeter) |> ignore) |> measureExecutionTime

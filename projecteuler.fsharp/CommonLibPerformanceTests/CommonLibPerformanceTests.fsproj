@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Utils\MeasureUtils.fs" />
     <Compile Include="EratosSieveTests.fs" />
-    <Compile Include="NumbersTests.fs" />
-    <Compile Include="NumbersRelationTests.fs" />
     <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
   </ItemGroup>
 
