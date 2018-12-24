@@ -15,7 +15,7 @@ type NumbersRelationTests() =
     [<Test>]
     member public this.CalcGCD() =
         // int
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.CalcGCD(0, 0) |> ignore) |> ignore
+        Assert.AreEqual(0,  NumbersRelation.CalcGCD(0, 0))
         Assert.AreEqual(3, NumbersRelation.CalcGCD(-15, 9))
         Assert.AreEqual(3, NumbersRelation.CalcGCD(15, -9))
         Assert.AreEqual(3, NumbersRelation.CalcGCD(9, 15))
@@ -28,7 +28,7 @@ type NumbersRelationTests() =
         Assert.AreEqual(1, NumbersRelation.CalcGCD(maxint, maxint - 1))
         Assert.AreEqual(1, NumbersRelation.CalcGCD(minint - 1, minint - 2))
         // int64
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.CalcGCD(0L, 0L) |> ignore) |> ignore
+        Assert.AreEqual(0L,  NumbersRelation.CalcGCD(0L, 0L))
         Assert.AreEqual(3L, NumbersRelation.CalcGCD(-15L, 9L))
         Assert.AreEqual(3L, NumbersRelation.CalcGCD(15L, -9L))
         Assert.AreEqual(3L, NumbersRelation.CalcGCD(9L, 15L))
@@ -41,7 +41,7 @@ type NumbersRelationTests() =
         Assert.AreEqual(1L, NumbersRelation.CalcGCD(maxint64, maxint64 - 1L))
         Assert.AreEqual(1L, NumbersRelation.CalcGCD(minint64 - 1L, minint64 - 2L))
         // bigint
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.CalcGCD(0I, 0I) |> ignore) |> ignore
+        Assert.AreEqual(0I,  NumbersRelation.CalcGCD(0I, 0I))
         Assert.AreEqual(3I, NumbersRelation.CalcGCD(-15I, 9I))
         Assert.AreEqual(3I, NumbersRelation.CalcGCD(15I, -9I))
         Assert.AreEqual(3I, NumbersRelation.CalcGCD(9I, 15I))
@@ -103,7 +103,7 @@ type NumbersRelationTests() =
     [<Test>]
     member public this.IsMutuallySimple() =
         // int
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.IsMutuallySimple(0, 0) |> ignore) |> ignore
+        Assert.IsFalse(NumbersRelation.IsMutuallySimple(0, 0))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(-15, 9))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(15, -9))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(9, 15))
@@ -116,7 +116,7 @@ type NumbersRelationTests() =
         Assert.IsTrue(NumbersRelation.IsMutuallySimple(maxint, maxint - 1))
         Assert.IsTrue(NumbersRelation.IsMutuallySimple(minint - 1, minint - 2))
         // int64
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.IsMutuallySimple(0L, 0L) |> ignore) |> ignore
+        Assert.IsFalse(NumbersRelation.IsMutuallySimple(0L, 0L))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(-15L, 9L))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(15L, -9L))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(9L, 15L))
@@ -129,7 +129,7 @@ type NumbersRelationTests() =
         Assert.IsTrue(NumbersRelation.IsMutuallySimple(maxint64, maxint64 - 1L))
         Assert.IsTrue(NumbersRelation.IsMutuallySimple(minint64 - 1L, minint64 - 2L))
         // bigint
-        Assert.Throws<ArgumentException>(fun() -> NumbersRelation.IsMutuallySimple(0I, 0I) |> ignore) |> ignore
+        Assert.IsFalse(NumbersRelation.IsMutuallySimple(0I, 0I))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(-15I, 9I))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(15I, -9I))
         Assert.IsFalse(NumbersRelation.IsMutuallySimple(9I, 15I))
