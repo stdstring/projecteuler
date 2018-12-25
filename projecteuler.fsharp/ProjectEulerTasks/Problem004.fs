@@ -17,9 +17,9 @@ type Problem004() =
         | _ -> (seq {factorMax .. -1 .. factorMin} |> Seq.skipWhile (fun factor -> factor * factorMin >= number) |> Seq.takeWhile (fun factor -> factor * factorMax >= number) |> Seq.tryFind (fun factor -> number % factor = 0)).IsSome
 
     let rec traverseNumber (factorMax: int) (factorMin: int) (numberBasis: int) =
-        let basisDigits = Numbers.GetDigits(numberBasis)
+        let basisDigits = NumbersDigits.GetDigits(numberBasis)
         let digits = basisDigits @ (basisDigits |> List.rev)
-        let number = Numbers.GetNumber(digits) |> int
+        let number = NumbersDigits.GetNumber(digits) |> int
         match tryFindFactor factorMax factorMin number with
         | false -> numberBasis - 1 |> traverseNumber factorMax factorMin
         | true -> number

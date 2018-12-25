@@ -10,7 +10,7 @@ open CommonLib
 type Problem016() =
 
     let solveImpl (baseValue: int) (powerValue: int) =
-        bigint.Pow(baseValue |> bigint, powerValue) |> Numbers.GetDigits |> List.sum
+        bigint.Pow(baseValue |> bigint, powerValue) |> NumbersDigits.GetDigits |> List.sum
 
     [<TestCase(2, 15, 26, TimeThresholds.HardTimeLimit)>]
     [<TestCase(2, 1000, 1366, TimeThresholds.HardTimeLimit)>]

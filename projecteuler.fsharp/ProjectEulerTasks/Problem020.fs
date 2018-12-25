@@ -12,7 +12,7 @@ open CommonLib
 type Problem020() =
 
     let solveImpl (number: int) =
-        number |> Numbers.CalcFactorial |> Numbers.GetDigits |> Seq.sum
+        number |> Numbers.CalcFactorial |> NumbersDigits.GetDigits |> Seq.sum
 
     [<TestCase(10, 27, TimeThresholds.HardTimeLimit)>]
     [<TestCase(100, 648, TimeThresholds.HardTimeLimit)>]
