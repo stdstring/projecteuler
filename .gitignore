@@ -10,3 +10,4 @@ projecteuler.erlang/erl_crash.dump
 projecteuler.fsharp/.vs
 projecteuler.fsharp/**/bin
 projecteuler.fsharp/**/obj
+projecteuler.fsharp/**/*.user
