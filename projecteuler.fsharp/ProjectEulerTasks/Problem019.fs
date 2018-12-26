@@ -9,7 +9,10 @@ open ProjectEulerTasks.Utils
 // A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
 // How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
 
-type ProcessData = {LastDay: int; SundaysCount: int}
+module Problem019Impl =
+    type ProcessData = {LastDay: int; SundaysCount: int}
+
+open Problem019Impl
 
 [<TestFixture>]
 type Problem019() =

@@ -7,19 +7,19 @@ open ProjectEulerTasks.Utils
 // 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
 // By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
 
-type FibonacciData = {mutable Prev: int; mutable Current: int}
+module Problem002Impl =
+    type FibonacciData = {Prev: int; Current: int}
+
+open Problem002Impl
 
 [<TestFixture>]
 type Problem002() =
 
     let solveImpl (maxNumber: int) =
-        let data = {FibonacciData.Prev = 0; FibonacciData.Current = 1}
-        let generator = fun index ->
+        let generator (data: FibonacciData) =
             let next = data.Prev + data.Current
-            data.Prev <- data.Current
-            data.Current <- next
-            next
-        generator |> Seq.initInfinite |> Seq.takeWhile (fun number -> number <= maxNumber) |> Seq.filter (fun number -> number % 2 = 0) |> Seq.sum
+            Some (next, {FibonacciData.Prev = data.Current; FibonacciData.Current = next})
+        {FibonacciData.Prev = 0; FibonacciData.Current = 1} |> Seq.unfold generator |> Seq.takeWhile (fun number -> number <= maxNumber) |> Seq.filter (fun number -> number % 2 = 0) |> Seq.sum
 
     [<TestCase(99, 44, TimeThresholds.HardTimeLimit)>]
     [<TestCase(3999999, 4613732, TimeThresholds.HardTimeLimit)>]

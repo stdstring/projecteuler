@@ -18,14 +18,21 @@ open CommonLib
 // We can see that 28 is the first triangle number to have over five divisors.
 // What is the value of the first triangle number to have over five hundred divisors?
 
+module Problem012Impl =
+    type TriangleData = {Prev: int; N: int}
+
+open Problem012Impl
+
 [<TestFixture>]
 type Problem012() =
 
     let solveImpl (dividersCountInfimum: int) =
-        let mutable triangleNumber = 0
-        Seq.initInfinite (fun index -> triangleNumber <- triangleNumber + (index + 1); triangleNumber) |>
-        Seq.skipWhile (fun value -> NumbersDividers.GetDividers(value).Length < dividersCountInfimum) |>
-        Seq.head
+        let generator (data: TriangleData) =
+            let nextN = data.N + 1
+            let nextValue = data.Prev + nextN
+            Some (nextValue, {TriangleData.Prev = nextValue; TriangleData.N = nextN})
+        {TriangleData.Prev = 0; TriangleData.N = 0} |> Seq.unfold generator |> Seq.skipWhile (fun value -> NumbersDividers.GetDividers(value).Length < dividersCountInfimum) |> Seq.head
+
 
     [<TestCase(6, 28, TimeThresholds.HardTimeLimit)>]
     [<TestCase(501, 76576500, TimeThresholds.HardTimeLimit)>]
