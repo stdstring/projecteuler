@@ -34,12 +34,12 @@ solve(SideSize) -> solve_impl(SideSize).
 %% Internal functions
 %% ====================================================================
 
-%% solution:
-%% let SideSize - size of helix's side, then N - number of helix (beginning from 0) and SideSize = 2*N+1
-%% Perimeter of helix P = 4*(2*N+1) - 4 = 8*N (N > 0)
-%% Volume (Sum of perimeters of lower helixes + central number 1) = 1 + Sum(8*k, k = 1..N) = 1 + 4*N*(N+1)
-%% For helix with number N corner's number will have follow numbers: V(N-1) + 2*N, V(N-1) + 4*N, V(N-1) + 6*N, V(N-1) + 8*N
-%% So, Sum of all diagonal numbers will be follows: 1 + Sum(4*V(k-1) + k*(2 + 4 +6 + 8), k = 1..N)
+%% Solution:
+%% let SideSize - size of coil side, then N - coil number (beginning from 0) and SideSize = 2 * N + 1
+%% Coil perimeter P = 4 * (2 * N + 1) - 4 = 8 * N (N > 0)
+%% Volume (sum of perimeters of lower coils + central number 1) = 1 + Sum(8 * k, k = 1..N) = 1 + 4 * N * (N + 1)
+%% For coil with number N corner numbers will be the following: V(N - 1) + 2 * N, V(N - 1) + 4 * N, V(N - 1) + 6 * N, V(N - 1) + 8 * N
+%% So, sum of all diagonal numbers will be the following: 1 + Sum(4 * V(k - 1) + k * (2 + 4 + 6 + 8), k = 1 .. N)
 -spec solve_impl(SideSize :: pos_integer()) -> pos_integer().
 solve_impl(SideSize) ->
     N = (SideSize - 1) div 2,
