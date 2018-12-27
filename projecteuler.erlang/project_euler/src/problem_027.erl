@@ -29,7 +29,7 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 %% Notes to solution:
 %% 1) N(n = 0) = b > 0 => b > 0 and b is prime number. Easy to show that b > 2 => b is odd number
 %% 2) N(n = 1) = 1 + a + b > 0 => a > -(b + 1), a - is odd number (due to b + 1 is even number), a <> 0
-%% 3) When n = b, N(n) = b^2 + a*b + b = b * (b  + a + 1) - is not prime number => n in (0, Nmax], Nmax = max(b)^2 + max(a) * max(b) + max(b)
+%% 3) When n = b, N(n) = b^2 + a*b + b = b * (b + a + 1) - is not prime number => n in (0, Nmax], Nmax = max(b)^2 + max(a) * max(b) + max(b)
 -spec solve(PreparedInput :: term()) -> term().
 solve({AMax, BMax}) ->
     NMax = calc_value(BMax, AMax, BMax),
