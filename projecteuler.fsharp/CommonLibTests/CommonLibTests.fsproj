@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Include="EratosSieveTests.fs" />
+    <Compile Include="ListUtilsTests.fs" />
     <Compile Include="NumbersTests.fs" />
     <Compile Include="NumbersDigitsTests.fs" />
     <Compile Include="NumbersDividersTests.fs" />

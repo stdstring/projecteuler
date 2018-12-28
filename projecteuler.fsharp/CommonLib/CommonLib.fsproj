@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="EratosSieve.fs" />
+    <Compile Include="ListUtils.fs" />
     <Compile Include="Numbers.fs" />
     <Compile Include="NumbersDigits.fs" />
     <Compile Include="NumbersDividers.fs" />
