@@ -123,3 +123,60 @@ type NumbersDividersTests() =
         Assert.AreEqual([2I; 7I], NumbersDividers.GetPrimeDividers(14I))
         Assert.AreEqual([3I; 5I], NumbersDividers.GetPrimeDividers(15I))
         Assert.AreEqual([2I; 3I; 5I; 11I; 13I], NumbersDividers.GetPrimeDividers(2I * 2I * 3I * 3I * 3I * 5I * 5I * 11I * 13I))
+
+    [<Test>]
+    member public this.IsPrime() =
+        // int
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(-1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(0) |> ignore) |> ignore
+        Assert.IsFalse(NumbersDividers.IsPrime(1))
+        Assert.IsTrue(NumbersDividers.IsPrime(2))
+        Assert.IsTrue(NumbersDividers.IsPrime(3))
+        Assert.IsFalse(NumbersDividers.IsPrime(4))
+        Assert.IsTrue(NumbersDividers.IsPrime(5))
+        Assert.IsFalse(NumbersDividers.IsPrime(6))
+        Assert.IsTrue(NumbersDividers.IsPrime(7))
+        Assert.IsFalse(NumbersDividers.IsPrime(8))
+        Assert.IsFalse(NumbersDividers.IsPrime(9))
+        Assert.IsFalse(NumbersDividers.IsPrime(10))
+        Assert.IsTrue(NumbersDividers.IsPrime(11))
+        Assert.IsFalse(NumbersDividers.IsPrime(12))
+        Assert.IsTrue(NumbersDividers.IsPrime(13))
+        Assert.IsFalse(NumbersDividers.IsPrime(14))
+        Assert.IsFalse(NumbersDividers.IsPrime(15))
+        // int64
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(-1L) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(0L) |> ignore) |> ignore
+        Assert.IsFalse(NumbersDividers.IsPrime(1L))
+        Assert.IsTrue(NumbersDividers.IsPrime(2L))
+        Assert.IsTrue(NumbersDividers.IsPrime(3L))
+        Assert.IsFalse(NumbersDividers.IsPrime(4L))
+        Assert.IsTrue(NumbersDividers.IsPrime(5L))
+        Assert.IsFalse(NumbersDividers.IsPrime(6L))
+        Assert.IsTrue(NumbersDividers.IsPrime(7L))
+        Assert.IsFalse(NumbersDividers.IsPrime(8L))
+        Assert.IsFalse(NumbersDividers.IsPrime(9L))
+        Assert.IsFalse(NumbersDividers.IsPrime(10L))
+        Assert.IsTrue(NumbersDividers.IsPrime(11L))
+        Assert.IsFalse(NumbersDividers.IsPrime(12L))
+        Assert.IsTrue(NumbersDividers.IsPrime(13L))
+        Assert.IsFalse(NumbersDividers.IsPrime(14L))
+        Assert.IsFalse(NumbersDividers.IsPrime(15L))
+        // bigint
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(-1I) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.IsPrime(0I) |> ignore) |> ignore
+        Assert.IsFalse(NumbersDividers.IsPrime(1I))
+        Assert.IsTrue(NumbersDividers.IsPrime(2I))
+        Assert.IsTrue(NumbersDividers.IsPrime(3I))
+        Assert.IsFalse(NumbersDividers.IsPrime(4I))
+        Assert.IsTrue(NumbersDividers.IsPrime(5I))
+        Assert.IsFalse(NumbersDividers.IsPrime(6I))
+        Assert.IsTrue(NumbersDividers.IsPrime(7I))
+        Assert.IsFalse(NumbersDividers.IsPrime(8I))
+        Assert.IsFalse(NumbersDividers.IsPrime(9I))
+        Assert.IsFalse(NumbersDividers.IsPrime(10I))
+        Assert.IsTrue(NumbersDividers.IsPrime(11I))
+        Assert.IsFalse(NumbersDividers.IsPrime(12I))
+        Assert.IsTrue(NumbersDividers.IsPrime(13I))
+        Assert.IsFalse(NumbersDividers.IsPrime(14I))
+        Assert.IsFalse(NumbersDividers.IsPrime(15I))

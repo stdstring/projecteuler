@@ -41,6 +41,30 @@ type NumbersDividers =
         | _ when number = 1I -> []
         | _  -> NumbersDividers.GetPrimeDividersImpl(number) |> List.rev
 
+    static member public IsPrime(number: int) =
+        match number with
+        | _ when number <= 0 -> raise (ArgumentOutOfRangeException("number"))
+        | 1 -> false
+        | 2 -> true
+        | _ when number % 2 = 0 -> false
+        | _ -> NumbersDividers.IsOddPrime(number, 3)
+
+    static member public IsPrime(number: int64) =
+        match number with
+        | _ when number <= 0L -> raise (ArgumentOutOfRangeException("number"))
+        | 1L -> false
+        | 2L -> true
+        | _ when number % 2L = 0L -> false
+        | _ -> NumbersDividers.IsOddPrime(number, 3L)
+
+    static member public IsPrime(number: bigint) =
+        match number with
+        | _ when number <= 0I -> raise (ArgumentOutOfRangeException("number"))
+        | _ when number = 1I -> false
+        | _ when number = 2I -> true
+        | _ when number % 2I = 0I -> false
+        | _ -> NumbersDividers.IsOddPrime(number, 3I)
+
     static member private GetDividersImpl(number: int) =
         let rec searchDividers (divider: int) (smallDividers: List<int>) (largeDividers: List<int>) =
             match divider with
@@ -118,3 +142,24 @@ type NumbersDividers =
         match number % 2I with
         | rem when rem = 0I -> [2I] |> searchPrimeDividers (extractDivider number 2I) 3I
         | _ -> [] |> searchPrimeDividers number 3I
+
+    static member private IsOddPrime(number: int, divider: int) =
+        match number with
+        | _ when divider * divider > number -> true
+        | _ when divider * divider = number -> false
+        | _ when number % divider = 0 -> false
+        | _ -> NumbersDividers.IsOddPrime(number, divider + 2)
+
+    static member private IsOddPrime(number: int64, divider: int64) =
+        match number with
+        | _ when divider * divider > number -> true
+        | _ when divider * divider = number -> false
+        | _ when number % divider = 0L -> false
+        | _ -> NumbersDividers.IsOddPrime(number, divider + 2L)
+
+    static member private IsOddPrime(number: bigint, divider: bigint) =
+        match number with
+        | _ when divider * divider > number -> true
+        | _ when divider * divider = number -> false
+        | _ when number % divider = 0I -> false
+        | _ -> NumbersDividers.IsOddPrime(number, divider + 2I)
