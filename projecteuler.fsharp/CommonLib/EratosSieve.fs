@@ -4,7 +4,7 @@ open System
 
 // Eratos == Eratosthene
 
-module EratosSieveUtils =
+module EratosSieveImpl =
 
     [<Literal>]
     let SupportedMaxNumber = 1000000000
@@ -18,7 +18,9 @@ module EratosSieveUtils =
         | 0 -> (maxNumber / 2) - 1
         | _ -> maxNumber / 2
 
-type EratosSieveSeqData = {mutable CurrentPrime: int option}
+    type EratosSieveSeqData = {mutable CurrentPrime: int option}
+
+open EratosSieveImpl
 
 type EratosSieve(maxNumber: int, sieve: bool[]) =
 
@@ -28,7 +30,7 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
     let rec getNextPrime (index: int) =
         match index with
         | _ when index >= sieve.Length -> None
-        | _ when sieve.[index] -> Some (EratosSieveUtils.calcNumber index)
+        | _ when sieve.[index] -> Some (calcNumber index)
         | _ -> getNextPrime (index + 1)
 
     member public this.IsPrime(number: int) =
@@ -36,7 +38,7 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
         | _ when (number < 2) || (number > maxNumber) -> raise (ArgumentOutOfRangeException("number"))
         | 2 -> true
         | _ when (number % 2) = 0 -> false
-        | _ -> sieve.[number |> EratosSieveUtils.calcIndex]
+        | _ -> sieve.[number |> calcIndex]
 
     member public this.IsPrime(number: int64) =
         this.IsPrime(number |> int)
@@ -49,7 +51,7 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
         | _ when (number < 2) || (number > maxNumber) -> raise (ArgumentOutOfRangeException("number"))
         | 2 when maxNumber = 2 -> None
         | 2 -> Some 3
-        | _ -> number |> EratosSieveUtils.calcIndex |> (+) 1 |> getNextPrime
+        | _ -> number |> calcIndex |> (+) 1 |> getNextPrime
 
     member public this.GetNextPrime(number: int64) =
         match this.GetNextPrime(number |> int) with
@@ -78,19 +80,19 @@ type EratosSieveBuilder() =
         let mutable number = prime * prime
         let delta =  2L * prime
         while number <= maxNumber do
-            sieve.[number |> int |> EratosSieveUtils.calcIndex] <- false
+            sieve.[number |> int |> calcIndex] <- false
             number <- number + delta
 
     let processIndex (maxNumber: int64) (sieve: bool[]) =
         for index = 0 to sieve.Length - 1 do
             if sieve.[index] then
-                sieve |> erasePrimeFactors (index |> EratosSieveUtils.calcNumber |> int64) maxNumber
+                sieve |> erasePrimeFactors (index |> calcNumber |> int64) maxNumber
 
     member public this.CreateSieve(maxNumber: int) =
         match maxNumber with
-        | _ when (maxNumber < 2) || (maxNumber > EratosSieveUtils.SupportedMaxNumber) -> raise (ArgumentOutOfRangeException("maxNumber"))
+        | _ when (maxNumber < 2) || (maxNumber > SupportedMaxNumber) -> raise (ArgumentOutOfRangeException("maxNumber"))
         | 2 -> EratosSieve(maxNumber, Array.create 0 true)
         | _ ->
-            let sieve = Array.create (EratosSieveUtils.calcSieveSize maxNumber) true
+            let sieve = Array.create (calcSieveSize maxNumber) true
             sieve |> processIndex (maxNumber |> int64)
             EratosSieve(maxNumber, sieve)
