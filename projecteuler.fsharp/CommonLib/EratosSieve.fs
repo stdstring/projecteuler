@@ -64,13 +64,13 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
         | None -> None
 
     member public this.ToSeq () =
-        let data = {EratosSieveSeqData.CurrentPrime = None}
-        let generator = fun index ->
-            data.CurrentPrime <- match index with
-                                 | 0 -> Some 2
-                                 | _ -> data.CurrentPrime.Value |> this.GetNextPrime
-            data.CurrentPrime
-        generator |> Seq.initInfinite |> Seq.takeWhile (fun value -> value.IsSome) |> Seq.map (fun value -> value.Value)
+        let generator = function
+            | 0 -> (2, 2) |> Some
+            | currentPrime ->
+                match currentPrime |> this.GetNextPrime with
+                | Some nextPrime -> (nextPrime, nextPrime) |> Some
+                | None -> None
+        Seq.unfold generator 0
 
     member public this.MaxNumber = maxNumber
 
