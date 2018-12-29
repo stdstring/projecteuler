@@ -122,7 +122,7 @@ process_number([Digit5 | Digit5Rest], Digits, Digit6, Digit7, Digit8, Digit9, Di
                      Result :: [pos_integer()]) -> [pos_integer()].
 process_number([], _Digits, _Digit5, _Digit6, _Digit7, _Digit8, _Digit9, _Digit10, Result) -> Result;
 %% d4 = 0, 2, 4, 6, 8 due to d2d3d4 is divisible by 2
-process_number([Digit4 | Digit4Rest], Digits, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result) when Digit4 == 0; Digit4 == 2; Digit4 ==4; Digit4 == 6; Digit4 == 8 ->
+process_number([Digit4 | Digit4Rest], Digits, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result) when Digit4 == 0; Digit4 == 2; Digit4 == 4; Digit4 == 6; Digit4 == 8 ->
     %% Digit 6 == 0 or Difit6 == 5 - check in generate_d6d7d8_part
     DigitsRest = lists:filter(fun(Digit) -> Digit /= Digit4 end, Digits),
     NewResult = process_number(DigitsRest, DigitsRest, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, Digit10, Result),
