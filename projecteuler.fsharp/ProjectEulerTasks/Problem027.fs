@@ -39,7 +39,7 @@ type Problem027() =
         let sieveBuilder = EratosSieveBuilder()
         let primes = sieveBuilder.CreateSieve(nMax).ToSeq() |> Seq.toList
         let primesSet = HashSet<int>(primes) :> ISet<int>
-        let 2 :: bValues = primes |> List.takeWhile (fun prime -> prime < bMax)
+        let bValues = primes |> List.skip 1 |> List.takeWhile (fun prime -> prime < bMax)
         let result = bValues |> Seq.map (fun bValue -> primesSet |> processACoeff aMax bValue) |> Seq.maxBy (fun result -> result.PrimesCount)
         result.A * result.B
 
