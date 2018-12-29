@@ -70,7 +70,7 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
                                  | 0 -> Some 2
                                  | _ -> data.CurrentPrime.Value |> this.GetNextPrime
             data.CurrentPrime
-        generator |> Seq.initInfinite |> Seq.takeWhile (fun value -> value.IsSome) |> Seq.map (fun (Some value) -> value)
+        generator |> Seq.initInfinite |> Seq.takeWhile (fun value -> value.IsSome) |> Seq.map (fun value -> value.Value)
 
     member public this.MaxNumber = maxNumber
 
