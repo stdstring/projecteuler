@@ -27,4 +27,4 @@ type Problem001() =
     [<TestCase(2, 4, 9, 20, TimeThresholds.HardTimeLimit)>]
     [<TestCase(4, 6, 19, 64, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(divider1: int, divider2: int, maxNumber: int, expectedAnswer: int, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl divider1 divider2 maxNumber)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, divider1, divider2, maxNumber)

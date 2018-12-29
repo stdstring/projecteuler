@@ -46,4 +46,4 @@ type Problem008() =
     [<TestCase("problem_008.dat", 4, 5832, TimeThresholds.HardTimeLimit)>]
     [<TestCase("problem_008.dat", 5, 40824, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(dataFilename: string, count: int, expectedAnswer: int, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl dataFilename count)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, dataFilename, count)

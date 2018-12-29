@@ -21,4 +21,4 @@ type Problem015() =
     [<TestCase(3, 20L, TimeThresholds.HardTimeLimit)>]
     [<TestCase(20, 137846528820L, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(gridSize: int, expectedAnswer: int64, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl gridSize)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, gridSize)

@@ -37,4 +37,4 @@ type Problem012() =
     [<TestCase(6, 28, TimeThresholds.HardTimeLimit)>]
     [<TestCase(501, 76576500, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(dividersCountInfimum: int, expectedAnswer: int, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl dividersCountInfimum)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, dividersCountInfimum)

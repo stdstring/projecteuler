@@ -24,4 +24,4 @@ type Problem002() =
     [<TestCase(99, 44, TimeThresholds.HardTimeLimit)>]
     [<TestCase(3999999, 4613732, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(maxNumber: int, expectedAnswer: int, timeLimit: int) =
-        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solveImpl maxNumber)
+        SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, maxNumber)
