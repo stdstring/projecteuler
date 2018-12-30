@@ -34,7 +34,7 @@ search(DigitCount) ->
     MaxNumber = (numbers:power(10, DigitCount) - 1) div 6,
     case search(MinNumber, MaxNumber) of
         {true, SearchedNumber} -> SearchedNumber;
-        false -> search(DigitCount - 1)
+        false -> search(DigitCount + 1)
     end.
 
 -spec search(CurrentNumber :: pos_integer(), MaxNumber :: pos_integer()) -> search_result().
