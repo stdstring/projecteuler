@@ -33,8 +33,7 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 
 %% Notes:
 %% Let S(N - 1) - last number from previous layer, L(N) - side size for layer N
-%% N1 = S(N - 1) + d * (L(N) - 1), where d = 1 => N1 = S(N - 1) + L(N) - 1
-%% Similarly, N2 =  N1 + L(N) - 1, N3 =  N2 + L(N) - 1, S(N) = N4 =  N3 + L(N) - 1
+%% N1 = S(N - 1) + L(N) - 1, N2 =  N1 + L(N) - 1, N3 =  N2 + L(N) - 1, S(N) = N4 =  N3 + L(N) - 1
 -spec solve(PreparedInput :: term()) -> term().
 solve(Ratio) -> process_spiral(1, 1, Ratio, {1, 0}).
 
