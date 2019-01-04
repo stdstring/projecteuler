@@ -14,6 +14,7 @@
     <Compile Include="NumbersDividersTests.fs" />
     <Compile Include="NumbersRelationTests.fs" />
     <Compile Include="PandigitalNumbersTests.fs" />
+    <Compile Include="PellEquationTests.fs" />
     <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
   </ItemGroup>
 

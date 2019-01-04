@@ -295,7 +295,7 @@ find_negative_pell_equation_n_solution_test_() ->
 
 find_n_solution_errors_test_() ->
     [{"Solution of the equation x^2 - 2 * y^2 = 2 isn't supported", ?_assertError(not_supported, pell_equation:find_n_solution({1, 1}, 2, 2, 1))},
-     {"Solution of the equation x^2 - 2 * y^2 = -2 isn't supported", ?_assertError(not_supported, pell_equation:find_n_solution({1, 1}, 2, 2, 1))},
+     {"Solution of the equation x^2 - 2 * y^2 = -2 isn't supported", ?_assertError(not_supported, pell_equation:find_n_solution({1, 1}, 2, -2, 1))},
      {"D = -1 =< 0", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, -1, 1, 1))},
      {"D = 0 =< 0", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, 0, 1, 1))},
      {"For negative pell equation (x^2 - D * y^2 = -1), N must be odd", ?_assertError(badarg, pell_equation:find_n_solution({1, 1}, 2, -1, 2))}].

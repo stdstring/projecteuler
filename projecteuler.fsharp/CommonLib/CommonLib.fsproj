@@ -12,6 +12,7 @@
     <Compile Include="NumbersDividers.fs" />
     <Compile Include="NumbersRelation.fs" />
     <Compile Include="PandigitalNumbers.fs" />
+    <Compile Include="PellEquation.fs" />
     <Compile Include="PythagoreanTriples.fs" />
   </ItemGroup>
 
