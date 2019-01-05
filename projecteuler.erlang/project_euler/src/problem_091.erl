@@ -1,9 +1,9 @@
 %% @author std-string
 
-%% The points P (x1, y1) and Q (x2, y2) are plotted at integer co-ordinates and are joined to the origin, O(0,0), to form ΔOPQ.
+%% The points P (x1, y1) and Q (x2, y2) are plotted at integer co-ordinates and are joined to the origin, O(0,0), to form OPQ triangle.
 %% There are exactly fourteen triangles containing a right angle that can be formed when each co-ordinate lies between 0 and 2 inclusive;
-%% that is, 0 ≤ x1, y1, x2, y2 ≤ 2 (see https://projecteuler.net/problem=91).
-%% Given that 0 ≤ x1, y1, x2, y2 ≤ 50, how many right triangles can be formed?
+%% that is, 0 <= x1, y1, x2, y2 <= 2 (see https://projecteuler.net/problem=91).
+%% Given that 0 <= x1, y1, x2, y2 <= 50, how many right triangles can be formed?
 
 -module(problem_091).
 -export([get_check_data/0, prepare_data/2, solve/1]).
@@ -30,12 +30,12 @@ solve({MaxX, MaxY}) ->
 %% ====================================================================
 
 %% Math:
-%% Let 0 ≤ x1, x2 ≤ MaxX, 0 ≤ y1, y2 ≤ MaxY
+%% Let 0 <= x1, x2 <= MaxX, 0 <= y1, y2 <= MaxY
 %% Let C1 - count of right triangles with legs, which are parallel to OX and OY axes
 %% Let C2 - count of right triangles with legs, which are not parallel to OX and OY axes
 %% Then total count of triangles = C1 + C2
 %% Obviously, that C1 = 3 * MaxX * MaxY
-%% Let (A, B) - arbitrary point in 0 ≤ A ≤ MaxX, 0 ≤ B ≤ MaxY with integer coordinates; R = (A, B) - radius vector of this point
+%% Let (A, B) - arbitrary point with integer coordinates and 0 <= A <= MaxX, 0 <= B <= MaxY; R = (A, B) - radius vector of this point
 %% Let N - vector perpendicular to R, then N = (-B, A) (or N = (B, -A))
 %% Then equation of the line with the directing vector N and passing through the point (A, B) will be the following:
 %% x = A - B * t / L, y = B + A * t / L, where t - parameter, L = sqrt(A^2 + B^2) - length of the vector N
@@ -60,8 +60,8 @@ calc_c2_count(MaxX, MaxY) -> calc_c2_count_impl(1, 1, MaxX, MaxY, 0).
                          Count :: non_neg_integer()) -> non_neg_integer().
 calc_c2_count_impl(MaxX, MaxY, MaxX, MaxY, Count) -> Count;
 calc_c2_count_impl(X, Y, MaxX, MaxY, Count) when X > MaxX-> calc_c2_count_impl(1, Y + 1, MaxX, MaxY, Count);
-calc_c2_count_impl(CurrentX, CurrentY, MaxX, MaxY, Count) ->
-    calc_c2_count_impl(CurrentX + 1, CurrentY, MaxX, MaxY, Count + calc_c2_case_count(CurrentX, CurrentY, MaxX, MaxY)).
+calc_c2_count_impl(X, Y, MaxX, MaxY, Count) ->
+    calc_c2_count_impl(X + 1, Y, MaxX, MaxY, Count + calc_c2_case_count(X, Y, MaxX, MaxY)).
 
 -spec calc_c2_case_count(A :: pos_integer(), B :: pos_integer(), MaxX :: pos_integer(), MaxY :: pos_integer()) -> non_neg_integer().
 calc_c2_case_count(A, B, MaxX, MaxY) ->
