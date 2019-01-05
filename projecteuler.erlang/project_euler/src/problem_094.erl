@@ -25,15 +25,14 @@ prepare_data(_ModuleSourceDir, Input) -> Input.
 -spec solve(PreparedInput :: term()) -> term().
 solve(MaxPerimeter) ->
     %% we have the triangle with sides C, C, C+-1
-    %% S^2 = (p/2) * ((p/2) - C) * ((p/2) - C) * ((p/2) - (C+-1)) = p * (p - 2*C) * (p - 2*C) * (p - 2*(C+-1)) / 16
-    %% where p = C + C + (C+-1) - perimeter
-    %% if C - even => C+-1 - odd => p - odd, 2 * (C+-1) - even => p - 2 * (C+-1) - odd, p - 2*C -odd =>
-    %% p * (p - 2*C) * (p - 2*C) * (p - 2*(C+-1)) - odd => p * (p - 2*C) * (p - 2*C) * (p - 2*(C+-1)) isn't divided by 16 => C - odd, C+-1 - even
+    %% S^2 = (p/2)*((p/2) - C)*((p/2) - C)*((p/2) - (C+-1)) = p*(p - 2*C)*(p - 2*C)*(p - 2*(C+-1))/16 where p = C + C + (C+-1) - perimeter
+    %% if C - even => C+-1 - odd => p - odd, 2*(C+-1) - even => p - 2*(C+-1) - odd, p - 2*C -odd =>
+    %% p*(p - 2*C)*(p - 2*C)*(p - 2*(C+-1)) - odd => p*(p - 2*C)*(p - 2*C)*(p - 2*(C+-1)) isn't divided by 16 => C - odd, C+-1 - even
     %% Let B - height (and median) on side C+-1 => 2*A = C+-1 and triangle with sides A, B, C is right triangle
     %% 2*A = C+-1 or C = 2*A+-1 - equivalent definitions
     %% A^2 + B^2 = C^2 = (2*A+-1)^2 = 4*A^2 +- 4*A + 1 =>
-    %% B^2 = 4*A^2 +- 4*A + 1 - A^2 = 3*A^2 +- 4*A + 1 => 3*B^2 = 9*A^2 +- 12*A + 3 = (9*A^2 +- 12*A + 4) - 1 = (3a+-2)^2 - 1
-    %% so, 3*B^2 = (3a+-2)^2 - 1 => (3a+-2)^2 - 3*B^2 = 1 - Pell equation
+    %% B^2 = 4*A^2 +- 4*A + 1 - A^2 = 3*A^2 +- 4*A + 1 => 3*B^2 = 9*A^2 +- 12*A + 3 = (9*A^2 +- 12*A + 4) - 1 = (3*A+-2)^2 - 1
+    %% so, 3*B^2 = (3*A+-2)^2 - 1 => (3*A+-2)^2 - 3*B^2 = 1 - Pell equation
     FirstSolution = pell_equation:find_first_solution(?D, 1),
     process(FirstSolution, FirstSolution, 1, MaxPerimeter, 0).
 
@@ -74,5 +73,5 @@ calc_perimeter(X, Sign) ->
         true ->
             A = Value div 3,
             C = 2 * A + Sign,
-            2 * C  + 2 * A
+            2 * (C + A)
     end.
