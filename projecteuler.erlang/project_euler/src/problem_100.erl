@@ -30,7 +30,7 @@ solve(MinTotalCount) ->
     %% P(BB) = (Nb / T) * ((Nb - 1) / (T - 1)) = (Nb^2 - Nb) / (T^2 - T) = (Nb^2 - Nb + 1/4 - 1/4) / (T^2 - T + 1/4 - 1/4)
     %% P(BB) = 1/2 => 2 * (Nb^2 - Nb + 1/4 - 1/4) = (T^2 - T + 1/4 - 1/4)
     %% 2 * (Nb - 1/2)^2 - 1/2 = (T - 1/2)^2 - 1/4 => (T - 1/2)^2 - 2 * (Nb - 1/2)^2 = -1/4 =>
-    %% 4 * (T - 1/2)^2 - 4 * 2 * (Nb - 1/2)^2 = -1 => (2 * T - 1)^2 - 2 * (2* Nb - 1)^2 = -1
+    %% 4 * (T - 1/2)^2 - 4 * 2 * (Nb - 1/2)^2 = -1 => (2 * T - 1)^2 - 2 * (2 * Nb - 1)^2 = -1
     %% X = 2 * T - 1, Y = 2 * Nb - 1 => X^2 - 2 * Y^2 = -1
     %% X = 2 * T - 1, Y = 2 * B - 1 => X & Y must be odd
     FirstSolution = pell_equation:find_first_solution(?D, ?C),
@@ -43,12 +43,8 @@ solve(MinTotalCount) ->
 -spec process(FirstSolution :: pell_equation:solution(), N :: pos_integer(), MinTotalCount :: pos_integer()) -> pos_integer().
 process(FirstSolution, N, MinTotalCount) ->
     {X, Y} = pell_equation:find_n_solution(FirstSolution, ?D, ?C, N),
+    TotalCount = (X + 1) div 2,
     if
-        X div 2 == 0; Y div 2 == 0 -> process(FirstSolution, N + 2, MinTotalCount);
-        true ->
-            TotalCount = (X + 1) div 2,
-            if
-                TotalCount < MinTotalCount -> process(FirstSolution, N + 2, MinTotalCount);
-                TotalCount >= MinTotalCount -> (Y + 1) div 2
-            end
+        TotalCount < MinTotalCount -> process(FirstSolution, N + 2, MinTotalCount);
+        TotalCount >= MinTotalCount -> (Y + 1) div 2
     end.
