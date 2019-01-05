@@ -1,6 +1,6 @@
 %% @author std-string
 
-%% Three distinct points are plotted at random on a Cartesian plane, for which -1000 ≤ x, y ≤ 1000, such that a triangle is formed.
+%% Three distinct points are plotted at random on a Cartesian plane, for which -1000 <= x, y <= 1000, such that a triangle is formed.
 %% Consider the following two triangles:
 %% A(-340,495), B(-153,-910), C(835,-947)
 %% X(-175,41), Y(-421,-714), Z(574,-645)
@@ -41,13 +41,13 @@ solve(VertexTable) ->
 
 -spec check_triangle(Triangle :: [integer()]) -> boolean().
 check_triangle([X1, Y1, X2, Y2, X3, Y3]) ->
-    ProductZ1 = claclulate_vectorz_product(X1, Y1, X2, Y2),
-    ProductZ2 = claclulate_vectorz_product(X2, Y2, X3, Y3),
-    ProductZ3 = claclulate_vectorz_product(X3, Y3, X1, Y1),
+    ProductZ1 = calclulate_vectorz_product(X1, Y1, X2, Y2),
+    ProductZ2 = calclulate_vectorz_product(X2, Y2, X3, Y3),
+    ProductZ3 = calclulate_vectorz_product(X3, Y3, X1, Y1),
     check_vectorz_products(ProductZ1, ProductZ2, ProductZ3).
 
--spec claclulate_vectorz_product(X1 :: integer(), Y1 :: integer(), X2 :: integer(), Y2 :: integer()) -> integer().
-claclulate_vectorz_product(X1, Y1, X2, Y2) -> Y1 * X2 - X1 * Y2.
+-spec calclulate_vectorz_product(X1 :: integer(), Y1 :: integer(), X2 :: integer(), Y2 :: integer()) -> integer().
+calclulate_vectorz_product(X1, Y1, X2, Y2) -> Y1 * X2 - X1 * Y2.
 
 -spec check_vectorz_products(ProductZ1 :: integer(), ProductZ2 :: integer(), ProductZ3 :: integer()) -> boolean().
 check_vectorz_products(ProductZ1, ProductZ2, ProductZ3) when ProductZ1 > 0, ProductZ2 > 0, ProductZ3 > 0 -> true;

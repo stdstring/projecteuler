@@ -40,6 +40,9 @@
     <None Include="Data\problem_099.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\problem_102.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Utils\TimeThresholds.fs" />
     <Compile Include="Utils\SolutionUtils.fs" />
     <Compile Include="Problem001.fs" />
@@ -98,6 +101,7 @@
     <Compile Include="Problem097.fs" />
     <Compile Include="Problem099.fs" />
     <Compile Include="Problem100.fs" />
+    <Compile Include="Problem102.fs" />
   </ItemGroup>
 
   <ItemGroup>
