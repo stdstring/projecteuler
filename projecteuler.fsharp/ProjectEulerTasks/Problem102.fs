@@ -12,6 +12,7 @@ open System.IO
 // Using problem_012.dat, a data file containing the co-ordinates of one thousand "random" triangles, find the number of triangles for which the interior contains the origin.
 // NOTE: The first two examples in the file represent the triangles in the example given above.
 
+// TODO (std_string) : probably, move into CommonLib
 module Problem102Impl =
     type Point = {X: int; Y: int}
 
