@@ -57,6 +57,7 @@
     <Compile Include="Problem011.fs" />
     <Compile Include="Problem012.fs" />
     <Compile Include="Problem013.fs" />
+    <Compile Include="Problem014.fs" />
     <Compile Include="Problem015.fs" />
     <Compile Include="Problem016.fs" />
     <Compile Include="Problem017.fs" />
@@ -92,11 +93,13 @@
     <Compile Include="Problem066.fs" />
     <Compile Include="Problem071.fs" />
     <Compile Include="Problem073.fs" />
+    <Compile Include="Problem074.fs" />
     <Compile Include="Problem075.fs" />
     <Compile Include="Problem080.fs" />
     <Compile Include="Problem087.fs" />
     <Compile Include="Problem089.fs" />
     <Compile Include="Problem091.fs" />
+    <Compile Include="Problem092.fs" />
     <Compile Include="Problem094.fs" />
     <Compile Include="Problem097.fs" />
     <Compile Include="Problem099.fs" />

@@ -2,7 +2,6 @@
 
 open NUnit.Framework
 open CommonLib
-open System.Diagnostics
 
 [<TestFixture>]
 type PythagoreanTriplesGeneratorTests() =
