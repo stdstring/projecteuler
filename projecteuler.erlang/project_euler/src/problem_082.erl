@@ -1,7 +1,7 @@
 %% @author std-string
 
 %% In the 5 by 5 matrix (in problem_082_example.dat), the minimal path sum from any cell in the left column to any cell in the right column,
-%% by moving left, right, up, and down, is equal to 994.
+%% by moving right, up, and down, is equal to 994.
 %% Find the minimal path sum, in problem_082.dat, a text file containing a 80 by 80 matrix, from the left column to the right column.
 
 -module(problem_082).

@@ -22,6 +22,9 @@
     <None Include="Data\problem_013.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\problem_018.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\problem_022.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -32,6 +35,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\problem_059.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_067.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_081.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_082.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_083.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\problem_089.dat">
@@ -61,6 +76,7 @@
     <Compile Include="Problem015.fs" />
     <Compile Include="Problem016.fs" />
     <Compile Include="Problem017.fs" />
+    <Compile Include="Problem018.fs" />
     <Compile Include="Problem019.fs" />
     <Compile Include="Problem020.fs" />
     <Compile Include="Problem021.fs" />
@@ -91,11 +107,15 @@
     <Compile Include="Problem062.fs" />
     <Compile Include="Problem064.fs" />
     <Compile Include="Problem066.fs" />
+    <Compile Include="Problem067.fs" />
     <Compile Include="Problem071.fs" />
     <Compile Include="Problem073.fs" />
     <Compile Include="Problem074.fs" />
     <Compile Include="Problem075.fs" />
     <Compile Include="Problem080.fs" />
+    <Compile Include="Problem081.fs" />
+    <Compile Include="Problem082.fs" />
+    <Compile Include="Problem083.fs" />
     <Compile Include="Problem087.fs" />
     <Compile Include="Problem089.fs" />
     <Compile Include="Problem091.fs" />
