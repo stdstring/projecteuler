@@ -16,6 +16,7 @@
     <Compile Include="NumbersRelationTests.fs" />
     <Compile Include="PandigitalNumbersTests.fs" />
     <Compile Include="PellEquationTests.fs" />
+    <Compile Include="PermutationsTests.fs" />
     <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
     <Compile Include="SafeStorageTests.fs" />
   </ItemGroup>
