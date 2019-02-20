@@ -70,7 +70,6 @@ type Permutations =
             Permutations.GetLexicographicalNumber(itemsRest, newAlphabet, newLexicographicalNumber, newLexicographicalNumberSup)
 
     // TODO (std_string) : think about location
-    // TODO (std_string) : think about approach - probably use array
     static member private ExtractElement(items: 'TItem list, index: int) =
         if (index < 0) || (index >= items.Length) then
             raise (ArgumentOutOfRangeException("index"))
