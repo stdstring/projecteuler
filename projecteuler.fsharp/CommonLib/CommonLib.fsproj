@@ -16,6 +16,7 @@
     <Compile Include="PellEquation.fs" />
     <Compile Include="Permutations.fs" />
     <Compile Include="PythagoreanTriples.fs" />
+    <Compile Include="Rational.fs" />
     <Compile Include="SafeStorage.fs" />
   </ItemGroup>
 
