@@ -11,6 +11,7 @@
     <Compile Include="Numbers.fs" />
     <Compile Include="NumbersDigits.fs" />
     <Compile Include="NumbersDividers.fs" />
+    <Compile Include="NumbersPrimeDividersStorage.fs" />
     <Compile Include="NumbersRelation.fs" />
     <Compile Include="PandigitalNumbers.fs" />
     <Compile Include="PellEquation.fs" />

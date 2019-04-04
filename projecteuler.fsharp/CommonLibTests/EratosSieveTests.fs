@@ -3,7 +3,6 @@
 open NUnit.Framework
 open System
 open CommonLib
-open System.Diagnostics
 
 [<TestFixture>]
 type EratosSieveTests() =
