@@ -21,8 +21,7 @@ type Problem046() =
     let maxNumber = 9999
 
     let solveImpl () =
-        let sieveBuilder = EratosSieveBuilder()
-        let oddPrimes = sieveBuilder.CreateSieve(maxNumber).ToSeq() |> Seq.skip 1 |> HashSet<int> :> ISet<int>
+        let oddPrimes = EratosSieve.Create(maxNumber).ToSeq() |> Seq.skip 1 |> HashSet<int> :> ISet<int>
         let squares = seq {1 .. maxNumber} |> Seq.map (fun number -> number * number) |> Seq.takeWhile (fun number -> 2 * number <= maxNumber) |> Seq.toList
         let checkNumber (number: int) =
             squares |> Seq.takeWhile (fun square -> 2 * square <= number) |> Seq.exists(fun square -> (number - 2 * square) |> oddPrimes.Contains) |> not

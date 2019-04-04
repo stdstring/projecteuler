@@ -67,8 +67,7 @@ type Problem060() =
     let SieveMax = 100000000
 
     let solveImpl (size: int) =
-        let sieveBuilder = new EratosSieveBuilder()
-        let sieve = sieveBuilder.CreateSieve(SieveMax)
+        let sieve = EratosSieve.Create(SieveMax)
         let solver = new SolutionImpl(size, sieve)
         solver.Solve()
 

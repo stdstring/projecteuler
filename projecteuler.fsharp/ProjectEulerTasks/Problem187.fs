@@ -13,8 +13,7 @@ type Problem187() =
 
     let solveImpl (maxNumber: int) =
         let primesSup  = maxNumber / 2
-        let sieveBuilder = EratosSieveBuilder()
-        let primes = sieveBuilder.CreateSieve(primesSup).ToSeq() |> Seq.toArray
+        let primes = EratosSieve.Create(primesSup).ToSeq() |> Seq.toArray
         let rec countNumbers (index1: int) (index2: int) (count: int) =
             match index1 with
             | _ when index1 = primes.Length -> count

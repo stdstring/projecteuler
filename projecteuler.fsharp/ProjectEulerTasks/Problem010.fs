@@ -10,8 +10,7 @@ open CommonLib
 type Problem010() =
 
     let solveImpl (maxNumber: int) =
-        let sieveBuilder = EratosSieveBuilder()
-        sieveBuilder.CreateSieve(maxNumber).ToSeq() |> Seq.map int64 |> Seq.sum
+        EratosSieve.Create(maxNumber).ToSeq() |> Seq.map int64 |> Seq.sum
 
     [<TestCase(10, 17L, TimeThresholds.HardTimeLimit)>]
     [<TestCase(1999999, 142913828922L, TimeThresholds.HardTimeLimit)>]

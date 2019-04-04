@@ -17,8 +17,7 @@ type Problem087() =
 
     let solveImpl (numberSup: int) =
         let primeSup = numberSup |> float |> sqrt |> int |> (+) 1
-        let sieveBuilder = EratosSieveBuilder()
-        let primes = sieveBuilder.CreateSieve(primeSup).ToSeq() |> Seq.toList
+        let primes = EratosSieve.Create(primeSup).ToSeq() |> Seq.toList
         let storage = Array.create numberSup false
         let processFourthPower (sum: int) =
             primes |> Seq.map (fun number -> pown number 4) |> Seq.takeWhile (fun number -> number <= (numberSup - sum)) |> Seq.iter (fun number -> storage.[sum + number - 1]<-true)

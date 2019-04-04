@@ -91,8 +91,7 @@ type Problem051() =
         digitsInfo |> getPossibleVariants familySize |> Seq.exists (fun variant -> variant |> checkPossibleVariant familySize sieve digitsInfo)
 
     let solveImpl (familySize: int) =
-        let sieveBuilder = EratosSieveBuilder()
-        let sieve = sieveBuilder.CreateSieve(MaxNumber)
+        let sieve = EratosSieve.Create(MaxNumber)
         // we don't process single digit primes
         sieve.ToSeq() |> Seq.skipWhile (fun prime -> prime < 10) |> Seq.find (fun prime -> prime |> processNumber familySize sieve)
 

@@ -22,8 +22,7 @@ type Problem041() =
         // 7) 4-digits pandigital number contains 1..4 digits. Their sum = 10. 10 is not divisible by 3 => all 4-digits pandigital numbers is not divisable by 3
         // So we find max prime pandigital number in 1234567 .. 7654321 and 2143 .. 4321 ranges (because 2143 is prime)
         let maxNumber = 7654321
-        let sieveBuilder = EratosSieveBuilder()
-        let sieve = sieveBuilder.CreateSieve(maxNumber)
+        let sieve = EratosSieve.Create(maxNumber)
         let rec processPandigitals (lexicographicalNumber: bigint) (digits: int list) =
             let number = Permutations.GetPermutation(lexicographicalNumber, digits) |> NumbersDigits.GetNumber
             match lexicographicalNumber, number |> sieve.IsPrime with

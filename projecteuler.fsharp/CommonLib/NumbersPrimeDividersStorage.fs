@@ -11,15 +11,6 @@ open NumbersPrimeDividersStorageImpl
 
 type NumbersPrimeDividersStorage private (maxNumber: int, storage: Set<int> []) =
 
-    do if (maxNumber < MinNumber) then
-        raise (new ArgumentOutOfRangeException("maxNumber"))
-
-    do if (storage = null) then
-        raise (new ArgumentNullException("storage"))
-
-    do if (storage.Length <> (maxNumber - MinNumber + 1)) then
-        raise (new ArgumentOutOfRangeException("maxNumber"))
-
     member public this.GetPrimeDividersSet(number: int) =
         if (number < MinNumber || number > maxNumber) then
             raise (new ArgumentOutOfRangeException("number"))
@@ -37,8 +28,7 @@ type NumbersPrimeDividersStorage private (maxNumber: int, storage: Set<int> []) 
     static member public Create(maxNumber: int) =
         if (maxNumber < MinNumber) then
             raise (new ArgumentOutOfRangeException("maxNumber"))
-        let sieveBuilder = new EratosSieveBuilder()
-        let sieve = sieveBuilder.CreateSieve(maxNumber)
+        let sieve = EratosSieve.Create(maxNumber)
         let storage = Array.create (maxNumber - MinNumber + 1) Set.empty
         let rec findOddDivider (number: int) (divider: int) =
             match number with

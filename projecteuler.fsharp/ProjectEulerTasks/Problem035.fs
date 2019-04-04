@@ -22,8 +22,7 @@ type Problem035() =
             | false -> allCircularNumbers |> List.iter (fun number -> number |> knownPrimes.Add |> ignore)
 
     let solveImpl (maxNumber: int) =
-        let sieveBuilder = EratosSieveBuilder()
-        let primeNumbers = sieveBuilder.CreateSieve(maxNumber).ToSeq() |> Seq.toList
+        let primeNumbers = EratosSieve.Create(maxNumber).ToSeq() |> Seq.toList
         let primeNumbersSet = HashSet<int>(primeNumbers) :> ISet<int>
         let knownPrimes = HashSet<int>() :> ISet<int>
         primeNumbers |> List.iter (fun prime -> prime |> processNumber primeNumbersSet knownPrimes)

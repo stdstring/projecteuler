@@ -37,8 +37,7 @@ type Problem049() =
         possibleTerms |> List.filter (fun number -> number >= prime) |> List.choose chooseTerms
 
     let solveImpl () =
-        let sieveBuilder = EratosSieveBuilder()
-        let primes = sieveBuilder.CreateSieve(maxNumber).ToSeq() |> Seq.skipWhile (fun prime -> prime < minNumber) |> Seq.toList
+        let primes = EratosSieve.Create(maxNumber).ToSeq() |> Seq.skipWhile (fun prime -> prime < minNumber) |> Seq.toList
         let primesSet = primes |> HashSet<int> :> ISet<int>
         let answers = primes |> Seq.map (fun prime -> prime |> chooseTerms primesSet) |> Seq.concat |> Seq.filter (fun answer -> answer <> knownResult) |> Seq.distinct |> Seq.toArray
         Assert.AreEqual(1, answers.Length)

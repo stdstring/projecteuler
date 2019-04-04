@@ -22,10 +22,7 @@ module EratosSieveImpl =
 
 open EratosSieveImpl
 
-type EratosSieve(maxNumber: int, sieve: bool[]) =
-
-    let maxNumber = maxNumber
-    let sieve = sieve
+type EratosSieve private (maxNumber: int, sieve: bool[]) =
 
     let rec getNextPrime (index: int) =
         match index with
@@ -74,21 +71,19 @@ type EratosSieve(maxNumber: int, sieve: bool[]) =
 
     member public this.MaxNumber = maxNumber
 
-type EratosSieveBuilder() =
+    static member public Create(maxNumber: int) =
+        let erasePrimeFactors (prime: int64) (maxNumber: int64) (sieve: bool[]) =
+            let mutable number = prime * prime
+            let delta =  2L * prime
+            while number <= maxNumber do
+                sieve.[number |> int |> calcIndex] <- false
+                number <- number + delta
 
-    let erasePrimeFactors (prime: int64) (maxNumber: int64) (sieve: bool[]) =
-        let mutable number = prime * prime
-        let delta =  2L * prime
-        while number <= maxNumber do
-            sieve.[number |> int |> calcIndex] <- false
-            number <- number + delta
+        let processIndex (maxNumber: int64) (sieve: bool[]) =
+            for index = 0 to sieve.Length - 1 do
+                if sieve.[index] then
+                    sieve |> erasePrimeFactors (index |> calcNumber |> int64) maxNumber
 
-    let processIndex (maxNumber: int64) (sieve: bool[]) =
-        for index = 0 to sieve.Length - 1 do
-            if sieve.[index] then
-                sieve |> erasePrimeFactors (index |> calcNumber |> int64) maxNumber
-
-    member public this.CreateSieve(maxNumber: int) =
         match maxNumber with
         | _ when (maxNumber < 2) || (maxNumber > SupportedMaxNumber) -> raise (ArgumentOutOfRangeException("maxNumber"))
         | 2 -> EratosSieve(maxNumber, Array.create 0 true)

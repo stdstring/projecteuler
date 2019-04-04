@@ -36,8 +36,7 @@ type Problem027() =
         // 2) N(n = 1) = 1 + a + b > 0 => a > -(b + 1), a - is odd number (due to b + 1 is even number), a <> 0
         // 3) When n = b, N(n) = b^2 + a*b + b = b * (b + a + 1) - is not prime number => n in (0, Nmax], Nmax = max(b)^2 + max(a) * max(b) + max(b)
         let nMax = calcValue bMax aMax bMax
-        let sieveBuilder = EratosSieveBuilder()
-        let primes = sieveBuilder.CreateSieve(nMax).ToSeq() |> Seq.toList
+        let primes = EratosSieve.Create(nMax).ToSeq() |> Seq.toList
         let primesSet = HashSet<int>(primes) :> ISet<int>
         let bValues = primes |> List.skip 1 |> List.takeWhile (fun prime -> prime < bMax)
         let result = bValues |> Seq.map (fun bValue -> primesSet |> processACoeff aMax bValue) |> Seq.maxBy (fun result -> result.PrimesCount)
