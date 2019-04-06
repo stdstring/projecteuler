@@ -75,21 +75,15 @@ find_nearest_value_impl(CurrentArea, MaxArea, RectanglesCount, SearchResult) ->
                                    RectanglesCount :: pos_integer(),
                                    SearchResult :: search_result()) -> search_result().
 find_nearest_rectangle_value(CurrentArea, RectanglesCount, SearchResult) ->
-    find_nearest_rectangle_value_impl(number_dividers:get_dividers(CurrentArea), RectanglesCount, SearchResult).
-
--spec find_nearest_rectangle_value_impl(DividerRest :: [pos_integer()],
-                                        RectanglesCount :: pos_integer(),
-                                        SearchResult :: search_result()) -> search_result().
-find_nearest_rectangle_value_impl([], _RectanglesCount, SearchResult) -> SearchResult;
-find_nearest_rectangle_value_impl([Width | DividerRest], RectanglesCount, SearchResult) ->
-    NewSearchResult = lists:foldl(fun(Height, {SavedArea, SavedRectanglesCount}) ->
+    lists:foldl(fun(Divider, {SavedArea, SavedRectanglesCount}) ->
+        Width = Divider,
+        Height = CurrentArea div Divider,
         CurrentRectanglesCount = calc_rectangles_count(Width, Height),
         if
             abs(SavedRectanglesCount - RectanglesCount) =< abs(CurrentRectanglesCount - RectanglesCount) -> {SavedArea, SavedRectanglesCount};
             true -> {Width * Height, CurrentRectanglesCount}
         end
-    end, SearchResult, DividerRest),
-    find_nearest_rectangle_value_impl(DividerRest, RectanglesCount, NewSearchResult).
+    end, SearchResult, number_dividers:get_dividers(CurrentArea)).
 
 -spec calc_rectangles_count(M :: pos_integer(), N :: pos_integer()) -> pos_integer().
 calc_rectangles_count(M, N) ->
