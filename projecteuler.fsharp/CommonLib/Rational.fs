@@ -41,6 +41,10 @@ module Rational =
         member val Numerator = numerator with get
         member val Denominator = denominator with get
 
+        member val IsZero = (numerator = 0I) with get
+
+        member val IsInteger = (denominator = 1I) with get
+
         member public this.Reverse() =
             new RationalNumber(denominator, numerator)
 

@@ -73,6 +73,26 @@ type RationalTests() =
         this.Check(6I, 9I, new RationalNumber(-6, -9))
 
     [<Test>]
+    member public this.IsZero() =
+        Assert.IsTrue((new RationalNumber(0, 1)).IsZero)
+        Assert.IsFalse((new RationalNumber(2, 1)).IsZero)
+        Assert.IsFalse((new RationalNumber(2, 3)).IsZero)
+        Assert.IsFalse((new RationalNumber(-2, 1)).IsZero)
+        Assert.IsFalse((new RationalNumber(-2, 3)).IsZero)
+
+    [<Test>]
+    member public this.IsInteger() =
+        Assert.IsTrue((new RationalNumber(0, 1)).IsInteger)
+        Assert.IsTrue((new RationalNumber(1, 1)).IsInteger)
+        Assert.IsTrue((new RationalNumber(2, 1)).IsInteger)
+        Assert.IsTrue((new RationalNumber(-1, 1)).IsInteger)
+        Assert.IsTrue((new RationalNumber(-2, 1)).IsInteger)
+        Assert.IsFalse((new RationalNumber(1, 2)).IsInteger)
+        Assert.IsFalse((new RationalNumber(2, 3)).IsInteger)
+        Assert.IsFalse((new RationalNumber(-1, 2)).IsInteger)
+        Assert.IsFalse((new RationalNumber(-2, 3)).IsInteger)
+
+    [<Test>]
     member public this.Reverse() =
         this.Check(1I, 2I, (new RationalNumber(2I)).Reverse())
         this.Check(-1I, 2I, (new RationalNumber(-2I)).Reverse())

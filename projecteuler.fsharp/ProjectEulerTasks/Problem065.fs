@@ -36,7 +36,7 @@ type Problem065() =
     let solveImpl (termCount: int) =
         let foldFun (value: RationalNumber) (term: int) =
             match value with
-            | _ when value = new RationalNumber(0) -> new RationalNumber(term)
+            | _ when value.IsZero -> new RationalNumber(term)
             | _ -> term + value.Reverse()
         let result = 2 + (termCount - 1 |> generateFractionRange |> Seq.fold foldFun (new RationalNumber(0))).Reverse()
         result.Numerator |> NumbersDigits.GetDigits |> List.sum
