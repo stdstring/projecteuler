@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="GridPoint.fs" />
+    <Compile Include="Grid.fs" />
+    <Compile Include="Common.fs" />
+    <Compile Include="NumbersBinary.fs" />
+    <Compile Include="CellsInfo.fs" />
+    <Compile Include="NumbersInfo.fs" />
+    <Compile Include="CalculationContext.fs" />
+    <Compile Include="Calculation.fs" />
+    <Compile Include="PredictionContext.fs" />
+    <Compile Include="Prediction.fs" />
+    <Compile Include="Solver.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
+
+</Project>

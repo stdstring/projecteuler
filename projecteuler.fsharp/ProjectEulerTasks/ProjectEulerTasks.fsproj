@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="nunit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +50,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\problem_089.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_096.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\problem_099.dat">
@@ -139,6 +142,7 @@
     <Compile Include="Problem092.fs" />
     <Compile Include="Problem094.fs" />
     <Compile Include="Problem095.fs" />
+    <Compile Include="Problem096.fs" />
     <Compile Include="Problem097.fs" />
     <Compile Include="Problem099.fs" />
     <Compile Include="Problem100.fs" />
@@ -152,10 +156,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.fsproj" />
+    <ProjectReference Include="..\Sudoku.Core\Sudoku.Core.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.5.4" />
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
   </ItemGroup>
 
 </Project>

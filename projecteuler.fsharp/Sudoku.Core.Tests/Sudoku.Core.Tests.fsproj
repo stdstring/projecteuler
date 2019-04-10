@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Utils\MeasureUtils.fs" />
-    <Compile Include="EratosSieveTests.fs" />
-    <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
+    <Compile Include="GridConversion.fs" />
+    <Compile Include="SolverTests.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommonLib\CommonLib.fsproj" />
+    <ProjectReference Include="..\Sudoku.Core\Sudoku.Core.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
