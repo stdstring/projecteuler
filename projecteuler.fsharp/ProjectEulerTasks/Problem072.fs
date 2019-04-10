@@ -14,7 +14,7 @@ open CommonLib
 type Problem072() =
 
     let solveImpl (maxNumber: int) =
-        let storage = NumbersPrimeDividersStorage.Create(maxNumber)
+        let storage = maxNumber |> NumbersDividersStorageFactory.CreatePrimeDividersStorage
         seq {2 .. maxNumber} |> Seq.map (fun number -> number |> storage.CalcPhiFunction |> int64) |> Seq.sum
 
     [<TestCase(8, 21L, TimeThresholds.HardTimeLimit)>]

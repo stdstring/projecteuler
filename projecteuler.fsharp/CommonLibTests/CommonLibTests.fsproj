@@ -13,7 +13,7 @@
     <Compile Include="NumbersTests.fs" />
     <Compile Include="NumbersDigitsTests.fs" />
     <Compile Include="NumbersDividersTests.fs" />
-    <Compile Include="NumbersPrimeDividersStorageTests.fs" />
+    <Compile Include="NumbersDividersStorageTests.fs" />
     <Compile Include="NumbersRelationTests.fs" />
     <Compile Include="PandigitalNumbersTests.fs" />
     <Compile Include="PellEquationTests.fs" />

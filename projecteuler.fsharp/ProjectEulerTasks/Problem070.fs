@@ -22,7 +22,7 @@ type Problem070() =
         number1Representation = number2Representation
 
     let solveImpl (maxNumber: int) =
-        let storage = NumbersPrimeDividersStorage.Create(maxNumber)
+        let storage = maxNumber |> NumbersDividersStorageFactory.CreatePrimeDividersStorage
         let mutable bestNumber = 2
         // for n = 2 phi(n) = 1 => n / phi(n) = 2
         let mutable bestRatio = 2.0

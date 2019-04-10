@@ -22,7 +22,7 @@ open CommonLib
 type Problem069() =
 
     let solveImpl (maxNumber: int) =
-        let storage = NumbersPrimeDividersStorage.Create(maxNumber)
+        let storage = maxNumber |> NumbersDividersStorageFactory.CreatePrimeDividersStorage
         seq {2 .. maxNumber} |> Seq.maxBy (fun number -> (number |> float) / (storage.CalcPhiFunction(number) |> float))
 
     [<TestCase(10, 6, TimeThresholds.HardTimeLimit)>]
