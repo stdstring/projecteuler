@@ -55,6 +55,9 @@
     <None Include="Data\problem_096.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\problem_098.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\problem_099.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -144,6 +147,7 @@
     <Compile Include="Problem095.fs" />
     <Compile Include="Problem096.fs" />
     <Compile Include="Problem097.fs" />
+    <Compile Include="Problem098.fs" />
     <Compile Include="Problem099.fs" />
     <Compile Include="Problem100.fs" />
     <Compile Include="Problem102.fs" />
