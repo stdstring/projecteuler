@@ -72,6 +72,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 74. Digit factorial chains](https://projecteuler.net/problem=74)
 * [Problem 75. Singular integer right triangles](https://projecteuler.net/problem=75)
 * [Problem 76. Counting summations](https://projecteuler.net/problem=76)
+* [Problem 77. Prime summations](https://projecteuler.net/problem=77)
 * [Problem 80. Square root digital expansion](https://projecteuler.net/problem=80)
 * [Problem 81. Path sum: two ways](https://projecteuler.net/problem=81)
 * [Problem 82. Path sum: three ways](https://projecteuler.net/problem=82)
