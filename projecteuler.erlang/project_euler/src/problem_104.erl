@@ -47,12 +47,12 @@ process(CurrentFib, PrevFib, FibNumber, {TopBorder, Divider}) ->
 
 -spec check_number(Number ::pos_integer(), Divider :: pos_integer()) -> boolean().
 check_number(Number, Divider) ->
-    Right = Number rem ?TOP_BORDER,
-    case pandigital_numbers:is_pandigital(Right) of
+    Left = Number div Divider,
+    case pandigital_numbers:is_pandigital(Left) of
         false -> false;
         true ->
-            Left = Number div Divider,
-            pandigital_numbers:is_pandigital(Left)
+            Right = Number rem ?TOP_BORDER,
+            pandigital_numbers:is_pandigital(Right)
     end.
 
 -spec gen_next_fibonacci(Current :: pos_integer(), Prev :: pos_integer()) -> pos_integer().
