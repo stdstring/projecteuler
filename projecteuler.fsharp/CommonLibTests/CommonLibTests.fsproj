@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="DynamicProgramming\SumPartitionsTests.fs" />
+    <Compile Include="EratosSieveTests.fs" />
+    <Compile Include="GridPathFactoryTests.fs" />
+    <Compile Include="ListUtilsTests.fs" />
+    <Compile Include="NumbersTests.fs" />
+    <Compile Include="NumbersDigitsTests.fs" />
+    <Compile Include="NumbersDividersTests.fs" />
+    <Compile Include="NumbersDividersStorageTests.fs" />
+    <Compile Include="NumbersRelationTests.fs" />
+    <Compile Include="PandigitalNumbersTests.fs" />
+    <Compile Include="PellEquationTests.fs" />
+    <Compile Include="PermutationsTests.fs" />
+    <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
+    <Compile Include="RationalTests.fs" />
+    <Compile Include="SafeStorageTests.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>

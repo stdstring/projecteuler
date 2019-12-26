@@ -1,0 +1,177 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Data\problem_008.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_011.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_013.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_018.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_022.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_042.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_054.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_059.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_067.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_081.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_082.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_083.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_089.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_096.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_098.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_099.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\problem_102.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Utils\TimeThresholds.fs" />
+    <Compile Include="Utils\SolutionUtils.fs" />
+    <Compile Include="Problem001.fs" />
+    <Compile Include="Problem002.fs" />
+    <Compile Include="Problem003.fs" />
+    <Compile Include="Problem004.fs" />
+    <Compile Include="Problem006.fs" />
+    <Compile Include="Problem007.fs" />
+    <Compile Include="Problem008.fs" />
+    <Compile Include="Problem009.fs" />
+    <Compile Include="Problem010.fs" />
+    <Compile Include="Problem011.fs" />
+    <Compile Include="Problem012.fs" />
+    <Compile Include="Problem013.fs" />
+    <Compile Include="Problem014.fs" />
+    <Compile Include="Problem015.fs" />
+    <Compile Include="Problem016.fs" />
+    <Compile Include="Problem017.fs" />
+    <Compile Include="Problem018.fs" />
+    <Compile Include="Problem019.fs" />
+    <Compile Include="Problem020.fs" />
+    <Compile Include="Problem021.fs" />
+    <Compile Include="Problem022.fs" />
+    <Compile Include="Problem023.fs" />
+    <Compile Include="Problem024.fs" />
+    <Compile Include="Problem025.fs" />
+    <Compile Include="Problem026.fs" />
+    <Compile Include="Problem027.fs" />
+    <Compile Include="Problem028.fs" />
+    <Compile Include="Problem029.fs" />
+    <Compile Include="Problem030.fs" />
+    <Compile Include="Problem031.fs" />
+    <Compile Include="Problem032.fs" />
+    <Compile Include="Problem033.fs" />
+    <Compile Include="Problem034.fs" />
+    <Compile Include="Problem035.fs" />
+    <Compile Include="Problem036.fs" />
+    <Compile Include="Problem037.fs" />
+    <Compile Include="Problem038.fs" />
+    <Compile Include="Problem039.fs" />
+    <Compile Include="Problem040.fs" />
+    <Compile Include="Problem041.fs" />
+    <Compile Include="Problem042.fs" />
+    <Compile Include="Problem043.fs" />
+    <Compile Include="Problem045.fs" />
+    <Compile Include="Problem046.fs" />
+    <Compile Include="Problem047.fs" />
+    <Compile Include="Problem048.fs" />
+    <Compile Include="Problem049.fs" />
+    <Compile Include="Problem051.fs" />
+    <Compile Include="Problem052.fs" />
+    <Compile Include="Problem053.fs" />
+    <Compile Include="Problem054.fs" />
+    <Compile Include="Problem055.fs" />
+    <Compile Include="Problem056.fs" />
+    <Compile Include="Problem057.fs" />
+    <Compile Include="Problem058.fs" />
+    <Compile Include="Problem059.fs" />
+    <Compile Include="Problem060.fs" />
+    <Compile Include="Problem061.fs" />
+    <Compile Include="Problem062.fs" />
+    <Compile Include="Problem064.fs" />
+    <Compile Include="Problem065.fs" />
+    <Compile Include="Problem066.fs" />
+    <Compile Include="Problem067.fs" />
+    <Compile Include="Problem068.fs" />
+    <Compile Include="Problem069.fs" />
+    <Compile Include="Problem070.fs" />
+    <Compile Include="Problem071.fs" />
+    <Compile Include="Problem072.fs" />
+    <Compile Include="Problem073.fs" />
+    <Compile Include="Problem074.fs" />
+    <Compile Include="Problem075.fs" />
+    <Compile Include="Problem076.fs" />
+    <Compile Include="Problem077.fs" />
+    <Compile Include="Problem080.fs" />
+    <Compile Include="Problem081.fs" />
+    <Compile Include="Problem082.fs" />
+    <Compile Include="Problem083.fs" />
+    <Compile Include="Problem085.fs" />
+    <Compile Include="Problem087.fs" />
+    <Compile Include="Problem089.fs" />
+    <Compile Include="Problem091.fs" />
+    <Compile Include="Problem092.fs" />
+    <Compile Include="Problem093.fs" />
+    <Compile Include="Problem094.fs" />
+    <Compile Include="Problem095.fs" />
+    <Compile Include="Problem096.fs" />
+    <Compile Include="Problem097.fs" />
+    <Compile Include="Problem098.fs" />
+    <Compile Include="Problem099.fs" />
+    <Compile Include="Problem100.fs" />
+    <Compile Include="Problem102.fs" />
+    <Compile Include="Problem104.fs" />
+    <Compile Include="Problem112.fs" />
+    <Compile Include="Problem144.fs" />
+    <Compile Include="Problem187.fs" />
+    <Compile Include="Problem205.fs" />
+    <Compile Include="Problem206.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.fsproj" />
+    <ProjectReference Include="..\Sudoku.Core\Sudoku.Core.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>
