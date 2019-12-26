@@ -4,6 +4,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 2. Even Fibonacci numbers](https://projecteuler.net/problem=2)
 * [Problem 3. Largest prime factor](https://projecteuler.net/problem=3)
 * [Problem 4. Largest palindrome product](https://projecteuler.net/problem=4)
+* [Problem 5. Smallest multiple](https://projecteuler.net/problem=5) - solved by hand
 * [Problem 6. Sum square difference](https://projecteuler.net/problem=6)
 * [Problem 7. 10001st prime](https://projecteuler.net/problem=7)
 * [Problem 8. Largest product in a series](https://projecteuler.net/problem=8)
@@ -59,6 +60,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 60. Prime pair sets](https://projecteuler.net/problem=60)
 * [Problem 61. Cyclical figurate numbers](https://projecteuler.net/problem=61)
 * [Problem 62. Cubic permutations](https://projecteuler.net/problem=62)
+* [Problem 63. Powerful digit counts](https://projecteuler.net/problem=63) - solved by hand
 * [Problem 64. Odd period square roots](https://projecteuler.net/problem=64)
 * [Problem 65. Convergents of e](https://projecteuler.net/problem=65)
 * [Problem 66. Diophantine equation](https://projecteuler.net/problem=66)
@@ -73,6 +75,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 75. Singular integer right triangles](https://projecteuler.net/problem=75)
 * [Problem 76. Counting summations](https://projecteuler.net/problem=76)
 * [Problem 77. Prime summations](https://projecteuler.net/problem=77)
+* [Problem 79. Passcode derivation](https://projecteuler.net/problem=79) - solved by hand
 * [Problem 80. Square root digital expansion](https://projecteuler.net/problem=80)
 * [Problem 81. Path sum: two ways](https://projecteuler.net/problem=81)
 * [Problem 82. Path sum: three ways](https://projecteuler.net/problem=82)
