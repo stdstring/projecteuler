@@ -76,6 +76,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 75. Singular integer right triangles](https://projecteuler.net/problem=75)
 * [Problem 76. Counting summations](https://projecteuler.net/problem=76)
 * [Problem 77. Prime summations](https://projecteuler.net/problem=77)
+* [Problem 78. Coin partitions](https://projecteuler.net/problem=78)
 * [Problem 79. Passcode derivation](https://projecteuler.net/problem=79) - solved by hand
 * [Problem 80. Square root digital expansion](https://projecteuler.net/problem=80)
 * [Problem 81. Path sum: two ways](https://projecteuler.net/problem=81)
