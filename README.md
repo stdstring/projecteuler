@@ -43,6 +43,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 41. Pandigital prime](https://projecteuler.net/problem=41)
 * [Problem 42. Coded triangle numbers](https://projecteuler.net/problem=42)
 * [Problem 43. Sub-string divisibility](https://projecteuler.net/problem=43)
+* [Problem 44. Pentagon numbers](https://projecteuler.net/problem=44)
 * [Problem 45. Triangular, pentagonal, and hexagonal](https://projecteuler.net/problem=45)
 * [Problem 46. Goldbach's other conjecture](https://projecteuler.net/problem=46)
 * [Problem 47. Distinct primes factors](https://projecteuler.net/problem=47)
