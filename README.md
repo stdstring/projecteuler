@@ -83,6 +83,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 82. Path sum: three ways](https://projecteuler.net/problem=82)
 * [Problem 83. Path sum: four ways](https://projecteuler.net/problem=83)
 * [Problem 85. Counting rectangles](https://projecteuler.net/problem=85)
+* [Problem 86. Cuboid route](https://projecteuler.net/problem=86)
 * [Problem 87. Prime power triples](https://projecteuler.net/problem=87)
 * [Problem 89. Roman numerals](https://projecteuler.net/problem=89)
 * [Problem 91. Right triangles with integer coordinates](https://projecteuler.net/problem=91)
