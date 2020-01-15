@@ -44,25 +44,25 @@ type Problem104() =
         | value when value > MaxPandigital -> false
         | value -> pandigitalStorage.[value - MinPandigital]
 
-    let calcTopDivisor (nextFibonacci: bigint) (topDivisor: bigint) =
-        let divisionResult = nextFibonacci / topDivisor
-        match divisionResult with
-        | value when value > border -> topDivisor * 10I
-        | _ -> topDivisor
+    let calcQuotientAndTopDivisor (nextFibonacci: bigint) (topDivisor: bigint) =
+        let quotient = nextFibonacci / topDivisor
+        match quotient with
+        | value when value > border -> quotient / 10I, topDivisor * 10I
+        | _ -> quotient, topDivisor
 
     let rec processKnownFibonacciNumbers (data: FibonacciData) =
         match data.TermNumber with
         | LastKnownTermNumber -> data
         | _ ->
             let nextFibonacci = data.Current + data.Prev
-            let topDivisor = data.TopDivisor |> calcTopDivisor nextFibonacci
+            let _, topDivisor = data.TopDivisor |> calcQuotientAndTopDivisor nextFibonacci
             {FibonacciData.Prev = data.Current; FibonacciData.Current = nextFibonacci; FibonacciData.TermNumber = data.TermNumber + 1; FibonacciData.TopDivisor = topDivisor} |> processKnownFibonacciNumbers
 
     let rec findSuitableFibonacciNumber (pandigitalStorage: bool[]) (data: FibonacciData) =
         let nextFibonacci = data.Current + data.Prev
-        let topDivisor = data.TopDivisor |> calcTopDivisor nextFibonacci
+        let quotient, topDivisor = data.TopDivisor |> calcQuotientAndTopDivisor nextFibonacci
         let nextData = {FibonacciData.Prev = data.Current; FibonacciData.Current = nextFibonacci; FibonacciData.TermNumber = data.TermNumber + 1; FibonacciData.TopDivisor = topDivisor}
-        match nextFibonacci / topDivisor |> int |> isPandigital pandigitalStorage with
+        match quotient |> int |> isPandigital pandigitalStorage with
         | false -> nextData |> findSuitableFibonacciNumber pandigitalStorage
         | true ->
             match nextFibonacci % border |> int |> isPandigital pandigitalStorage with
