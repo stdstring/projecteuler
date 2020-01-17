@@ -71,6 +71,15 @@ type NumbersDigits =
         let radixBig = bigint radix
         digits |> List.fold (fun number digit -> number * radixBig + (bigint digit)) 0I
 
+    static member public ReverseNumber(source: int) =
+        source |> NumbersDigits.GetDigits |> List.rev |> NumbersDigits.GetNumber |> int
+
+    static member public ReverseNumber(source: int64) =
+        source |> NumbersDigits.GetDigits |> List.rev |> NumbersDigits.GetNumber |> int64
+
+    static member public ReverseNumber(source: bigint) =
+        source |> NumbersDigits.GetDigits |> List.rev |> NumbersDigits.GetNumber
+
     static member private CheckRadix(radix: int) =
         match radix with
         | _ when radix < 2 -> raise (ArgumentOutOfRangeException("radix"))

@@ -19,7 +19,7 @@ type Problem145() =
 
     let calcForLess100 () =
         seq {10 .. 99} |>
-        Seq.map (fun number -> number, number |> NumbersDigits.GetDigits |> List.rev |> NumbersDigits.GetNumber |> int) |>
+        Seq.map (fun number -> number, number |> NumbersDigits.ReverseNumber) |>
         Seq.filter (fun (number, reversedNumber) -> reversedNumber >= number) |>
         Seq.map (fun (number, reversedNumber) -> number + reversedNumber) |>
         Seq.filter (fun sum -> sum |> checkSum) |>

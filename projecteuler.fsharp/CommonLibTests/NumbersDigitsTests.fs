@@ -363,3 +363,39 @@ type NumbersDigitsTests() =
         Assert.AreEqual(24I, NumbersDigits.GetNumber([2; 2; 0], 3))
         Assert.AreEqual(25I, NumbersDigits.GetNumber([2; 2; 1], 3))
         Assert.AreEqual(26I, NumbersDigits.GetNumber([2; 2; 2], 3))
+
+    [<Test>]
+    member public this.ReverseNumber() =
+        // int
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.ReverseNumber(-1) |> ignore) |> ignore
+        Assert.AreEqual(0, NumbersDigits.ReverseNumber(0))
+        Assert.AreEqual(1, NumbersDigits.ReverseNumber(1))
+        Assert.AreEqual(1, NumbersDigits.ReverseNumber(01))
+        Assert.AreEqual(1, NumbersDigits.ReverseNumber(10))
+        Assert.AreEqual(11, NumbersDigits.ReverseNumber(11))
+        Assert.AreEqual(31, NumbersDigits.ReverseNumber(13))
+        Assert.AreEqual(92, NumbersDigits.ReverseNumber(29))
+        Assert.AreEqual(1, NumbersDigits.ReverseNumber(100))
+        Assert.AreEqual(21, NumbersDigits.ReverseNumber(120))
+        // int64
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.ReverseNumber(-1L) |> ignore) |> ignore
+        Assert.AreEqual(0L, NumbersDigits.ReverseNumber(0L))
+        Assert.AreEqual(1L, NumbersDigits.ReverseNumber(1L))
+        Assert.AreEqual(1L, NumbersDigits.ReverseNumber(01L))
+        Assert.AreEqual(1L, NumbersDigits.ReverseNumber(10L))
+        Assert.AreEqual(11L, NumbersDigits.ReverseNumber(11L))
+        Assert.AreEqual(31L, NumbersDigits.ReverseNumber(13L))
+        Assert.AreEqual(92L, NumbersDigits.ReverseNumber(29L))
+        Assert.AreEqual(1L, NumbersDigits.ReverseNumber(100L))
+        Assert.AreEqual(21L, NumbersDigits.ReverseNumber(120L))
+        // bigint
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.ReverseNumber(-1I) |> ignore) |> ignore
+        Assert.AreEqual(0I, NumbersDigits.ReverseNumber(0I))
+        Assert.AreEqual(1I, NumbersDigits.ReverseNumber(1I))
+        Assert.AreEqual(1I, NumbersDigits.ReverseNumber(01I))
+        Assert.AreEqual(1I, NumbersDigits.ReverseNumber(10I))
+        Assert.AreEqual(11I, NumbersDigits.ReverseNumber(11I))
+        Assert.AreEqual(31I, NumbersDigits.ReverseNumber(13I))
+        Assert.AreEqual(92I, NumbersDigits.ReverseNumber(29I))
+        Assert.AreEqual(1I, NumbersDigits.ReverseNumber(100I))
+        Assert.AreEqual(21I, NumbersDigits.ReverseNumber(120I))

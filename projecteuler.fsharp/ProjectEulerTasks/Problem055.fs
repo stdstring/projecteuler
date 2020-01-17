@@ -42,7 +42,7 @@ type Problem055() =
                 match digits = reversedDigits with
                 | true -> true
                 | false -> processChain (iteration + 1) next reversedNext
-        processChain 0 (number |> bigint) (number |> NumbersDigits.GetDigits |> List.rev |> NumbersDigits.GetNumber)
+        processChain 0 (number |> bigint) (number |> NumbersDigits.ReverseNumber |> bigint)
 
 
     let solveImpl (maxNumber: int) =
