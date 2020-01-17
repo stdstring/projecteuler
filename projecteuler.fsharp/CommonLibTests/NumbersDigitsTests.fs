@@ -212,6 +212,84 @@ type NumbersDigitsTests() =
         Assert.AreEqual([2; 2; 2], NumbersDigits.GetDigits(26I, 3))
 
     [<Test>]
+    member public this.GetFixedSizeDigits() =
+        // int
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, -1) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1, 2))
+        Assert.AreEqual([0; 0; 1], NumbersDigits.GetFixedSizeDigits(1, 3))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123, 1))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123, 2))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123, 3))
+        Assert.AreEqual([0; 1; 2; 3], NumbersDigits.GetFixedSizeDigits(123, 4))
+        // int64
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1L, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, -1) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1L, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1L, 2))
+        Assert.AreEqual([0; 0; 1], NumbersDigits.GetFixedSizeDigits(1L, 3))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123L, 1))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123L, 2))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123L, 3))
+        Assert.AreEqual([0; 1; 2; 3], NumbersDigits.GetFixedSizeDigits(123L, 4))
+        // bigint
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1I, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, -1) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1I, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1I, 2))
+        Assert.AreEqual([0; 0; 1], NumbersDigits.GetFixedSizeDigits(1I, 3))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123I, 1))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123I, 2))
+        Assert.AreEqual([1; 2; 3], NumbersDigits.GetFixedSizeDigits(123I, 3))
+        Assert.AreEqual([0; 1; 2; 3], NumbersDigits.GetFixedSizeDigits(123I, 4))
+
+    [<Test>]
+    member public this.GetFixedSizeDigitsWithRadix() =
+        // int
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1, 10, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, -1, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, 0, 1) |> ignore) |> ignore
+        Assert.Throws<NotSupportedException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, 11, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, 2, -1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1, 2, 0) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1, 2, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5, 2, 1))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5, 2, 3))
+        Assert.AreEqual([0; 1; 0; 1], NumbersDigits.GetFixedSizeDigits(5, 2, 4))
+        // int64
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1L, 10, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, -1, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, 0, 1) |> ignore) |> ignore
+        Assert.Throws<NotSupportedException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, 11, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, 2, -1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1L, 2, 0) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1L, 2, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1L, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5L, 2, 1))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5L, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5L, 2, 3))
+        Assert.AreEqual([0; 1; 0; 1], NumbersDigits.GetFixedSizeDigits(5L, 2, 4))
+        // bigint
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(-1I, 10, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, -1, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, 0, 1) |> ignore) |> ignore
+        Assert.Throws<NotSupportedException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, 11, 1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, 2, -1) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetFixedSizeDigits(1I, 2, 0) |> ignore) |> ignore
+        Assert.AreEqual([1], NumbersDigits.GetFixedSizeDigits(1I, 2, 1))
+        Assert.AreEqual([0; 1], NumbersDigits.GetFixedSizeDigits(1I, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5I, 2, 1))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5I, 2, 2))
+        Assert.AreEqual([1; 0; 1], NumbersDigits.GetFixedSizeDigits(5I, 2, 3))
+        Assert.AreEqual([0; 1; 0; 1], NumbersDigits.GetFixedSizeDigits(5I, 2, 4))
+
+    [<Test>]
     member public this.GetNumber() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetNumber([0; 1; -1]) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDigits.GetNumber([0; 1; 11]) |> ignore) |> ignore

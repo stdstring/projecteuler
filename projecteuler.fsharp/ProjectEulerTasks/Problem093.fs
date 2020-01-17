@@ -118,8 +118,8 @@ type Problem093() =
     let generateOperationCombinations () =
         let operationCombinationStorage = Array.create operatorCombinationCount []
         for combinationIndex in seq {0 .. operatorCombinationCount - 1} do
-            let combinationDigits = NumbersDigits.GetDigits(combinationIndex, operators.Length)
-            operationCombinationStorage.[combinationIndex] <- combinationDigits |> List.append (List.init (OperatorCount - combinationDigits.Length) (fun _ -> 0)) |> List.map (fun digitIndex -> operators.[digitIndex])
+            let combinationDigits = NumbersDigits.GetFixedSizeDigits(combinationIndex, operators.Length, OperatorCount)
+            operationCombinationStorage.[combinationIndex] <- combinationDigits |> List.map (fun digitIndex -> operators.[digitIndex])
         operationCombinationStorage
 
     let solveImpl () =
