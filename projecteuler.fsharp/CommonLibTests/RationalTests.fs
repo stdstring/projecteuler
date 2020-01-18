@@ -5,7 +5,7 @@ open System
 open CommonLib.Rational
 
 [<TestFixture>]
-type RationalTests32() =
+type RationalNumber32Tests() =
 
     [<Test>]
     member public this.Create() =
@@ -329,7 +329,7 @@ type RationalTests32() =
         Assert.AreEqual(expectedDenominator, actualNumber.Denominator)
 
 [<TestFixture>]
-type RationalTests64() =
+type RationalNumber64Tests() =
 
     [<Test>]
     member public this.Create() =
@@ -675,7 +675,7 @@ type RationalTests64() =
         Assert.AreEqual(expectedDenominator, actualNumber.Denominator)
 
 [<TestFixture>]
-type RationalTests() =
+type RationalNumberTests() =
 
     [<Test>]
     member public this.Create() =
