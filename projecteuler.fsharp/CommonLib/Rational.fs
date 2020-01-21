@@ -101,6 +101,9 @@ module Rational =
         static member (/) (left: int, right: RationalNumber32) =
             new RationalNumber32(left * right.Denominator, right.Numerator)
 
+        static member (~-) (number: RationalNumber32) =
+            new RationalNumber32(-number.Numerator, number.Denominator)
+
         static member op_Equality (left: RationalNumber32, right: RationalNumber32) =
             (left.Numerator * right.Denominator - right.Numerator * left.Denominator) = 0
 
@@ -242,6 +245,9 @@ module Rational =
 
         static member (/) (left: int, right: RationalNumber64) =
             (left |> int64) / right
+
+        static member (~-) (number: RationalNumber64) =
+            new RationalNumber64(-number.Numerator, number.Denominator)
 
         static member op_Equality (left: RationalNumber64, right: RationalNumber64) =
             (left.Numerator * right.Denominator - right.Numerator * left.Denominator) = 0L
@@ -414,6 +420,9 @@ module Rational =
 
         static member (/) (left: int, right: RationalNumber) =
             (left |> bigint) / right
+
+        static member (~-) (number: RationalNumber) =
+            new RationalNumber(-number.Numerator, number.Denominator)
 
         static member op_Equality (left: RationalNumber, right: RationalNumber) =
             (left.Numerator * right.Denominator - right.Numerator * left.Denominator) = 0I

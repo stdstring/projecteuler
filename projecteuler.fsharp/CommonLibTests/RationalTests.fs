@@ -231,6 +231,16 @@ type RationalNumber32Tests() =
         this.Check(1, 2, new RationalNumber32(-2, 3) / new RationalNumber32(-4, 3))
 
     [<Test>]
+    member public this.OpUnaryMinus() =
+        // integer number
+        this.Check(-4, 1, -new RationalNumber32(4))
+        this.Check(4, 1, -new RationalNumber32(-4))
+        this.Check(0, 1, -new RationalNumber32(0))
+        // rational number
+        this.Check(-2, 7, -new RationalNumber32(2, 7))
+        this.Check(2, 7, -new RationalNumber32(-2, 7))
+
+    [<Test>]
     member public this.Compare() =
         // two integer numbers
         Assert.IsTrue(new RationalNumber32(2) < new RationalNumber32(3))
@@ -572,6 +582,16 @@ type RationalNumber64Tests() =
         this.Check(-1L, 2L, new RationalNumber64(2L, 3L) / new RationalNumber64(-4L, 3L))
         this.Check(-1L, 2L, new RationalNumber64(-2L, 3L) / new RationalNumber64(4L, 3L))
         this.Check(1L, 2L, new RationalNumber64(-2L, 3L) / new RationalNumber64(-4L, 3L))
+
+    [<Test>]
+    member public this.OpUnaryMinus() =
+        // integer number
+        this.Check(-4L, 1L, -new RationalNumber64(4L))
+        this.Check(4L, 1L, -new RationalNumber64(-4L))
+        this.Check(0L, 1L, -new RationalNumber64(0L))
+        // rational number
+        this.Check(-2L, 7L, -new RationalNumber64(2L, 7L))
+        this.Check(2L, 7L, -new RationalNumber64(-2L, 7L))
 
     [<Test>]
     member public this.Compare() =
@@ -937,6 +957,16 @@ type RationalNumberTests() =
         this.Check(-1I, 2I, new RationalNumber(2I, 3I) / new RationalNumber(-4I, 3I))
         this.Check(-1I, 2I, new RationalNumber(-2I, 3I) / new RationalNumber(4I, 3I))
         this.Check(1I, 2I, new RationalNumber(-2I, 3I) / new RationalNumber(-4I, 3I))
+
+    [<Test>]
+    member public this.OpUnaryMinus() =
+        // integer number
+        this.Check(-4I, 1I, -new RationalNumber(4I))
+        this.Check(4I, 1I, -new RationalNumber(-4I))
+        this.Check(0I, 1I, -new RationalNumber(0I))
+        // rational number
+        this.Check(-2I, 7I, -new RationalNumber(2I, 7I))
+        this.Check(2I, 7I, -new RationalNumber(-2I, 7I))
 
     [<Test>]
     member public this.Compare() =
