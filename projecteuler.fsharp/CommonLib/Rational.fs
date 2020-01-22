@@ -1,5 +1,6 @@
 ﻿namespace CommonLib
 
+open Checked
 open System
 
 module Rational =
@@ -118,6 +119,11 @@ module Rational =
 
         static member op_GreaterThan (left: RationalNumber32, right: RationalNumber32) =
             left > right
+
+        static member Zero = RationalNumber32(0)
+
+        static member One = RationalNumber32(1)
+
 
     // based on Int64 for numerator and denominator
     type RationalNumber64(numerator: int64, denominator: int64) =
@@ -263,6 +269,10 @@ module Rational =
 
         static member op_GreaterThan (left: RationalNumber64, right: RationalNumber64) =
             left > right
+
+        static member Zero = RationalNumber64(0L)
+
+        static member One = RationalNumber64(1L)
 
     // based on BigInteger for numerator and denominator
     type RationalNumber(numerator: bigint, denominator: bigint) =
@@ -438,3 +448,7 @@ module Rational =
 
         static member op_GreaterThan (left: RationalNumber, right: RationalNumber) =
             left > right
+
+        static member Zero = RationalNumber(0I)
+
+        static member One = RationalNumber(1I)

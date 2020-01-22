@@ -97,6 +97,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 98. Anagramic squares](https://projecteuler.net/problem=98)
 * [Problem 99. Largest exponential](https://projecteuler.net/problem=99)
 * [Problem 100. Arranged probability](https://projecteuler.net/problem=100)
+* [Problem 101. Optimum polynomial](https://projecteuler.net/problem=101)
 * [Problem 102. Triangle containment](https://projecteuler.net/problem=102)
 * [Problem 104. Pandigital Fibonacci ends](https://projecteuler.net/problem=104)
 * [Problem 112. Bouncy numbers](https://projecteuler.net/problem=112)
