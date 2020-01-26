@@ -164,11 +164,14 @@
     <Compile Include="Problem102.fs" />
     <Compile Include="Problem104.fs" />
     <Compile Include="Problem112.fs" />
+    <Compile Include="Problem124.fs" />
     <Compile Include="Problem144.fs" />
     <Compile Include="Problem145.fs" />
+    <Compile Include="Problem179.fs" />
     <Compile Include="Problem187.fs" />
     <Compile Include="Problem205.fs" />
     <Compile Include="Problem206.fs" />
+    <Compile Include="Problem214.fs" />
   </ItemGroup>
 
   <ItemGroup>

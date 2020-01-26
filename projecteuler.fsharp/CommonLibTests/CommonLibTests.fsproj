@@ -9,13 +9,13 @@
   <ItemGroup>
     <Compile Include="DynamicProgramming\SumPartitionsTests.fs" />
     <Compile Include="EratosSieveTests.fs" />
+    <Compile Include="EulerTotientFunctionTests.fs" />
     <Compile Include="GridPathFactoryTests.fs" />
     <Compile Include="LinearEquationsSystemTests.fs" />
     <Compile Include="ListUtilsTests.fs" />
     <Compile Include="NumbersTests.fs" />
     <Compile Include="NumbersDigitsTests.fs" />
     <Compile Include="NumbersDividersTests.fs" />
-    <Compile Include="NumbersDividersStorageTests.fs" />
     <Compile Include="NumbersRelationTests.fs" />
     <Compile Include="PandigitalNumbersTests.fs" />
     <Compile Include="PellEquationTests.fs" />

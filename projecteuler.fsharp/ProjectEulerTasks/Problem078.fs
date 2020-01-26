@@ -26,6 +26,7 @@ type Problem078() =
         Seq.map (fun (sign, number) -> sign * storage.[n - number]) |>
         Seq.fold (fun result term -> (result + term) % divider) 0*)
 
+    // TODO (std_string) : move into common libs
     let calcP (storage: ResizeArray<int>) (divider: int) (n: int) =
         let rec calcPImpl (k: int) (result: int) =
             let generalizedPentagonalNumber = k |> calcGeneralizedPentagonalNumber

@@ -1,8 +1,8 @@
 ﻿namespace ProjectEulerTasks
 
+open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open CommonLib
 
 // Consider the fraction, n/d, where n and d are positive integers. If n<d and HCF(n,d)=1, it is called a reduced proper fraction.
 // If we list the set of reduced proper fractions for d <= 8 in ascending order of size, we get:
@@ -14,8 +14,8 @@ open CommonLib
 type Problem072() =
 
     let solveImpl (maxNumber: int) =
-        let storage = maxNumber |> NumbersDividersStorageFactory.CreatePrimeDividersStorage
-        seq {2 .. maxNumber} |> Seq.map (fun number -> number |> storage.CalcPhiFunction |> int64) |> Seq.sum
+        let eulerTotientFunction = maxNumber |> EulerTotientFunction.Create
+        seq {2 .. maxNumber} |> Seq.map (fun number -> number |> eulerTotientFunction.GetValue |> int64) |> Seq.sum
 
     [<TestCase(8, 21L, TimeThresholds.HardTimeLimit)>]
     [<TestCase(1000000, 303963552391L, TimeThresholds.HardTimeLimit)>]

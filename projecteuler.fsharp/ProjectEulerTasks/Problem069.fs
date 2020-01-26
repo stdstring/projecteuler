@@ -1,8 +1,8 @@
 ﻿namespace ProjectEulerTasks
 
+open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open CommonLib
 
 // Euler's Totient function, phi(n) [sometimes called the phi function], is used to determine the number of numbers less than n which are relatively prime to n.
 // For example, as 1, 2, 4, 5, 7, and 8, are all less than nine and relatively prime to nine, phi(9)=6.
@@ -22,12 +22,10 @@ open CommonLib
 type Problem069() =
 
     let solveImpl (maxNumber: int) =
-        let storage = maxNumber |> NumbersDividersStorageFactory.CreatePrimeDividersStorage
-        seq {2 .. maxNumber} |> Seq.maxBy (fun number -> (number |> float) / (storage.CalcPhiFunction(number) |> float))
+        let eulerTotientFunction = maxNumber |> EulerTotientFunction.Create
+        seq {2 .. maxNumber} |> Seq.maxBy (fun number -> (number |> float) / (number |> eulerTotientFunction.GetValue |> float))
 
     [<TestCase(10, 6, TimeThresholds.HardTimeLimit)>]
     [<TestCase(1000000, 510510, TimeThresholds.HardTimeLimit)>]
     member public this.Solve(maxNumber: int, expectedAnswer: int, timeLimit: int) =
         SolutionUtils.CheckSolution(timeLimit, expectedAnswer, solveImpl, maxNumber)
-
-

@@ -1,8 +1,8 @@
 ﻿namespace ProjectEulerTasks
 
+open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open CommonLib
 open System.Collections.Generic
 
 //  The proper divisors of a number are all the divisors excluding the number itself. For example, the proper divisors of 28 are 1, 2, 4, 7, and 14.
@@ -24,7 +24,7 @@ type Problem095() =
     [<Literal>]
     let MinNumber = 1
 
-    let rec processChain (dividerStorage: NumbersDividersStorage) (chainStorage: int option[]) (currentNumber: int) (maxNumber: int) (chain: ChainData) =
+    let rec processChain (sieve: EratosSieveWithSmallestPrimeFactors) (chainStorage: int option[]) (currentNumber: int) (maxNumber: int) (chain: ChainData) =
         match currentNumber with
         | _ when currentNumber >= maxNumber ->
             chain.Chain |> Seq.iter (fun number -> chainStorage.[number - MinNumber]<-(0 |> Some))
@@ -41,15 +41,15 @@ type Problem095() =
                     | _ -> chainStorage.[number - MinNumber]<-(0 |> Some)
                 chain.Chain |> Seq.iteri iterFun
             | _, None ->
-                let nextNumber = (currentNumber |> dividerStorage.GetDividersSet |> Seq.sum) - currentNumber
+                let nextNumber = (currentNumber |> sieve.CalcSigma1) - currentNumber
                 currentNumber |> chain.ChainSet.Add |> ignore
-                {chain with Chain = currentNumber :: chain.Chain} |> processChain dividerStorage chainStorage nextNumber maxNumber
+                {chain with Chain = currentNumber :: chain.Chain} |> processChain sieve chainStorage nextNumber maxNumber
 
     let solveImpl (maxNumber: int) =
-        let dividerStorage = maxNumber |> NumbersDividersStorageFactory.CreateDividersStorage
+        let spf = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
         let chainStorage = Array.create (maxNumber - MinNumber) None
         chainStorage.[0]<-(0 |> Some)
-        seq {MinNumber + 1 .. maxNumber - 1} |> Seq.iter (fun number -> {ChainData.Chain = []; ChainData.ChainSet = new HashSet<int>()} |> processChain dividerStorage chainStorage number maxNumber)
+        seq {MinNumber + 1 .. maxNumber - 1} |> Seq.iter (fun number -> {ChainData.Chain = []; ChainData.ChainSet = new HashSet<int>()} |> processChain spf chainStorage number maxNumber)
         let mutable bestLength, bestNumber = chainStorage.[0].Value, MinNumber
         for number in seq {MinNumber + 1 .. maxNumber - 1} do
             if (bestLength < chainStorage.[number - MinNumber].Value) then

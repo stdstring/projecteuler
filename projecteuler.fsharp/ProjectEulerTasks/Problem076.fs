@@ -29,6 +29,7 @@ type Problem076() =
         Seq.map (fun (sign, number) -> sign * storage.[n - number]) |>
         Seq.sum*)
 
+    // TODO (std_string) : move into common libs
     let calcP (storage: ResizeArray<int>) (n: int) =
         let rec calcPImpl (k: int) (result: int) =
             let generalizedPentagonalNumber = k |> calcGeneralizedPentagonalNumber
