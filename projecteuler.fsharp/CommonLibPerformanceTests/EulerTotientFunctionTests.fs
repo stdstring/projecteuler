@@ -16,6 +16,6 @@ type EulerTotientFunctionTests() =
     [<TestCase(1000000)>]
     [<TestCase(10000000)>]
     [<TestCase(100000000)>]
-    [<TestCase(250000000)>]
+    //[<TestCase(250000000)>] - executes more than 1 minute
     member public this.CreateSieve(maxNumber: int) =
         (fun () -> EulerTotientFunction.Create(maxNumber) |> ignore) |> MeasureUtils.MeasureExecutionTime |> ignore

@@ -22,15 +22,15 @@ open ProjectEulerTasks.Utils
 [<TestFixture>]
 type Problem214() =
 
-    let rec processChain (eulerTotientFunction: EulerTotientFunction) (length: int) (number: int) =
+    let rec processChain (eulerTotientFunction: LazyEulerTotientFunction) (length: int) (number: int) =
         match number with
         | 1 -> length + 1
         | _ -> number |> eulerTotientFunction.GetValue |> processChain eulerTotientFunction (length + 1)
 
     let solveImpl (maxNumber: int) (chainLength: int) =
-        let eulerTotientFunction = maxNumber |> EulerTotientFunction.Create
+        let eulerTotientFunction = maxNumber |> LazyEulerTotientFunction.Create
         let mutable result = 0L
-        for prime in seq {3 .. 2 .. maxNumber} |> Seq.filter (fun number -> number |> eulerTotientFunction.IsPrime) do
+        for prime in eulerTotientFunction.GetPrimes() do
             if (prime |> processChain eulerTotientFunction 0) = chainLength then
                 result<-result + (prime |> int64)
         result |> int64

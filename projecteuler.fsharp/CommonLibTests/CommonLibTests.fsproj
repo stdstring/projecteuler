@@ -11,6 +11,7 @@
     <Compile Include="EratosSieveTests.fs" />
     <Compile Include="EulerTotientFunctionTests.fs" />
     <Compile Include="GridPathFactoryTests.fs" />
+    <Compile Include="LazyEulerTotientFunctionTests.fs" />
     <Compile Include="LinearEquationsSystemTests.fs" />
     <Compile Include="ListUtilsTests.fs" />
     <Compile Include="NumbersTests.fs" />

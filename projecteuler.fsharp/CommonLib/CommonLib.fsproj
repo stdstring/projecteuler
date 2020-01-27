@@ -10,6 +10,7 @@
     <Compile Include="NumbersRelation.fs" />
     <Compile Include="EulerTotientFunction.fs" />
     <Compile Include="GridPathFactory.fs" />
+    <Compile Include="LazyEulerTotientFunction.fs" />
     <Compile Include="ListUtils.fs" />
     <Compile Include="Numbers.fs" />
     <Compile Include="NumbersDigits.fs" />
