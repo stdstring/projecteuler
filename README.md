@@ -102,6 +102,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 104. Pandigital Fibonacci ends](https://projecteuler.net/problem=104)
 * [Problem 112. Bouncy numbers](https://projecteuler.net/problem=112)
 * [Problem 120. Square remainders](https://projecteuler.net/problem=120)
+* [Problem 123. Prime square remainders](https://projecteuler.net/problem=123)
 * [Problem 124. Ordered radicals](https://projecteuler.net/problem=124)
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
