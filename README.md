@@ -108,6 +108,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
 * [Problem 179. Consecutive positive divisors](https://projecteuler.net/problem=179)
+* [Problem 183. Maximum product of parts](https://projecteuler.net/problem=183)
 * [Problem 187. Semiprimes](https://projecteuler.net/problem=187)
 * [Problem 205. Dice Game](https://projecteuler.net/problem=205)
 * [Problem 206. Concealed Square](https://projecteuler.net/problem=206)
