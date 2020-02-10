@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Collections\PriorityQueueTests.fs" />
     <Compile Include="DynamicProgramming\SumPartitionsTests.fs" />
     <Compile Include="EratosSieveTests.fs" />
     <Compile Include="EulerTotientFunctionTests.fs" />
