@@ -112,6 +112,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 179. Consecutive positive divisors](https://projecteuler.net/problem=179)
 * [Problem 183. Maximum product of parts](https://projecteuler.net/problem=183)
 * [Problem 187. Semiprimes](https://projecteuler.net/problem=187)
+* [Problem 190. Maximising a weighted product](https://projecteuler.net/problem=190)
 * [Problem 205. Dice Game](https://projecteuler.net/problem=205)
 * [Problem 206. Concealed Square](https://projecteuler.net/problem=206)
 * [Problem 214. Totient Chains](https://projecteuler.net/problem=214)
