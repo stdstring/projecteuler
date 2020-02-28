@@ -116,4 +116,5 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 204. Generalised Hamming Numbers](https://projecteuler.net/problem=204)
 * [Problem 205. Dice Game](https://projecteuler.net/problem=205)
 * [Problem 206. Concealed Square](https://projecteuler.net/problem=206)
+* [Problem 207. Integer partition equations](https://projecteuler.net/problem=207)
 * [Problem 214. Totient Chains](https://projecteuler.net/problem=214)
