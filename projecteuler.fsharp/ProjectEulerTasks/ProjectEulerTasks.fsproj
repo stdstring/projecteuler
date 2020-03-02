@@ -152,6 +152,7 @@
     <Compile Include="Problem081.fs" />
     <Compile Include="Problem082.fs" />
     <Compile Include="Problem083.fs" />
+    <Compile Include="Problem084.fs" />
     <Compile Include="Problem085.fs" />
     <Compile Include="Problem086.fs" />
     <Compile Include="Problem087.fs" />
