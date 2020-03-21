@@ -105,6 +105,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 107. Minimal network](https://projecteuler.net/problem=107)
 * [Problem 112. Bouncy numbers](https://projecteuler.net/problem=112)
 * [Problem 113. Non-bouncy numbers](https://projecteuler.net/problem=113)
+* [Problem 116. Red, green or blue tiles](https://projecteuler.net/problem=116)
 * [Problem 120. Square remainders](https://projecteuler.net/problem=120)
 * [Problem 123. Prime square remainders](https://projecteuler.net/problem=123)
 * [Problem 124. Ordered radicals](https://projecteuler.net/problem=124)
