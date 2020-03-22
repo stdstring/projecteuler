@@ -110,6 +110,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 116. Red, green or blue tiles](https://projecteuler.net/problem=116)
 * [Problem 117. Red, green and blue tiles](https://projecteuler.net/problem=117)
 * [Problem 120. Square remainders](https://projecteuler.net/problem=120)
+* [Problem 122. Efficient exponentiation](https://projecteuler.net/problem=122)
 * [Problem 123. Prime square remainders](https://projecteuler.net/problem=123)
 * [Problem 124. Ordered radicals](https://projecteuler.net/problem=124)
 * [Problem 125. Palindromic sums](https://projecteuler.net/problem=125)
