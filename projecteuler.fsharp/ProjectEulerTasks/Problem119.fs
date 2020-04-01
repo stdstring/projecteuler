@@ -13,7 +13,6 @@ module Problem119Impl =
 
 open Problem119Impl
 
-
 [<TestFixture>]
 type Problem119() =
 
