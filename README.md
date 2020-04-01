@@ -109,6 +109,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 115. Counting block combinations II](https://projecteuler.net/problem=115)
 * [Problem 116. Red, green or blue tiles](https://projecteuler.net/problem=116)
 * [Problem 117. Red, green and blue tiles](https://projecteuler.net/problem=117)
+* [Problem 119. Digit power sum](https://projecteuler.net/problem=119)
 * [Problem 120. Square remainders](https://projecteuler.net/problem=120)
 * [Problem 122. Efficient exponentiation](https://projecteuler.net/problem=122)
 * [Problem 123. Prime square remainders](https://projecteuler.net/problem=123)
