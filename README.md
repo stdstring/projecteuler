@@ -87,6 +87,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 85. Counting rectangles](https://projecteuler.net/problem=85)
 * [Problem 86. Cuboid route](https://projecteuler.net/problem=86)
 * [Problem 87. Prime power triples](https://projecteuler.net/problem=87)
+* [Problem 88. Product-sum numbers](https://projecteuler.net/problem=88)
 * [Problem 89. Roman numerals](https://projecteuler.net/problem=89)
 * [Problem 90. Cube digit pairs](https://projecteuler.net/problem=90)
 * [Problem 91. Right triangles with integer coordinates](https://projecteuler.net/problem=91)
