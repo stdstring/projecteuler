@@ -132,4 +132,5 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 207. Integer partition equations](https://projecteuler.net/problem=207)
 * [Problem 214. Totient Chains](https://projecteuler.net/problem=214)
 * [Problem 345. Matrix Sum](https://projecteuler.net/problem=345)
+* [Problem 347. Largest integer divisible by two primes](https://projecteuler.net/problem=347)
 * [Problem 357. Prime generating integers](https://projecteuler.net/problem=357)

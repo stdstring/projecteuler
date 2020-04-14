@@ -252,15 +252,16 @@ type EratosSieveWithSmallestPrimeFactors private (maxNumber: int, data: int[]) =
             let delta =  2L * prime
             while number <= maxNumber do
                 let index = number |> int |> calcIndex
-                data.[index] <- prime |> int
+                if data.[index] = 0 then
+                    data.[index] <- prime |> int
                 number <- number + delta
 
         let generate (maxNumber: int64) (data: int[]) =
             for index = 0 to data.Length - 1 do
-            if data.[index] = 0 then
-                let prime = index |> calcNumber
-                data.[index] <- prime
-                data |> erasePrimeFactors (prime |> int64) maxNumber
+                if data.[index] = 0 then
+                    let prime = index |> calcNumber
+                    data.[index] <- prime
+                    data |> erasePrimeFactors (prime |> int64) maxNumber
 
         let supportedMaxNumber = 500000000
 
@@ -268,6 +269,6 @@ type EratosSieveWithSmallestPrimeFactors private (maxNumber: int, data: int[]) =
         | _ when (maxNumber < 2) || (maxNumber > supportedMaxNumber) -> raise (ArgumentOutOfRangeException("maxNumber"))
         | 2 -> EratosSieveWithSmallestPrimeFactors(maxNumber, Array.create 0 0)
         | _ ->
-            let data = Array.create (calcSieveSize maxNumber) 0
+            let data = maxNumber |> calcSieveSize |> Array.zeroCreate
             data |> generate (maxNumber |> int64)
             EratosSieveWithSmallestPrimeFactors(maxNumber, data)
