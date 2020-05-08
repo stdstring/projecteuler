@@ -206,6 +206,7 @@
     <Compile Include="Problem214.fs" />
     <Compile Include="Problem265.fs" />
     <Compile Include="Problem301.fs" />
+    <Compile Include="Problem315.fs" />
     <Compile Include="Problem345.fs" />
     <Compile Include="Problem347.fs" />
     <Compile Include="Problem357.fs" />
