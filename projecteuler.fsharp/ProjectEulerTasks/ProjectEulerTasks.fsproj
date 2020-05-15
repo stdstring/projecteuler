@@ -191,6 +191,7 @@
     <Compile Include="Problem125.fs" />
     <Compile Include="Problem144.fs" />
     <Compile Include="Problem145.fs" />
+    <Compile Include="Problem162.fs" />
     <Compile Include="Problem173.fs" />
     <Compile Include="Problem174.fs" />
     <Compile Include="Problem179.fs" />
