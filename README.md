@@ -120,6 +120,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
 * [Problem 162. Hexadecimal numbers](https://projecteuler.net/problem=162)
+* [Problem 164. Numbers for which no three consecutive digits have a sum greater than a given value](https://projecteuler.net/problem=164)
 * [Problem 173. Using up to one million tiles how many different "hollow" square laminae can be formed?](https://projecteuler.net/problem=173)
 * [Problem 174. Counting the number of "hollow" square laminae that can form one, two, three, ... distinct arrangements](https://projecteuler.net/problem=174)
 * [Problem 179. Consecutive positive divisors](https://projecteuler.net/problem=179)
