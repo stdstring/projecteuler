@@ -119,6 +119,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 125. Palindromic sums](https://projecteuler.net/problem=125)
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
+* [Problem 155. Counting Capacitor Circuits](https://projecteuler.net/problem=155)
 * [Problem 162. Hexadecimal numbers](https://projecteuler.net/problem=162)
 * [Problem 164. Numbers for which no three consecutive digits have a sum greater than a given value](https://projecteuler.net/problem=164)
 * [Problem 173. Using up to one million tiles how many different "hollow" square laminae can be formed?](https://projecteuler.net/problem=173)
