@@ -122,6 +122,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 155. Counting Capacitor Circuits](https://projecteuler.net/problem=155)
 * [Problem 162. Hexadecimal numbers](https://projecteuler.net/problem=162)
 * [Problem 164. Numbers for which no three consecutive digits have a sum greater than a given value](https://projecteuler.net/problem=164)
+* [Problem 172. Investigating numbers with few repeated digits](https://projecteuler.net/problem=172)
 * [Problem 173. Using up to one million tiles how many different "hollow" square laminae can be formed?](https://projecteuler.net/problem=173)
 * [Problem 174. Counting the number of "hollow" square laminae that can form one, two, three, ... distinct arrangements](https://projecteuler.net/problem=174)
 * [Problem 179. Consecutive positive divisors](https://projecteuler.net/problem=179)
