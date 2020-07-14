@@ -126,6 +126,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 172. Investigating numbers with few repeated digits](https://projecteuler.net/problem=172)
 * [Problem 173. Using up to one million tiles how many different "hollow" square laminae can be formed?](https://projecteuler.net/problem=173)
 * [Problem 174. Counting the number of "hollow" square laminae that can form one, two, three, ... distinct arrangements](https://projecteuler.net/problem=174)
+* [Problem 178. Step Numbers](https://projecteuler.net/problem=178)
 * [Problem 179. Consecutive positive divisors](https://projecteuler.net/problem=179)
 * [Problem 183. Maximum product of parts](https://projecteuler.net/problem=183)
 * [Problem 187. Semiprimes](https://projecteuler.net/problem=187)
