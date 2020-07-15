@@ -142,6 +142,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 301. Nim](https://projecteuler.net/problem=301)
 * [Problem 315. Digital root clocks](https://projecteuler.net/problem=315)
 * [Problem 345. Matrix Sum](https://projecteuler.net/problem=345)
+* [Problem 346. Strong Repunits](https://projecteuler.net/problem=346)
 * [Problem 347. Largest integer divisible by two primes](https://projecteuler.net/problem=347)
 * [Problem 357. Prime generating integers](https://projecteuler.net/problem=357)
 * [Problem 587. Concave triangle](https://projecteuler.net/problem=587)
