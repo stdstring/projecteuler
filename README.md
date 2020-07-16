@@ -138,6 +138,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 206. Concealed Square](https://projecteuler.net/problem=206)
 * [Problem 207. Integer partition equations](https://projecteuler.net/problem=207)
 * [Problem 214. Totient Chains](https://projecteuler.net/problem=214)
+* [Problem 215. Crack-free Walls](https://projecteuler.net/problem=215)
 * [Problem 265. Binary Circles](https://projecteuler.net/problem=265)
 * [Problem 301. Nim](https://projecteuler.net/problem=301)
 * [Problem 315. Digital root clocks](https://projecteuler.net/problem=315)
