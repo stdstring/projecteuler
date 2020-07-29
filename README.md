@@ -105,6 +105,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 104. Pandigital Fibonacci ends](https://projecteuler.net/problem=104)
 * [Problem 107. Minimal network](https://projecteuler.net/problem=107)
 * [Problem 109. Darts](https://projecteuler.net/problem=109)
+* [Problem 111. Primes with runs](https://projecteuler.net/problem=111)
 * [Problem 112. Bouncy numbers](https://projecteuler.net/problem=112)
 * [Problem 113. Non-bouncy numbers](https://projecteuler.net/problem=113)
 * [Problem 114. Counting block combinations I](https://projecteuler.net/problem=114)
