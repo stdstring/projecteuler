@@ -1,7 +1,7 @@
 ﻿namespace ProjectEulerTasks
 
-open NUnit.Framework
 open CommonLib
+open NUnit.Framework
 open ProjectEulerTasks.Utils
 
 // from https://projecteuler.net/problem=1
@@ -12,7 +12,7 @@ open ProjectEulerTasks.Utils
 [<TestFixture>]
 type Problem001() =
 
-    let arithProgressionSum (a1: int) (an: int) (n :int) =
+    let arithProgressionSum (a1: int) (an: int) (n: int) =
         n * (a1 + an) / 2
 
     let solveImpl (divider1: int) (divider2: int) (maxNumber: int) =
