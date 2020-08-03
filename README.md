@@ -124,6 +124,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
 * [Problem 148. Exploring Pascal's triangle](https://projecteuler.net/problem=148)
 * [Problem 155. Counting Capacitor Circuits](https://projecteuler.net/problem=155)
+* [Problem 158. Exploring strings for which only one character comes lexicographically after its neighbour to the left](https://projecteuler.net/problem=158)
 * [Problem 162. Hexadecimal numbers](https://projecteuler.net/problem=162)
 * [Problem 164. Numbers for which no three consecutive digits have a sum greater than a given value](https://projecteuler.net/problem=164)
 * [Problem 172. Investigating numbers with few repeated digits](https://projecteuler.net/problem=172)
