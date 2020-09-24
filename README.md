@@ -151,4 +151,5 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 347. Largest integer divisible by two primes](https://projecteuler.net/problem=347)
 * [Problem 357. Prime generating integers](https://projecteuler.net/problem=357)
 * [Problem 587. Concave triangle](https://projecteuler.net/problem=587)
+* [Problem 684. Inverse Digit Sum](https://projecteuler.net/problem=684)
 * [Problem 686. Powers of Two](https://projecteuler.net/problem=686)
