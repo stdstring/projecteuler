@@ -69,7 +69,7 @@ type NumbersDividersTests() =
         // int
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(-1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(0) |> ignore) |> ignore
-        Assert.AreEqual([], NumbersDividers.GetPrimeDividers(1))
+        Assert.AreEqual(List.empty<int>, NumbersDividers.GetPrimeDividers(1))
         Assert.AreEqual([2], NumbersDividers.GetPrimeDividers(2))
         Assert.AreEqual([3], NumbersDividers.GetPrimeDividers(3))
         Assert.AreEqual([2], NumbersDividers.GetPrimeDividers(4))
@@ -88,7 +88,7 @@ type NumbersDividersTests() =
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(0L) |> ignore) |> ignore
-        Assert.AreEqual([], NumbersDividers.GetPrimeDividers(1L))
+        Assert.AreEqual(List.empty<int64>, NumbersDividers.GetPrimeDividers(1L))
         Assert.AreEqual([2L], NumbersDividers.GetPrimeDividers(2L))
         Assert.AreEqual([3L], NumbersDividers.GetPrimeDividers(3L))
         Assert.AreEqual([2L], NumbersDividers.GetPrimeDividers(4L))
@@ -107,7 +107,7 @@ type NumbersDividersTests() =
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> NumbersDividers.GetPrimeDividers(0I) |> ignore) |> ignore
-        Assert.AreEqual([], NumbersDividers.GetPrimeDividers(1I))
+        Assert.AreEqual(List.empty<bigint>, NumbersDividers.GetPrimeDividers(1I))
         Assert.AreEqual([2I], NumbersDividers.GetPrimeDividers(2I))
         Assert.AreEqual([3I], NumbersDividers.GetPrimeDividers(3I))
         Assert.AreEqual([2I], NumbersDividers.GetPrimeDividers(4I))

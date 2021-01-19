@@ -38,7 +38,7 @@ type ListUtilsTests() =
 
     [<Test>]
     member public this.GetAllCirularShift() =
-        Assert.AreEqual([], ListUtils.GetAllCirularShift([]))
+        Assert.AreEqual(List.empty<obj list>, ListUtils.GetAllCirularShift([]))
         Assert.AreEqual([[1]], ListUtils.GetAllCirularShift([1]))
         Assert.AreEqual([[1; 2]; [2; 1]], ListUtils.GetAllCirularShift([1; 2]))
         Assert.AreEqual([[1; 2; 3]; [2; 3; 1]; [3; 1; 2]], ListUtils.GetAllCirularShift([1; 2; 3]))
