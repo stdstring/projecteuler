@@ -145,6 +145,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 215. Crack-free Walls](https://projecteuler.net/problem=215)
 * [Problem 265. Binary Circles](https://projecteuler.net/problem=265)
 * [Problem 301. Nim](https://projecteuler.net/problem=301)
+* [Problem 310. Nim Square](https://projecteuler.net/problem=310)
 * [Problem 315. Digital root clocks](https://projecteuler.net/problem=315)
 * [Problem 317. Firecracker](https://projecteuler.net/problem=317)
 * [Problem 345. Matrix Sum](https://projecteuler.net/problem=345)
