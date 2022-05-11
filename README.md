@@ -119,6 +119,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 123. Prime square remainders](https://projecteuler.net/problem=123)
 * [Problem 124. Ordered radicals](https://projecteuler.net/problem=124)
 * [Problem 125. Palindromic sums](https://projecteuler.net/problem=125)
+* [Problem 128. Hexagonal tile differences](https://projecteuler.net/problem=128)
 * [Problem 131. Prime cube partnership](https://projecteuler.net/problem=131)
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
