@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Data\problem_105.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\problem_008.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -175,6 +178,7 @@
     <Compile Include="Problem101.fs" />
     <Compile Include="Problem102.fs" />
     <Compile Include="Problem104.fs" />
+    <Compile Include="Problem105.fs" />
     <Compile Include="Problem107.fs" />
     <Compile Include="Problem109.fs" />
     <Compile Include="Problem111.fs" />
