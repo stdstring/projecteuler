@@ -78,11 +78,13 @@
     </None>
     <Compile Include="Utils\TimeThresholds.fs" />
     <Compile Include="Utils\SolutionUtils.fs" />
-    <Compile Include="Problem001.fs" />
+    <None Include="Problem001\description.md" />
+    <Compile Include="Problem001\Problem001.fs" />
+    <None Include="Problem006\description.md" />
+    <Compile Include="Problem006\Problem006.fs" />
     <Compile Include="Problem002.fs" />
     <Compile Include="Problem003.fs" />
     <Compile Include="Problem004.fs" />
-    <Compile Include="Problem006.fs" />
     <Compile Include="Problem007.fs" />
     <Compile Include="Problem008.fs" />
     <Compile Include="Problem009.fs" />
