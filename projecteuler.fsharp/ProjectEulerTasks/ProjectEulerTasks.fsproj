@@ -92,13 +92,16 @@
     <Compile Include="Problem007\Problem007.fs" />
     <None Include="Problem008\description.md" />
     <Compile Include="Problem008\Problem008.fs" />
+    <None Include="Problem009\description.md" />
+    <Compile Include="Problem009\Problem009.fs" />
+    <None Include="Problem010\description.md" />
+    <Compile Include="Problem010\Problem010.fs" />
+    <None Include="Problem011\description.md" />
+    <Compile Include="Problem011\Problem011.fs" />
     <None Include="Problem053\description.md" />
     <Compile Include="Problem053\Problem053.fs" />
     <None Include="Problem057\description.md" />
     <Compile Include="Problem057\Problem057.fs" />
-    <Compile Include="Problem009.fs" />
-    <Compile Include="Problem010.fs" />
-    <Compile Include="Problem011.fs" />
     <Compile Include="Problem012.fs" />
     <Compile Include="Problem013.fs" />
     <Compile Include="Problem014.fs" />
@@ -253,6 +256,10 @@
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Problem011\images\" />
   </ItemGroup>
 
 </Project>

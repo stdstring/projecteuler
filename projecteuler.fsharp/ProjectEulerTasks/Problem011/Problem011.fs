@@ -4,8 +4,6 @@ open NUnit.Framework
 open ProjectEulerTasks.Utils
 open System.IO
 
-// What is the greatest product of four adjacent numbers in any direction (up, down, left, right, or diagonally) in the 20*20 grid (situated in "problem_011.dat")?
-
 [<TestFixture>]
 type Problem011() =
 
