@@ -102,6 +102,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 100. Arranged probability](https://projecteuler.net/problem=100)
 * [Problem 101. Optimum polynomial](https://projecteuler.net/problem=101)
 * [Problem 102. Triangle containment](https://projecteuler.net/problem=102)
+* [Problem 103. Special subset sums: optimum](https://projecteuler.net/problem=103)
 * [Problem 104. Pandigital Fibonacci ends](https://projecteuler.net/problem=104)
 * [Problem 105. Special subset sums: testing](https://projecteuler.net/problem=105)
 * [Problem 106. Special subset sums: meta-testing](https://projecteuler.net/problem=106)
