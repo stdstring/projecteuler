@@ -80,13 +80,14 @@
     <Compile Include="Utils\SolutionUtils.fs" />
     <None Include="Problem001\description.md" />
     <Compile Include="Problem001\Problem001.fs" />
+    <None Include="Problem002\description.md" />
+    <Compile Include="Problem002\Problem002.fs" />
     <None Include="Problem006\description.md" />
     <Compile Include="Problem006\Problem006.fs" />
     <None Include="Problem053\description.md" />
     <Compile Include="Problem053\Problem053.fs" />
     <None Include="Problem057\description.md" />
     <Compile Include="Problem057\Problem057.fs" />
-    <Compile Include="Problem002.fs" />
     <Compile Include="Problem003.fs" />
     <Compile Include="Problem004.fs" />
     <Compile Include="Problem007.fs" />
