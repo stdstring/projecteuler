@@ -16,9 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Data\problem_105.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Data\problem_008.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -70,6 +67,9 @@
     <None Include="Data\problem_102.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\problem_105.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\problem_107.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -113,17 +113,24 @@
     <Compile Include="Problem017\Problem017.fs" />
     <None Include="Problem018\description.md" />
     <Compile Include="Problem018\Problem018.fs" />
+    <None Include="Problem019\description.md" />
+    <Compile Include="Problem019\Problem019.fs" />
+    <None Include="Problem020\description.md" />
+    <Compile Include="Problem020\Problem020.fs" />
+    <None Include="Problem021\description.md" />
+    <Compile Include="Problem021\Problem021.fs" />
+    <None Include="Problem022\description.md" />
+    <Compile Include="Problem022\Problem022.fs" />
+    <None Include="Problem023\description.md" />
+    <Compile Include="Problem023\Problem023.fs" />
+    <None Include="Problem024\description.md" />
+    <Compile Include="Problem024\Problem024.fs" />
+    <None Include="Problem025\description.md" />
+    <Compile Include="Problem025\Problem025.fs" />
     <None Include="Problem053\description.md" />
     <Compile Include="Problem053\Problem053.fs" />
     <None Include="Problem057\description.md" />
     <Compile Include="Problem057\Problem057.fs" />
-    <Compile Include="Problem019.fs" />
-    <Compile Include="Problem020.fs" />
-    <Compile Include="Problem021.fs" />
-    <Compile Include="Problem022.fs" />
-    <Compile Include="Problem023.fs" />
-    <Compile Include="Problem024.fs" />
-    <Compile Include="Problem025.fs" />
     <Compile Include="Problem026.fs" />
     <Compile Include="Problem027.fs" />
     <Compile Include="Problem028.fs" />
