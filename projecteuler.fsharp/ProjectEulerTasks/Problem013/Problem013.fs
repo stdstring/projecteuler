@@ -4,8 +4,6 @@ open NUnit.Framework
 open ProjectEulerTasks.Utils
 open System.IO
 
-// Work out the first ten digits of the sum of the one-hundred 50-digit numbers in "problem_013.dat".
-
 [<TestFixture>]
 type Problem013() =
 
