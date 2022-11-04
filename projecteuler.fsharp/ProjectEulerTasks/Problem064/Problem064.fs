@@ -4,24 +4,6 @@ open NUnit.Framework
 open ProjectEulerTasks.Utils
 open System.Collections.Generic
 
-// All square roots are periodic when written as continued fractions and can be written in the form:
-// N^(1/2) = a0 + 1/(a1 + 1/(a2 + 1/(a3 + ...)))
-// For example, we can write 23^(1/2) as [4;(1,3,1,8)].
-// Here we use the notation 23^(1/2) = [4;(1,3,1,8)], to indicate that the block (1,3,1,8) repeats indefinitely.
-// The first ten continued fraction representations of (irrational) square roots are:
-// 2^(1/2) = [1;(2)], period = 1
-// 3^(1/2) = [1;(1,2)], period = 2
-// 5^(1/2) = [2;(4)], period = 1
-// 6^(1/2) = [2;(2,4)], period = 2
-// 7^(1/2) = [2;(1,1,1,4)], period = 4
-// 8^(1/2) = [2;(1,4)], period = 2
-// 10^(1/2) = [3;(6)], period = 1
-// 11^(1/2) = [3;(3,6)], period = 2
-// 12^(1/2) = [3;(2,6)], period = 2
-// 13^(1/2) = [3;(1,1,1,1,6)], period = 5
-// Exactly four continued fractions, for N <= 13, have an odd period.
-// How many continued fractions for N <= 10000 have an odd period?
-
 module Problem064Impl =
     type AData = {A0: int; AList: int list}
 
