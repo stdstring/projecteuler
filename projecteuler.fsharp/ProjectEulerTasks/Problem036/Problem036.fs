@@ -4,10 +4,6 @@ open NUnit.Framework
 open ProjectEulerTasks.Utils
 open CommonLib
 
-// The decimal number, 585 (base 10) = 1001001001 (base 2), is palindromic in both bases.
-// Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
-// (Please note that the palindromic number, in either base, may not include leading zeros.)
-
 module Problem036Impl =
     // Digits allways bottom half of number's digits, e.g, for number 67576 Digits = [5, 7, 6], for number 675576 Digits = [5, 7, 6]
     type NumberData = {Digits: List<int>; DigitsCount: int}
