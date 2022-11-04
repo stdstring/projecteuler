@@ -204,7 +204,8 @@
     <None Include="Problem063\description.md" />
     <None Include="Problem064\description.md" />
     <Compile Include="Problem064\Problem064.fs" />
-    <Compile Include="Problem065.fs" />
+    <None Include="Problem065\description.md" />
+    <Compile Include="Problem065\Problem065.fs" />
     <Compile Include="Problem066.fs" />
     <Compile Include="Problem067.fs" />
     <Compile Include="Problem068.fs" />
