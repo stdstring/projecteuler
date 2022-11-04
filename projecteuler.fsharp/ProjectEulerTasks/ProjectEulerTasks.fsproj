@@ -185,12 +185,16 @@
     <Compile Include="Problem053\Problem053.fs" />
     <None Include="Problem054\description.md" />
     <Compile Include="Problem054\Problem054.fs" />
+    <None Include="Problem055\description.md" />
+    <Compile Include="Problem055\Problem055.fs" />
+    <None Include="Problem056\description.md" />
+    <Compile Include="Problem056\Problem056.fs" />
     <None Include="Problem057\description.md" />
     <Compile Include="Problem057\Problem057.fs" />
-    <Compile Include="Problem055.fs" />
-    <Compile Include="Problem056.fs" />
-    <Compile Include="Problem058.fs" />
-    <Compile Include="Problem059.fs" />
+    <None Include="Problem058\description.md" />
+    <Compile Include="Problem058\Problem058.fs" />
+    <None Include="Problem059\description.md" />
+    <Compile Include="Problem059\Problem059.fs" />
     <Compile Include="Problem060.fs" />
     <Compile Include="Problem061.fs" />
     <Compile Include="Problem062.fs" />
@@ -305,6 +309,7 @@
     <Folder Include="Problem011\images\" />
     <Folder Include="Problem015\images\" />
     <Folder Include="Problem028\images\" />
+    <Folder Include="Problem058\images\" />
   </ItemGroup>
 
 </Project>
