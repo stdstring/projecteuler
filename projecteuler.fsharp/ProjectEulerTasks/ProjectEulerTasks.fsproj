@@ -43,6 +43,9 @@
     <None Include="Data\problem_067.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\problem_079.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\problem_081.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -214,15 +217,25 @@
     <Compile Include="Problem068\Problem068.fs" />
     <None Include="Problem069\description.md" />
     <Compile Include="Problem069\Problem069.fs" />
-    <Compile Include="Problem070.fs" />
-    <Compile Include="Problem071.fs" />
-    <Compile Include="Problem072.fs" />
-    <Compile Include="Problem073.fs" />
-    <Compile Include="Problem074.fs" />
-    <Compile Include="Problem075.fs" />
-    <Compile Include="Problem076.fs" />
-    <Compile Include="Problem077.fs" />
-    <Compile Include="Problem078.fs" />
+    <None Include="Problem070\description.md" />
+    <Compile Include="Problem070\Problem070.fs" />
+    <None Include="Problem071\description.md" />
+    <Compile Include="Problem071\Problem071.fs" />
+    <None Include="Problem072\description.md" />
+    <Compile Include="Problem072\Problem072.fs" />
+    <None Include="Problem073\description.md" />
+    <Compile Include="Problem073\Problem073.fs" />
+    <None Include="Problem074\description.md" />
+    <Compile Include="Problem074\Problem074.fs" />
+    <None Include="Problem075\description.md" />
+    <Compile Include="Problem075\Problem075.fs" />
+    <None Include="Problem076\description.md" />
+    <Compile Include="Problem076\Problem076.fs" />
+    <None Include="Problem077\description.md" />
+    <Compile Include="Problem077\Problem077.fs" />
+    <None Include="Problem078\description.md" />
+    <Compile Include="Problem078\Problem078.fs" />
+    <None Include="Problem079\description.md" />
     <Compile Include="Problem080.fs" />
     <Compile Include="Problem081.fs" />
     <Compile Include="Problem082.fs" />
