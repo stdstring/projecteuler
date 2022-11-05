@@ -12,12 +12,6 @@ module Problem107Impl =
 
 open Problem107Impl
 
-// The following (see here https://projecteuler.net/problem=107) undirected network consists of seven vertices and twelve edges with a total weight of 243.
-// The same network can be represented by the matrix below. (see here https://projecteuler.net/problem=107)
-// However, it is possible to optimise the network by removing some edges and still ensure that all points on the network remain connected.
-// The network which achieves the maximum saving is shown below (see here https://projecteuler.net/problem=107). It has a weight of 93, representing a saving of 243 − 93 = 150 from the original network.
-// Using data (situated in "problem_107.dat") of a network with forty vertices, and given in matrix form, find the maximum saving which can be achieved by removing redundant edges whilst ensuring that the network remains connected.
-
 [<TestFixture>]
 type Problem107() =
 
