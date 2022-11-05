@@ -4,9 +4,6 @@ open NUnit.Framework
 open ProjectEulerTasks.Utils
 open CommonLib
 
-// By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles (see https://projecteuler.net/problem=85).
-// Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.
-
 module Problem085Impl =
     type SearchRange = {Left: int; Right: int}
     type SearchResult = {Area: int; RectanglesCount: int}

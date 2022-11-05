@@ -5,9 +5,6 @@ open ProjectEulerTasks.Utils
 open System.IO
 open CommonLib
 
-// In the 5 by 5 matrix (more see here: https://projecteuler.net/problem=83), the minimal path sum from the top left to the bottom right, by moving left, right, up, and down, is equal to 2297.
-// Find the minimal path sum, in problem_083.dat, a 31K text file containing a 80 by 80 matrix, from the top left to the bottom right by moving left, right, up, and down.
-
 [<TestFixture>]
 type Problem083() =
 
