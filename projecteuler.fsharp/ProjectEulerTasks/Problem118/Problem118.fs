@@ -3,14 +3,12 @@
 open NUnit.Framework
 open ProjectEulerTasks.Utils
 
-// Using all of the digits 1 through 9 and concatenating them freely to form decimal integers, different sets can be formed.
-// Interestingly with the set {2,5,47,89,631}, all of the elements belonging to it are prime.
-// How many distinct sets containing each of the digits one through nine exactly once contain only prime elements?
-
 [<TestFixture>]
 type Problem118() =
 
-    // 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 = 45, 45 mod 3 = 0 => pandigital number 1 .. 9 can't be prime number => max prime < 99999999 => max prime size = 8
+    // 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 = 45, 45 mod 3 = 0 =>
+    // pandigital number 1 .. 9 can't be prime number =>
+    // max prime < 99999999 => max prime size = 8
     [<Literal>]
     let MaxNumber = 99999999
 

@@ -4,27 +4,6 @@ open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
 
-// Considering 4-digit primes containing repeated digits it is clear that they cannot all be the same: 1111 is divisible by 11, 2222 is divisible by 22, and so on.
-// But there are nine 4-digit primes containing three ones: 1117, 1151, 1171, 1181, 1511, 1811, 2111, 4111, 8111
-// We shall say that M(n, d) represents the maximum number of repeated digits for an n-digit prime where d is the repeated digit,
-// N(n, d) represents the number of such primes, and S(n, d) represents the sum of these primes.
-// So M(4, 1) = 3 is the maximum number of repeated digits for a 4-digit prime where one is the repeated digit,
-// there are N(4, 1) = 9 such primes, and the sum of these primes is S(4, 1) = 22275.
-// It turns out that for d = 0, it is only possible to have M(4, 0) = 2 repeated digits, but there are N(4, 0) = 13 such cases.
-// In the same way we obtain the following results for 4-digit primes:
-// M(4, 0) = 2, N(4, 0) = 13, S(4, 0) = 67061
-// M(4, 1) = 3, N(4, 1) = 9,  S(4, 1) = 22275
-// M(4, 2) = 3, N(4, 2) = 1,  S(4, 2) = 2221
-// M(4, 3) = 3, N(4, 3) = 12, S(4, 3) = 46214
-// M(4, 4) = 3, N(4, 4) = 2,  S(4, 4) = 8888
-// M(4, 5) = 3, N(4, 5) = 1,  S(4, 5) = 5557
-// M(4, 6) = 3, N(4, 6) = 1,  S(4, 6) = 6661
-// M(4, 7) = 3, N(4, 7) = 9,  S(4, 7) = 57863
-// M(4, 8) = 3, N(4, 8) = 1,  S(4, 8) = 8887
-// M(4, 9) = 3, N(4, 9) = 7,  S(4, 9) = 48073
-// For d = 0 to 9, the sum of all S(4, d) is 273700.
-// Find the sum of all S(10, d).
-
 [<TestFixture>]
 type Problem111() =
 

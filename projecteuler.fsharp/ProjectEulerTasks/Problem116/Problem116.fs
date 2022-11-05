@@ -3,16 +3,6 @@
 open NUnit.Framework
 open ProjectEulerTasks.Utils
 
-// A row of five grey square tiles is to have a number of its tiles replaced with coloured oblong tiles chosen from red (length two), green (length three), or blue (length four).
-// If red tiles are chosen there are exactly seven ways this can be done:
-// RREEE, ERREE, EERRE, EEERR, RRRRE, RRERR, ERRRR (where R - red, E - grey/empty)
-// If green tiles are chosen there are three ways:
-// GGGEE, EGGGE, EEGGG (where G - green, E - grey/empty)
-// And if blue tiles are chosen there are two ways:
-// BBBBE, EBBBB (where B - blue, E - grey/empty)
-// Assuming that colours cannot be mixed there are 7 + 3 + 2 = 12 ways of replacing the grey tiles in a row measuring five units in length.
-// How many different ways can the grey tiles in a row measuring fifty units in length be replaced if colours cannot be mixed and at least one coloured tile must be used?
-
 [<TestFixture>]
 type Problem116() =
 
