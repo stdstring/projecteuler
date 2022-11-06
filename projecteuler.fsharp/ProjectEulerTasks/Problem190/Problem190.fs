@@ -5,10 +5,6 @@ open CommonLib.Rational
 open NUnit.Framework
 open ProjectEulerTasks.Utils
 
-// Let Sm = (x1, x2, ... , xm) be the m-tuple of positive real numbers with x1 + x2 + ... + xm = m for which Pm = x1 * x2^2 * ... * xm^m is maximised.
-// For example, it can be verified that [P10] = 4112 ([ ] is the integer part function).
-// Find Sum[Pm] for 2 <= m <= 15.
-
 [<TestFixture>]
 type Problem190() =
 
