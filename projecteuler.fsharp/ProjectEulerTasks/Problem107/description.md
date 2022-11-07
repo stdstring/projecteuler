@@ -21,4 +21,4 @@ However, it is possible to optimise the network by removing some edges and still
 
 ![Network after](images/network.after.png)
 
-Using **problem_107.dat**, a 6K text file containing a network with forty vertices, and given in matrix form, find the maximum saving which can be achieved by removing redundant edges whilst ensuring that the network remains connected.
+Using [problem_107.dat](../Data/problem_107.dat), a 6K text file containing a network with forty vertices, and given in matrix form, find the maximum saving which can be achieved by removing redundant edges whilst ensuring that the network remains connected.

@@ -11,4 +11,4 @@ $$\begin{pmatrix}
 805 & 732 & 524 & \color{red}{37} & \color{red}{331}
 \end{pmatrix}$$
 
-Find the minimal path sum from the top left to the bottom right by only moving right and down in **problem_081.dat**, a 31K text file containing an 80 by 80 matrix.
+Find the minimal path sum from the top left to the bottom right by only moving right and down in [problem_081.dat](../Data/problem_081.dat), a 31K text file containing an 80 by 80 matrix.

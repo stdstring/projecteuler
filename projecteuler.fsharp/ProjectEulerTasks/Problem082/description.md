@@ -11,4 +11,4 @@ $$\begin{pmatrix}
 805 & 732 & 524 & 37 & 331
 \end{pmatrix}$$
 
-Find the minimal path sum from the left column to the right column in **problem_082.dat**, a 31K text file containing an 80 by 80 matrix.
+Find the minimal path sum from the left column to the right column in [problem_082.dat](../Data/problem_082.dat), a 31K text file containing an 80 by 80 matrix.

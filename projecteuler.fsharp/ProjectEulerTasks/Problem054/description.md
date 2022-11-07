@@ -30,6 +30,6 @@ Consider the following five hands dealt to two players:
 | **4** | 4D 6S 9H QH QC Pair of Queens Highest card Nine | 3D 6D 7H QD QS Pair of Queens Highest card Seven | Player 1 |
 | **5** | 2H 2D 4C 4D 4S Full House With Three Fours | 3C 3D 3S 9S 9D Full House with Three Threes | Player 1 |
 
-The file, **problem_054.dat**, contains one-thousand random hands dealt to two players. Each line of the file contains ten cards (separated by a single space): the first five are Player 1's cards and the last five are Player 2's cards. You can assume that all hands are valid (no invalid characters or repeated cards), each player's hand is in no specific order, and in each hand there is a clear winner.
+The file, [problem_054.dat](../Data/problem_054.dat), contains one-thousand random hands dealt to two players. Each line of the file contains ten cards (separated by a single space): the first five are Player 1's cards and the last five are Player 2's cards. You can assume that all hands are valid (no invalid characters or repeated cards), each player's hand is in no specific order, and in each hand there is a clear winner.
 
 How many hands does Player 1 win?
