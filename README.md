@@ -160,3 +160,4 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 587. Concave triangle](https://projecteuler.net/problem=587)
 * [Problem 684. Inverse Digit Sum](https://projecteuler.net/problem=684)
 * [Problem 686. Powers of Two](https://projecteuler.net/problem=686)
+* [Problem 800. Hybrid Integers](https://projecteuler.net/problem=800)

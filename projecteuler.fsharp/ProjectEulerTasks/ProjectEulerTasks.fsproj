@@ -398,6 +398,8 @@
     <Compile Include="Problem684\Problem684.fs" />
     <None Include="Problem686\description.md" />
     <Compile Include="Problem686\Problem686.fs" />
+    <None Include="Problem800\description.md" />
+    <Compile Include="Problem800\Problem800.fs" />
   </ItemGroup>
 
   <ItemGroup>
