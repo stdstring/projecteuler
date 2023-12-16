@@ -322,6 +322,8 @@
     <Compile Include="Problem124\Problem124.fs" />
     <None Include="Problem125\description.md" />
     <Compile Include="Problem125\Problem125.fs" />
+    <None Include="Problem127\description.md" />
+    <Compile Include="Problem127\Problem127.fs" />
     <None Include="Problem128\description.md" />
     <Compile Include="Problem128\Problem128.fs" />
     <None Include="Problem131\description.md" />
