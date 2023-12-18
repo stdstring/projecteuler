@@ -1,8 +1,9 @@
 ﻿namespace CommonLibTests
 
-open NUnit.Framework
-open System
 open CommonLib
+open NUnit.Framework
+open NUnit.Framework.Legacy
+open System
 
 [<TestFixture>]
 type EulerTotientFunctionTests() =
@@ -13,11 +14,11 @@ type EulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EulerTotientFunction.Create(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EulerTotientFunction.Create(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EulerTotientFunction.Create(250000001) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(2) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(3) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(10) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(19) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(100) |> Assert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(2) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(3) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(10) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(19) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EulerTotientFunction.Create(100) |> ClassicAssert.IsNotNull)
 
     [<Test>]
     member public this.GetValue() =
@@ -68,19 +69,19 @@ type EulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 1 + shift |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 1 + shift |> eulerTotientFunction.GetValue))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0L) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 1L |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 1L |> eulerTotientFunction.GetValue))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0I) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 1I |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 1I |> eulerTotientFunction.GetValue))
 
     member private this.CheckIsPrime(maxNumber: int, [<ParamArray>] expectedValues: bool[]) =
         let eulerTotientFunction = maxNumber |> EulerTotientFunction.Create
@@ -89,16 +90,16 @@ type EulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> eulerTotientFunction.IsPrime))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> eulerTotientFunction.IsPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> eulerTotientFunction.IsPrime))

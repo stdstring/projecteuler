@@ -1,8 +1,9 @@
 ﻿namespace CommonLibTests
 
-open NUnit.Framework
-open System
 open CommonLib
+open NUnit.Framework
+open NUnit.Framework.Legacy
+open System
 
 [<TestFixture>]
 type LazyEulerTotientFunctionTests() =
@@ -13,11 +14,11 @@ type LazyEulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> LazyEulerTotientFunction.Create(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> LazyEulerTotientFunction.Create(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> LazyEulerTotientFunction.Create(125000001) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(2) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(3) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(10) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(19) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(100) |> Assert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(2) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(3) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(10) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(19) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> LazyEulerTotientFunction.Create(100) |> ClassicAssert.IsNotNull)
 
     [<Test>]
     member public this.GetValue() =
@@ -63,24 +64,24 @@ type LazyEulerTotientFunctionTests() =
 
     [<Test>]
     member public this.GetPrimes() =
-        Assert.AreEqual([2], LazyEulerTotientFunction.Create(2).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3], LazyEulerTotientFunction.Create(3).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3], LazyEulerTotientFunction.Create(4).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], LazyEulerTotientFunction.Create(5).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], LazyEulerTotientFunction.Create(6).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(7).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(8).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(9).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(10).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], LazyEulerTotientFunction.Create(11).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], LazyEulerTotientFunction.Create(12).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(13).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(14).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(15).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(16).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13; 17], LazyEulerTotientFunction.Create(17).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13; 17], LazyEulerTotientFunction.Create(18).GetPrimes() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13; 17; 19], LazyEulerTotientFunction.Create(19).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2], LazyEulerTotientFunction.Create(2).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], LazyEulerTotientFunction.Create(3).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], LazyEulerTotientFunction.Create(4).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], LazyEulerTotientFunction.Create(5).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], LazyEulerTotientFunction.Create(6).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(7).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(8).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(9).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], LazyEulerTotientFunction.Create(10).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], LazyEulerTotientFunction.Create(11).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], LazyEulerTotientFunction.Create(12).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(13).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(14).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(15).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], LazyEulerTotientFunction.Create(16).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13; 17], LazyEulerTotientFunction.Create(17).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13; 17], LazyEulerTotientFunction.Create(18).GetPrimes() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13; 17; 19], LazyEulerTotientFunction.Create(19).GetPrimes() |> Seq.toList)
 
     member private this.CheckGetValue(maxNumber: int, [<ParamArray>] expectedValues: int[]) =
         let eulerTotientFunction = maxNumber |> LazyEulerTotientFunction.Create
@@ -89,19 +90,19 @@ type LazyEulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 1 + shift |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 1 + shift |> eulerTotientFunction.GetValue))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0L) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 1L |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 1L |> eulerTotientFunction.GetValue))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(0I) |> ignore) |> ignore
         //Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.GetValue(eulerTotientFunction.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 1I |> eulerTotientFunction.GetValue))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 1I |> eulerTotientFunction.GetValue))
 
     member private this.CheckIsPrime(maxNumber: int, [<ParamArray>] expectedValues: bool[]) =
         let eulerTotientFunction = maxNumber |> LazyEulerTotientFunction.Create
@@ -110,16 +111,16 @@ type LazyEulerTotientFunctionTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> eulerTotientFunction.IsPrime))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> eulerTotientFunction.IsPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> eulerTotientFunction.IsPrime(eulerTotientFunction.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> eulerTotientFunction.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> eulerTotientFunction.IsPrime))

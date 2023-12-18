@@ -31,7 +31,7 @@ type Problem059() =
                      Seq.map (fun keyBasis -> keyBasis |> repeatKey source.Length) |>
                      Seq.map (fun key -> key |> decypt source |> asciiEncoder.GetChars |> System.String) |>
                      Seq.filter (fun dest -> checkData |> List.exists dest.Contains) |> Seq.toList
-        Assert.AreEqual(1, result.Length)
+        Assert.That(result.Length, Is.EqualTo(1))
         result |> List.head |> asciiEncoder.GetBytes |> Seq.sumBy (fun value -> value |> int)
 
     [<TestCase("problem_059.dat", 107359, TimeThresholds.HardTimeLimit)>]

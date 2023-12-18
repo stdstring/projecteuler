@@ -1,7 +1,8 @@
 ﻿namespace CommonLibTests
 
-open NUnit.Framework
 open CommonLib
+open NUnit.Framework
+open NUnit.Framework.Legacy
 open System
 
 [<TestFixture>]
@@ -418,28 +419,28 @@ type PellEquationTests() =
         Assert.Throws<ArgumentException>(fun() -> PellEquation.FindNSolution(PellSolution(3I, 2I), 4I, 1I, 2) |> ignore) |> ignore
 
     member private this.FindFirstSolution(d: int, c: int) =
-        Assert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindFirstSolution(d: int64, c: int64) =
-        Assert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindFirstSolution(d: bigint, c: bigint) =
-        Assert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(None, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindFirstSolution(d: int, c: int, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindFirstSolution(d: int64, c: int64, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindFirstSolution(d: bigint, c: bigint, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
+        ClassicAssert.AreEqual(expectedSolution |> Some, PellEquation.FindFirstSolution(d, c), "first solution of x^2 - {0} * y^2 = {1} equation", d, c)
 
     member private this.FindNSolution(firstSolution: PellSolution, d: int, c: int, n: int, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)
+        ClassicAssert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)
 
     member private this.FindNSolution(firstSolution: PellSolution, d: int64, c: int64, n: int, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)
+        ClassicAssert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)
 
     member private this.FindNSolution(firstSolution: PellSolution, d: bigint, c: bigint, n: int, expectedSolution: PellSolution) =
-        Assert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)
+        ClassicAssert.AreEqual(expectedSolution, PellEquation.FindNSolution(firstSolution, d, c, n), "{0}-th solution of x^2 - {1} * y^2 = {2}", n, d, c)

@@ -1,8 +1,8 @@
 ﻿namespace ProjectEulerTasks
 
+open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open CommonLib
 open System.Collections.Generic
 
 [<TestFixture>]
@@ -35,7 +35,7 @@ type Problem049() =
         let primes = EratosSieve.Create(maxNumber).ToSeq() |> Seq.skipWhile (fun prime -> prime < minNumber) |> Seq.toList
         let primesSet = primes |> HashSet<int> :> ISet<int>
         let answers = primes |> Seq.map (fun prime -> prime |> chooseTerms primesSet) |> Seq.concat |> Seq.filter (fun answer -> answer <> knownResult) |> Seq.distinct |> Seq.toArray
-        Assert.AreEqual(1, answers.Length)
+        Assert.That(answers.Length, Is.EqualTo(1))
         answers.[0]
 
     [<TestCase(296962999629L, TimeThresholds.HardTimeLimit)>]

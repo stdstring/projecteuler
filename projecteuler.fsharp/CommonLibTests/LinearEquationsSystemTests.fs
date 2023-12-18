@@ -3,6 +3,7 @@
 open CommonLib.LinearEquationsSystem
 open CommonLib.Rational
 open NUnit.Framework
+open NUnit.Framework.Legacy
 open System
 
 [<TestFixture>]
@@ -41,7 +42,7 @@ type GaussSolverTests() =
                                [RationalNumber32(3, 50); RationalNumber32(9, 100); RationalNumber32(3, 20)];
                                [RationalNumber32(11, 50); RationalNumber32(-1, 10); RationalNumber32(3, 50)]]
         let matrixB = [|RationalNumber32(11, 2); RationalNumber32(-39, 20); RationalNumber32(1, 2)|]
-        Assert.AreEqual([|RationalNumber32(10); RationalNumber32(5); RationalNumber32(-20)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
+        ClassicAssert.AreEqual([|RationalNumber32(10); RationalNumber32(5); RationalNumber32(-20)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
         // RationalNumber64
         this.CheckSolution(array2D [[1L; -2L; 1L]; [2L; 2L; -1L]; [4L; -1L; 1L]], [|0L; 3L; 5L|], [|1L; 2L; 3L|])
         this.CheckSolution(array2D [[3L; 2L; 1L; 1L]; [1L; -1L; 4L; -1L]; [-2L; -2L; -3L; 1L]; [1L; 5L; -1L; 2L]], [|-2L; -1L; 9L; 4L|], [|-3L; -1L; 2L; 7L|])
@@ -49,7 +50,7 @@ type GaussSolverTests() =
                                [RationalNumber64(3L, 50L); RationalNumber64(9L, 100L); RationalNumber64(3L, 20L)];
                                [RationalNumber64(11L, 50L); RationalNumber64(-1L, 10L); RationalNumber64(3L, 50L)]]
         let matrixB = [|RationalNumber64(11L, 2L); RationalNumber64(-39L, 20L); RationalNumber64(1L, 2L)|]
-        Assert.AreEqual([|RationalNumber64(10L); RationalNumber64(5L); RationalNumber64(-20L)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
+        ClassicAssert.AreEqual([|RationalNumber64(10L); RationalNumber64(5L); RationalNumber64(-20L)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
         // RationalNumber
         this.CheckSolution(array2D [[1I; -2I; 1I]; [2I; 2I; -1I]; [4I; -1I; 1I]], [|0I; 3I; 5I|], [|1I; 2I; 3I|])
         this.CheckSolution(array2D [[3I; 2I; 1I; 1I]; [1I; -1I; 4I; -1I]; [-2I; -2I; -3I; 1I]; [1I; 5I; -1I; 2I]], [|-2I; -1I; 9I; 4I|], [|-3I; -1I; 2I; 7I|])
@@ -57,22 +58,22 @@ type GaussSolverTests() =
                                [RationalNumber(3I, 50I); RationalNumber(9I, 100I); RationalNumber(3I, 20I)];
                                [RationalNumber(11I, 50I); RationalNumber(-1I, 10I); RationalNumber(3I, 50I)]]
         let matrixB = [|RationalNumber(11I, 2I); RationalNumber(-39I, 20I); RationalNumber(1I, 2I)|]
-        Assert.AreEqual([|RationalNumber(10I); RationalNumber(5I); RationalNumber(-20I)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
+        ClassicAssert.AreEqual([|RationalNumber(10I); RationalNumber(5I); RationalNumber(-20I)|] |> Some, GaussSolver.Solve(matrixA, matrixB))
 
     member public this.CheckSolution(matrixA: int32[,], matrixB: int32[], expectedResult: int32[]) =
-        Assert.AreEqual(expectedResult |> Array.map RationalNumber32 |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber32, matrixB |> Array.map RationalNumber32))
+        ClassicAssert.AreEqual(expectedResult |> Array.map RationalNumber32 |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber32, matrixB |> Array.map RationalNumber32))
 
     member public this.CheckSolutionMiss(matrixA: int32[,], matrixB: int32[]) =
-        Assert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber32, matrixB |> Array.map RationalNumber32))
+        ClassicAssert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber32, matrixB |> Array.map RationalNumber32))
 
     member public this.CheckSolution(matrixA: int64[,], matrixB: int64[], expectedResult: int64[]) =
-        Assert.AreEqual(expectedResult |> Array.map RationalNumber64 |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber64, matrixB |> Array.map RationalNumber64))
+        ClassicAssert.AreEqual(expectedResult |> Array.map RationalNumber64 |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber64, matrixB |> Array.map RationalNumber64))
 
     member public this.CheckSolutionMiss(matrixA: int64[,], matrixB: int64[]) =
-        Assert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber64, matrixB |> Array.map RationalNumber64))
+        ClassicAssert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber64, matrixB |> Array.map RationalNumber64))
 
     member public this.CheckSolution(matrixA: bigint[,], matrixB: bigint[], expectedResult: bigint[]) =
-        Assert.AreEqual(expectedResult |> Array.map RationalNumber |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber, matrixB |> Array.map RationalNumber))
+        ClassicAssert.AreEqual(expectedResult |> Array.map RationalNumber |> Some, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber, matrixB |> Array.map RationalNumber))
 
     member public this.CheckSolutionMiss(matrixA: bigint[,], matrixB: bigint[]) =
-        Assert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber, matrixB |> Array.map RationalNumber))
+        ClassicAssert.AreEqual(None, GaussSolver.Solve(matrixA |> Array2D.map RationalNumber, matrixB |> Array.map RationalNumber))

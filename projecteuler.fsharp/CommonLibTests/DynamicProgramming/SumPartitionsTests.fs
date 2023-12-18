@@ -2,6 +2,7 @@
 
 open CommonLib.DynamicProgramming
 open NUnit.Framework
+open NUnit.Framework.Legacy
 open System
 
 [<TestFixture>]
@@ -55,17 +56,17 @@ type SumPartitionsTests() =
     member private this.CheckPartitions(partitions: SumPartitions<int>, expectedPartitions: int[]) =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(-1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(0) |> ignore) |> ignore
-        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in Assert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
+        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in ClassicAssert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(expectedPartitions.Length + 1) |> ignore) |> ignore
 
     member private this.CheckPartitions(partitions: SumPartitions<int64>, expectedPartitions: int64[]) =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(-1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(0) |> ignore) |> ignore
-        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in Assert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
+        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in ClassicAssert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(expectedPartitions.Length + 1) |> ignore) |> ignore
 
     member private this.CheckPartitions(partitions: SumPartitions<bigint>, expectedPartitions: bigint[]) =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(-1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(0) |> ignore) |> ignore
-        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in Assert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
+        expectedPartitions |> Array.iteri (fun index expectedValue -> let number = index + 1 in ClassicAssert.AreEqual(expectedValue, number |> partitions.GetPartitionCount))
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> partitions.GetPartitionCount(expectedPartitions.Length + 1) |> ignore) |> ignore

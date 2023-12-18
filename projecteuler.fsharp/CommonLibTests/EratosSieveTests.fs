@@ -1,8 +1,9 @@
 ﻿namespace CommonLibTests
 
-open NUnit.Framework
-open System
 open CommonLib
+open NUnit.Framework
+open NUnit.Framework.Legacy
+open System
 
 [<TestFixture>]
 type EratosSieveTests() =
@@ -19,11 +20,11 @@ type EratosSieveTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieve.Create(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieve.Create(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieve.Create(1000000001) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> EratosSieve.Create(2) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieve.Create(3) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieve.Create(10) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieve.Create(19) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieve.Create(100) |> Assert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieve.Create(2) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieve.Create(3) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieve.Create(10) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieve.Create(19) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieve.Create(100) |> ClassicAssert.IsNotNull)
 
     [<Test>]
     member public this.IsPrime() =
@@ -61,20 +62,20 @@ type EratosSieveTests() =
 
     [<Test>]
     member public this.ToSeq() =
-        Assert.AreEqual([2], EratosSieve.Create(2).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3], EratosSieve.Create(3).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3], EratosSieve.Create(4).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], EratosSieve.Create(5).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], EratosSieve.Create(6).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieve.Create(7).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieve.Create(8).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieve.Create(9).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieve.Create(10).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], EratosSieve.Create(11).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], EratosSieve.Create(12).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(13).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(14).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(15).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2], EratosSieve.Create(2).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], EratosSieve.Create(3).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], EratosSieve.Create(4).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], EratosSieve.Create(5).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], EratosSieve.Create(6).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieve.Create(7).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieve.Create(8).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieve.Create(9).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieve.Create(10).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], EratosSieve.Create(11).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], EratosSieve.Create(12).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(13).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(14).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieve.Create(15).ToSeq() |> Seq.toList)
 
     member private this.CheckIsPrime(maxNumber: int, [<ParamArray>] expectedValues: bool[]) =
         let sieve = maxNumber |> EratosSieve.Create
@@ -83,19 +84,19 @@ type EratosSieveTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, sieve.IsPrime(2 + shift)))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, sieve.IsPrime(2 + shift)))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> sieve.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> sieve.IsPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> sieve.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> sieve.IsPrime))
 
     member private this.CheckGetNextPrime(maxNumber: int, [<ParamArray>] expectedValues: int option[]) =
         let sieve = maxNumber |> EratosSieve.Create
@@ -104,19 +105,19 @@ type EratosSieveTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, sieve.GetNextPrime(2 + shift)))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, sieve.GetNextPrime(2 + shift)))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> convertOptionValue int64, shift |> int64 |> (+) 2L |> sieve.GetNextPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> convertOptionValue int64, shift |> int64 |> (+) 2L |> sieve.GetNextPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> convertOptionValue bigint, shift |> bigint |> (+) 2I |> sieve.GetNextPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> convertOptionValue bigint, shift |> bigint |> (+) 2I |> sieve.GetNextPrime))
 
 [<TestFixture>]
 type EratosSieveWithSmallestPrimeFactorsTests() =
@@ -133,11 +134,11 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieveWithSmallestPrimeFactors.Create(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieveWithSmallestPrimeFactors.Create(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> EratosSieveWithSmallestPrimeFactors.Create(500000001) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(2) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(3) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(10) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(19) |> Assert.IsNotNull)
-        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(100) |> Assert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(2) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(3) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(10) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(19) |> ClassicAssert.IsNotNull)
+        Assert.DoesNotThrow(fun() -> EratosSieveWithSmallestPrimeFactors.Create(100) |> ClassicAssert.IsNotNull)
 
     [<Test>]
     member public this.IsPrime() =
@@ -175,20 +176,20 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
 
     [<Test>]
     member public this.ToSeq() =
-        Assert.AreEqual([2], EratosSieveWithSmallestPrimeFactors.Create(2).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3], EratosSieveWithSmallestPrimeFactors.Create(3).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3], EratosSieveWithSmallestPrimeFactors.Create(4).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], EratosSieveWithSmallestPrimeFactors.Create(5).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5], EratosSieveWithSmallestPrimeFactors.Create(6).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(7).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(8).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(9).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(10).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], EratosSieveWithSmallestPrimeFactors.Create(11).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11], EratosSieveWithSmallestPrimeFactors.Create(12).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(13).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(14).ToSeq() |> Seq.toList)
-        Assert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(15).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2], EratosSieveWithSmallestPrimeFactors.Create(2).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], EratosSieveWithSmallestPrimeFactors.Create(3).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3], EratosSieveWithSmallestPrimeFactors.Create(4).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], EratosSieveWithSmallestPrimeFactors.Create(5).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5], EratosSieveWithSmallestPrimeFactors.Create(6).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(7).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(8).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(9).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7], EratosSieveWithSmallestPrimeFactors.Create(10).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], EratosSieveWithSmallestPrimeFactors.Create(11).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11], EratosSieveWithSmallestPrimeFactors.Create(12).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(13).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(14).ToSeq() |> Seq.toList)
+        ClassicAssert.AreEqual([2; 3; 5; 7; 11; 13], EratosSieveWithSmallestPrimeFactors.Create(15).ToSeq() |> Seq.toList)
 
     [<Test>]
     member public this.GetItem() =
@@ -301,19 +302,19 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> sieve.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> sieve.IsPrime))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> sieve.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> int64 |> (+) 2L |> sieve.IsPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.IsPrime(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> sieve.IsPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, shift |> bigint |> (+) 2I |> sieve.IsPrime))
 
     member private this.CheckGetNextPrime(maxNumber: int, [<ParamArray>] expectedValues: int option[]) =
         let sieve = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
@@ -322,19 +323,19 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> sieve.GetNextPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> sieve.GetNextPrime))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> convertOptionValue int64, shift |> int64 |> (+) 2L |> sieve.GetNextPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> convertOptionValue int64, shift |> int64 |> (+) 2L |> sieve.GetNextPrime))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.GetNextPrime(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> convertOptionValue bigint, shift |> bigint |> (+) 2I |> sieve.GetNextPrime))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> convertOptionValue bigint, shift |> bigint |> (+) 2I |> sieve.GetNextPrime))
 
     member private this.CheckGetItem(maxNumber: int, [<ParamArray>] expectedValues: int[]) =
         let sieve = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
@@ -343,19 +344,19 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[0] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[1] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[sieve.MaxNumber + 1] |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, sieve.[2 + shift]))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, sieve.[2 + shift]))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[-1L] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[0L] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[1L] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[sieve.MaxNumber |> int64 |> (+) 1L] |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, sieve.[shift |> int64 |> (+) 2L]))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, sieve.[shift |> int64 |> (+) 2L]))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[-1I] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[0I] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[1I] |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.[sieve.MaxNumber |> bigint |> (+) 1I] |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, sieve.[shift |> bigint |> (+) 2I]))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, sieve.[shift |> bigint |> (+) 2I]))
 
     member private this.CheckCalcSigma0(maxNumber: int, [<ParamArray>] expectedValues: int[]) =
         let sieve = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
@@ -364,19 +365,19 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> sieve.CalcSigma0))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> sieve.CalcSigma0))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcSigma0))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcSigma0))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma0(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcSigma0))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcSigma0))
 
     member private this.CheckCalcSigma1(maxNumber: int, [<ParamArray>] expectedValues: int[]) =
         let sieve = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
@@ -385,19 +386,19 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> sieve.CalcSigma1))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> sieve.CalcSigma1))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcSigma1))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcSigma1))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcSigma1(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcSigma1))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcSigma1))
 
     member private this.CheckCalcEulerTotientFunction(maxNumber: int, [<ParamArray>] expectedValues: int[]) =
         let sieve = maxNumber |> EratosSieveWithSmallestPrimeFactors.Create
@@ -406,16 +407,16 @@ type EratosSieveWithSmallestPrimeFactorsTests() =
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(0) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(1) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(sieve.MaxNumber + 1) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue, 2 + shift |> sieve.CalcEulerTotientFunction))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue, 2 + shift |> sieve.CalcEulerTotientFunction))
         // int64
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(-1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(0L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(1L) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(sieve.MaxNumber |> int64 |> (+) 1L) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcEulerTotientFunction))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> int64, shift |> int64 |> (+) 2L |> sieve.CalcEulerTotientFunction))
         // bigint
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(-1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(0I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(1I) |> ignore) |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(fun() -> sieve.CalcEulerTotientFunction(sieve.MaxNumber |> bigint |> (+) 1I) |> ignore) |> ignore
-        expectedValues |> Seq.iteri (fun shift expectedValue -> Assert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcEulerTotientFunction))
+        expectedValues |> Seq.iteri (fun shift expectedValue -> ClassicAssert.AreEqual(expectedValue |> bigint, shift |> bigint |> (+) 2I |> sieve.CalcEulerTotientFunction))
