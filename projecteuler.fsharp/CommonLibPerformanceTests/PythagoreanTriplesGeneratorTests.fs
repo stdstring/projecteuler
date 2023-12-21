@@ -17,7 +17,7 @@ type PythagoreanTriplesGeneratorTests() =
     [<TestCase(10000000)>]
     member public this.GeneratePrimitiveWithPerimeterSelector(perimeter: int) =
         let generator = PythagoreanTriplesGenerator(fun triple -> triple.X + triple.Y + triple.Z)
-        (fun () -> generator.GeneratePrimitiveTriples(perimeter) |> ignore) |> MeasureUtils.MeasureExecutionTime |> ignore
+        (fun () -> generator.GeneratePrimitiveTriples(perimeter) |> ignore) |> MeasureUtils.MeasureExecutionTime |> printf "Execution time = %d ms"
 
     [<TestCase(10)>]
     [<TestCase(100)>]
@@ -28,4 +28,4 @@ type PythagoreanTriplesGeneratorTests() =
     [<TestCase(10000000)>]
     member public this.GenerateWithPerimeterSelector(perimeter: int) =
         let generator = PythagoreanTriplesGenerator(fun triple -> triple.X + triple.Y + triple.Z)
-        (fun () -> generator.GenerateTriples(perimeter) |> ignore) |> MeasureUtils.MeasureExecutionTime |> ignore
+        (fun () -> generator.GenerateTriples(perimeter) |> ignore) |> MeasureUtils.MeasureExecutionTime |> printf "Execution time = %d ms"
