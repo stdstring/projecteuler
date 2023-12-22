@@ -14,7 +14,13 @@ type NumbersRelation =
         | a, b when a < b -> NumbersRelation.CalcGCD(b, a)
         | a, b when a = b -> a
         | a, 0 -> a
-        | a, b -> NumbersRelation.CalcGCD(b, a % b)
+        | a, b ->
+            let mutable aValue, bValue = a, b
+            while bValue > 0 do
+                let reminder = aValue % bValue
+                aValue <- bValue
+                bValue <- reminder
+            aValue
 
     static member public CalcGCD(a: int64, b: int64) =
         match a, b with
@@ -24,7 +30,13 @@ type NumbersRelation =
         | a, b when a < b -> NumbersRelation.CalcGCD(b, a)
         | a, b when a = b -> a
         | a, 0L -> a
-        | a, b -> NumbersRelation.CalcGCD(b, a % b)
+        | a, b ->
+            let mutable aValue, bValue = a, b
+            while bValue > 0 do
+                let reminder = aValue % bValue
+                aValue <- bValue
+                bValue <- reminder
+            aValue
 
     static member public CalcGCD(a: bigint, b: bigint) = bigint.GreatestCommonDivisor(a, b)
 

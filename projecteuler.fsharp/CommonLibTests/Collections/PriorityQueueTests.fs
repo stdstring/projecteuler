@@ -2,6 +2,7 @@
 
 open CommonLib.Collections
 open NUnit.Framework
+open NUnit.Framework.Legacy
 open System
 
 module PriorityQueueTestsImpl =
@@ -20,25 +21,25 @@ type MaxPriorityQueueTests() =
     let insertItemsWithCheckMax(queue: MaxPriorityQueue<'TItem>) (itemAndMaxPairs: ('TItem * 'TItem)[]) =
         for (item, expectedMax) in itemAndMaxPairs do
             item |> queue.Insert
-            Assert.AreEqual(expectedMax, queue.GetMax)
+            ClassicAssert.AreEqual(expectedMax, queue.GetMax)
 
     let checkExtractMax (queue: MaxPriorityQueue<'TItem>) (expectedMax: 'TItem[]) =
         for max in expectedMax do
-            Assert.AreEqual(max, queue.ExtractMax())
-        queue.IsEmpty |> Assert.IsTrue
+            ClassicAssert.AreEqual(max, queue.ExtractMax())
+        queue.IsEmpty |> ClassicAssert.IsTrue
 
     [<Test>]
     member public this.Insert() =
         // max priority queue for int
         let intQueue = MaxPriorityQueue<int>(fun (left, right) -> left - right)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         [|(1, 1); (4, 4); (3, 4); (13, 13); (11, 13)|] |> insertItemsWithCheckMax intQueue
         intQueue.ExtractMax() |> ignore
         666 |> intQueue.Insert
-        Assert.AreEqual(666, intQueue.GetMax)
+        ClassicAssert.AreEqual(666, intQueue.GetMax)
         // max priority queue for SomeData
         let someDataQueue = MaxPriorityQueue<SomeData>(fun (left, right) -> left.FieldA - right.FieldA)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue
         [|(creareSomeData 1 "IDDQD", creareSomeData 1 "IDDQD");
           (creareSomeData 4 "IDKFA", creareSomeData 4 "IDKFA");
           (creareSomeData 3 "IDCLIP", creareSomeData 4 "IDKFA");
@@ -46,7 +47,7 @@ type MaxPriorityQueueTests() =
           (creareSomeData 11 "IMPULSE 666", creareSomeData 13 "IMPULSE 9")|] |> insertItemsWithCheckMax someDataQueue
         someDataQueue.ExtractMax() |> ignore
         creareSomeData 666 "666" |> someDataQueue.Insert
-        Assert.AreEqual(creareSomeData 666 "666", someDataQueue.GetMax)
+        ClassicAssert.AreEqual(creareSomeData 666 "666", someDataQueue.GetMax)
 
     [<Test>]
     member public this.GetMax() =
@@ -80,22 +81,22 @@ type MaxPriorityQueueTests() =
     member public this.IsEmpty() =
         // max priority queue for int
         let intQueue = MaxPriorityQueue<int>(fun (left, right) -> left - right)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         Assert.DoesNotThrow(fun() -> 666 |> intQueue.Insert)
-        intQueue.IsEmpty |> Assert.IsFalse
+        intQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> intQueue.GetMax |> ignore)
-        intQueue.IsEmpty |> Assert.IsFalse
+        intQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> intQueue.ExtractMax() |> ignore)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         // max priority queue for SomeData
         let someDataQueue = MaxPriorityQueue<SomeData>(fun (left, right) -> left.FieldA - right.FieldA)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue
         Assert.DoesNotThrow(fun() -> creareSomeData 666 "IDDQD" |> someDataQueue.Insert)
-        someDataQueue.IsEmpty |> Assert.IsFalse
+        someDataQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> someDataQueue.GetMax |> ignore)
-        someDataQueue.IsEmpty |> Assert.IsFalse
+        someDataQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> someDataQueue.ExtractMax() |> ignore)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue
 
 [<TestFixture>]
 type MinPriorityQueueTests() =
@@ -106,25 +107,25 @@ type MinPriorityQueueTests() =
     let insertItemsWithCheckMin(queue: MinPriorityQueue<'TItem>) (itemAndMinPairs: ('TItem * 'TItem)[]) =
         for (item, expectedMin) in itemAndMinPairs do
             item |> queue.Insert
-            Assert.AreEqual(expectedMin, queue.GetMin)
+            ClassicAssert.AreEqual(expectedMin, queue.GetMin)
 
     let checkExtractMin (queue: MinPriorityQueue<'TItem>) (expectedMin: 'TItem[]) =
         for min in expectedMin do
-            Assert.AreEqual(min, queue.ExtractMin())
-        queue.IsEmpty |> Assert.IsTrue
+            ClassicAssert.AreEqual(min, queue.ExtractMin())
+        queue.IsEmpty |> ClassicAssert.IsTrue
 
     [<Test>]
     member public this.Insert() =
         // min priority queue for int
         let intQueue = MinPriorityQueue<int>(fun (left, right) -> left - right)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         [|(11, 11); (13, 11); (3, 3); (4, 3); (1, 1)|] |> insertItemsWithCheckMin intQueue
         intQueue.ExtractMin() |> ignore
         -19 |> intQueue.Insert
-        Assert.AreEqual(-19, intQueue.GetMin)
+        ClassicAssert.AreEqual(-19, intQueue.GetMin)
         // min priority queue for SomeData
         let someDataQueue = MinPriorityQueue<SomeData>(fun (left, right) -> left.FieldA - right.FieldA)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue
         [|(creareSomeData 11 "IDDQD", creareSomeData 11 "IDDQD");
           (creareSomeData 13 "IDKFA", creareSomeData 11 "IDDQD");
           (creareSomeData 3 "IDCLIP", creareSomeData 3 "IDCLIP");
@@ -132,7 +133,7 @@ type MinPriorityQueueTests() =
           (creareSomeData 1 "IMPULSE 666", creareSomeData 1 "IMPULSE 666")|] |> insertItemsWithCheckMin someDataQueue
         someDataQueue.ExtractMin() |> ignore
         creareSomeData -19 "-19" |> someDataQueue.Insert
-        Assert.AreEqual(creareSomeData -19 "-19", someDataQueue.GetMin)
+        ClassicAssert.AreEqual(creareSomeData -19 "-19", someDataQueue.GetMin)
 
     [<Test>]
     member public this.GetMin() =
@@ -166,19 +167,19 @@ type MinPriorityQueueTests() =
     member public this.IsEmpty() =
         // min priority queue for int
         let intQueue = MinPriorityQueue<int>(fun (left, right) -> left - right)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         Assert.DoesNotThrow(fun() -> 666 |> intQueue.Insert)
-        intQueue.IsEmpty |> Assert.IsFalse
+        intQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> intQueue.GetMin |> ignore)
-        intQueue.IsEmpty |> Assert.IsFalse
+        intQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> intQueue.ExtractMin() |> ignore)
-        intQueue.IsEmpty |> Assert.IsTrue
+        intQueue.IsEmpty |> ClassicAssert.IsTrue
         // min priority queue for SomeData
         let someDataQueue = MinPriorityQueue<SomeData>(fun (left, right) -> left.FieldA - right.FieldA)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue
         Assert.DoesNotThrow(fun() -> creareSomeData 666 "IDDQD" |> someDataQueue.Insert)
-        someDataQueue.IsEmpty |> Assert.IsFalse
+        someDataQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> someDataQueue.GetMin |> ignore)
-        someDataQueue.IsEmpty |> Assert.IsFalse
+        someDataQueue.IsEmpty |> ClassicAssert.IsFalse
         Assert.DoesNotThrow(fun() -> someDataQueue.ExtractMin() |> ignore)
-        someDataQueue.IsEmpty |> Assert.IsTrue
+        someDataQueue.IsEmpty |> ClassicAssert.IsTrue

@@ -11,8 +11,8 @@ type SolutionUtils =
         let result = solver ()
         stopwatch.Stop()
         printfn "Execution time is %i ms" stopwatch.ElapsedMilliseconds
-        Assert.AreEqual(expectedAnswer, result)
-        Assert.LessOrEqual(stopwatch.ElapsedMilliseconds, timeLimit)
+        Assert.That(result, Is.EqualTo(expectedAnswer))
+        Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThanOrEqualTo(timeLimit))
 
     static member public CheckSolution(timeLimit: int, expectedAnswer: 'TResult, solver: 'TIn -> 'TResult, input: 'TIn ) =
         SolutionUtils.CheckSolution(timeLimit, expectedAnswer, fun() -> solver input)

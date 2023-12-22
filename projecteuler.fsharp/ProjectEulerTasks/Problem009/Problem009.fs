@@ -1,8 +1,8 @@
 ﻿namespace ProjectEulerTasks
 
+open CommonLib
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open CommonLib
 open System.Collections.Generic
 
 [<TestFixture>]
@@ -17,8 +17,8 @@ type Problem009() =
             if not (storage.ContainsKey(perimeter)) then
                 storage.[perimeter] <- ResizeArray<PythagoreanTriple>()
             storage.[perimeter].Add(triple)
-        Assert.IsTrue(storage.ContainsKey(maxPerimeter))
-        Assert.AreEqual(1, storage.[maxPerimeter].Count)
+        Assert.That(storage.ContainsKey(maxPerimeter), Is.True);
+        Assert.That(storage.[maxPerimeter].Count, Is.EqualTo(1));
         let actualTriple = storage.[maxPerimeter].[0]
         actualTriple.X * actualTriple.Y * actualTriple.Z
 

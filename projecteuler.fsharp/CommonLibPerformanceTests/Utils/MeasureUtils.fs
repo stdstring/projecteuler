@@ -9,6 +9,4 @@ type MeasureUtils =
         let stopwatch = Stopwatch.StartNew()
         operation ()
         stopwatch.Stop()
-        let elapsedMilliseconds = stopwatch.ElapsedMilliseconds
-        elapsedMilliseconds |> printf "Execution time = %d ms"
-        elapsedMilliseconds
+        stopwatch.ElapsedMilliseconds

@@ -1,7 +1,8 @@
 ﻿namespace CommonLibTests
 
-open NUnit.Framework
 open CommonLib
+open NUnit.Framework
+open NUnit.Framework.Legacy
 
 [<TestFixture>]
 type GridPathFactoryTests() =
@@ -65,9 +66,9 @@ type GridPathFactoryTests() =
                        }
         let pathFactory = GridPathFactory<int>(behavior)
         let result = pathFactory.Create(squareGrid, [GridPoint(1, 1)], [GridPoint(squareRowMax, squareColumnMax)])
-        Assert.AreEqual(2427, result.Value)
+        ClassicAssert.AreEqual(2427, result.Value)
         let expectedPath = [(1, 1); (2, 1); (2, 2); (2, 3); (3, 3); (3, 4); (4, 4); (5, 4); (5, 5)] |> List.map GridPoint
-        Assert.AreEqual(expectedPath, result.Path)
+        ClassicAssert.AreEqual(expectedPath, result.Path)
 
     [<Test>]
     member public this.SearchThreeWayTest() =
@@ -80,9 +81,9 @@ type GridPathFactoryTests() =
         let initPoints = [ for row in 1 .. squareRowMax -> GridPoint(row, 1) ]
         let resultPoints = [ for row in 1 .. squareRowMax -> GridPoint(row, squareColumnMax) ]
         let result = pathFactory.Create(squareGrid, initPoints, resultPoints)
-        Assert.AreEqual(994, result.Value)
+        ClassicAssert.AreEqual(994, result.Value)
         let expectedPath = [(2, 1); (2, 2); (2, 3); (1, 3); (1, 4); (1, 5)] |> List.map GridPoint
-        Assert.AreEqual(expectedPath, result.Path)
+        ClassicAssert.AreEqual(expectedPath, result.Path)
 
     [<Test>]
     member public this.SearchFourWayTest() =
@@ -93,9 +94,9 @@ type GridPathFactoryTests() =
                        }
         let pathFactory = GridPathFactory<int>(behavior)
         let result = pathFactory.Create(squareGrid, [GridPoint(1, 1)], [GridPoint(squareRowMax, squareColumnMax)])
-        Assert.AreEqual(2297, result.Value)
+        ClassicAssert.AreEqual(2297, result.Value)
         let expectedPath = [(1, 1); (2, 1); (2, 2); (2, 3); (1, 3); (1, 4); (1, 5); (2, 5); (3, 5); (3, 4); (4, 4); (5, 4); (5, 5)] |> List.map GridPoint
-        Assert.AreEqual(expectedPath, result.Path)
+        ClassicAssert.AreEqual(expectedPath, result.Path)
 
     [<Test>]
     member public this.SearchDirectTriangleTest() =
@@ -106,8 +107,8 @@ type GridPathFactoryTests() =
                        }
         let pathFactory = GridPathFactory<int>(behavior)
         let result = pathFactory.Create(triangleGrid, [GridPoint(1, 1)], [ for column in 1 .. triangleColumnMax -> GridPoint(triangleRowMax, column) ])
-        Assert.AreEqual(23, result.Value)
-        Assert.AreEqual([(1, 1); (2, 1); (3, 2); (4, 3)] |> List.map GridPoint, result.Path)
+        ClassicAssert.AreEqual(23, result.Value)
+        ClassicAssert.AreEqual([(1, 1); (2, 1); (3, 2); (4, 3)] |> List.map GridPoint, result.Path)
 
     [<Test>]
     member public this.SearchReverseTriangleTest() =
@@ -118,5 +119,5 @@ type GridPathFactoryTests() =
                        }
         let pathFactory = GridPathFactory<int>(behavior)
         let result = pathFactory.Create(triangleGrid, [ for column in 1 .. triangleColumnMax -> GridPoint(triangleRowMax, column) ], [GridPoint(1, 1)])
-        Assert.AreEqual(23, result.Value)
-        Assert.AreEqual([(4, 3); (3, 2); (2, 1); (1, 1)] |> List.map GridPoint, result.Path)
+        ClassicAssert.AreEqual(23, result.Value)
+        ClassicAssert.AreEqual([(4, 3); (3, 2); (2, 1); (1, 1)] |> List.map GridPoint, result.Path)

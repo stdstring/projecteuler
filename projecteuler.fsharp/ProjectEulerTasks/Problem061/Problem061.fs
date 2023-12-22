@@ -119,7 +119,7 @@ type Problem061() =
         let storages = [heptagonalStorage; hexagonalStorage; pentagonalStorage; squareStorage; triangleStorage]
         let octagonalNumbers = seq { OctagonalInf .. OctagonalSup } |> Seq.map (fun n -> n * (3 * n - 2))
         let result = octagonalNumbers |> Seq.filter (fun number -> number % 100 >= StorageDelta) |> Seq.map (fun number -> [number] |> processNumber storages number) |> List.concat
-        Assert.AreEqual(1, result.Length)
+        Assert.That(result.Length, Is.EqualTo(1))
         result |> List.head |> List.sum
 
     [<TestCase(28684, TimeThresholds.HardTimeLimit)>]
