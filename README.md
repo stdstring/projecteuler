@@ -153,6 +153,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 310. Nim Square](https://projecteuler.net/problem=310)
 * [Problem 315. Digital root clocks](https://projecteuler.net/problem=315)
 * [Problem 317. Firecracker](https://projecteuler.net/problem=317)
+* [Problem 336. Maximix Arrangements](https://projecteuler.net/problem=336)
 * [Problem 345. Matrix Sum](https://projecteuler.net/problem=345)
 * [Problem 346. Strong Repunits](https://projecteuler.net/problem=346)
 * [Problem 347. Largest integer divisible by two primes](https://projecteuler.net/problem=347)

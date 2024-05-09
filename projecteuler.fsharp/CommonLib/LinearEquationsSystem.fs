@@ -60,7 +60,6 @@ module LinearEquationsSystem =
                         swapRows(matrixA, matrixB, current, row)
                         GaussSolver.AddRowToRest(matrixA, matrixB, current)
                         (current + 1) |> prepareImpl
-                    | _ -> false
             0 |> prepareImpl
 
         static member private PrepareMatrix(matrixA: RationalNumber64[,], matrixB: RationalNumber64[]) =
@@ -77,7 +76,6 @@ module LinearEquationsSystem =
                         swapRows(matrixA, matrixB, current, row)
                         GaussSolver.AddRowToRest(matrixA, matrixB, current)
                         (current + 1) |> prepareImpl
-                    | _ -> false
             0 |> prepareImpl
 
         static member private PrepareMatrix(matrixA: RationalNumber[,], matrixB: RationalNumber[]) =
@@ -94,7 +92,6 @@ module LinearEquationsSystem =
                         swapRows(matrixA, matrixB, current, row)
                         GaussSolver.AddRowToRest(matrixA, matrixB, current)
                         (current + 1) |> prepareImpl
-                    | _ -> false
             0 |> prepareImpl
 
         static member private CalcResult(matrixA: RationalNumber32[,], matrixB: RationalNumber32[]) =
