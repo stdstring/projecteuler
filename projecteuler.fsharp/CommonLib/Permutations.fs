@@ -5,6 +5,32 @@ open System
 [<AbstractClass; Sealed>]
 type Permutations =
 
+    static member public GenerateNextPermutationInPlace(currentPermutation: 'TItem[]) =
+        // Narayana algorithm
+        let mutable j = -1
+        for index in seq {0 .. currentPermutation.Length - 2} do
+            if currentPermutation.[index] < currentPermutation.[index + 1] then
+                j <- index
+        match j with
+        | -1 -> None
+        | _ ->
+            let mutable l = j + 1
+            for index in seq {j + 1 .. currentPermutation.Length - 1} do
+                if currentPermutation.[j] < currentPermutation.[index] then
+                    l <- index
+            let jValue = currentPermutation.[j]
+            currentPermutation.[j] <- currentPermutation.[l]
+            let mutable start = j + 1
+            let mutable finish = currentPermutation.Length - 1
+            while start < finish do
+                let temp = currentPermutation.[start]
+                currentPermutation.[start] <- currentPermutation.[finish]
+                currentPermutation.[finish] <- temp
+                start <- start + 1
+                finish <- finish - 1
+            currentPermutation.[currentPermutation.Length - 1 - l + j + 1] <- jValue
+            currentPermutation |> Some
+
     static member public GetPermutation(lexicographicalNumber: bigint, alphabet: 'TItem list) =
         Permutations.GetPermutation(lexicographicalNumber, alphabet.Length, alphabet)
 
