@@ -28,7 +28,10 @@ type Problem112() =
             | _ -> true
         match number with
         | _ when number < 100 -> false
-        | _ -> let digit :: digitsRest = number |> NumbersDigits.GetDigits in DigitsOrdering.Undef digit |> isBouncyNumberImpl digitsRest
+        | _ ->
+            match number |> NumbersDigits.GetDigits with
+            | digit :: digitsRest -> DigitsOrdering.Undef digit |> isBouncyNumberImpl digitsRest
+            | _ -> failwith "Unexpected branch of match expression"
 
     let solveImpl (bouncyNumbersProportion: float) =
         let rec processNumber (number: int) (bouncyNumbersCount: int) =
