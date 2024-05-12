@@ -19,10 +19,10 @@ type Problem014() =
         | 1L -> 3L * current + 1L
         | _ -> failwith "Unexpected branch of match expression"
 
-    let saveChain (storage: SafeStorage<int>) (result: ChainResult) =
+    let saveChain (storage: SafeArray<int>) (result: ChainResult) =
         result.Chain |> List.iteri (fun index number -> storage.SetValue(number, result.ChainSize + index + 1))
 
-    let rec processChain (storage: SafeStorage<int>) (chain: int64 list) (current: int64) =
+    let rec processChain (storage: SafeArray<int>) (chain: int64 list) (current: int64) =
         match current with
         | 1L -> {ChainResult.Current = current; ChainResult.ChainSize = 0; ChainResult.Chain = chain}
         | _ ->
@@ -30,14 +30,14 @@ type Problem014() =
             | value when value = storage.DefaultValue -> current |> generateNextStep |> processChain storage (current :: chain)
             | value -> {ChainResult.Current = current; ChainResult.ChainSize = value; ChainResult.Chain = chain}
 
-    let addNumber (number: int) (storage: SafeStorage<int>) =
+    let addNumber (number: int) (storage: SafeArray<int>) =
         number |> int64 |> processChain storage [] |> saveChain storage
 
-    let findLongestChain (storage: SafeStorage<int>) =
+    let findLongestChain (storage: SafeArray<int>) =
         seq { storage.MinNumber .. storage.MaxNumber } |> Seq.map (fun number -> number, storage.GetValue(number)) |> Seq.maxBy (fun (_, length) -> length) |> fst
 
     let solveImpl (maxNumber: int) =
-        let storage = SafeStorage(2, maxNumber, 0)
+        let storage = SafeArray(2, maxNumber, 0)
         seq { storage.MinNumber .. storage.MaxNumber } |> Seq.iter (fun number -> addNumber number storage)
         storage |> findLongestChain
 

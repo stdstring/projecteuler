@@ -22,7 +22,7 @@
     <Compile Include="PythagoreanTriples.fs" />
     <Compile Include="Rational.fs" />
     <Compile Include="LinearEquationsSystem.fs" />
-    <Compile Include="SafeStorage.fs" />
+    <Compile Include="SafeArray.fs" />
   </ItemGroup>
 
   <ItemGroup>
