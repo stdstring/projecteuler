@@ -15,14 +15,16 @@ type Problem102() =
 
     let calcVectorZProduct (point1: Point) (point2: Point) = point1.Y * point2.X - point1.X * point2.Y
 
-    let checkTriangle([point1; point2; point3]: Point list) =
-        let productZ1 = calcVectorZProduct point1 point2
-        let productZ2 = calcVectorZProduct point2 point3
-        let productZ3 = calcVectorZProduct point3 point1
-        match productZ1, productZ2, productZ3 with
-        | _ when (productZ1 > 0) && (productZ2 > 0) && (productZ3 > 0) -> true
-        | _ when (productZ1 < 0) && (productZ2 < 0) && (productZ3 < 0) -> true
-        | _ -> false
+    let checkTriangle = function
+        | [point1; point2; point3] ->
+            let productZ1 = calcVectorZProduct point1 point2
+            let productZ2 = calcVectorZProduct point2 point3
+            let productZ3 = calcVectorZProduct point3 point1
+            match productZ1, productZ2, productZ3 with
+            | _ when (productZ1 > 0) && (productZ2 > 0) && (productZ3 > 0) -> true
+            | _ when (productZ1 < 0) && (productZ2 < 0) && (productZ3 < 0) -> true
+            | _ -> false
+        | _ -> failwith "Unexpected branch of match expression"
 
     let solveImpl (dataFilename: string) =
         let createTriangle (numbers: int[]) =

@@ -53,35 +53,38 @@ type Problem093() =
         | _, _, '/' -> calc3Value value1 operator1 value2 operator2 (calc2Value value3 '/' value4)
         | _ -> calc3Value (calc2Value value1 operator1 value2) operator2 value3 operator3 value4
 
-    let calcDigitsValues ([digit1; digit2; digit3; digit4]: int list) ([operator1; operator2; operator3]: char list) =
-        let number1 = new RationalNumber32(digit1) |> Some
-        let number2 = new RationalNumber32(digit2) |> Some
-        let number3 = new RationalNumber32(digit3) |> Some
-        let number4 = new RationalNumber32(digit4) |> Some
-        [
-            // 1: digit1 operator1 digit2 operator2 digit3 operator3 digit4
-            calc4Value number1 operator1 number2 operator2 number3 operator3 number4;
-            // 2: (digit1 operator1 digit2) operator2 digit3 operator3 digit4
-            calc3Value (calc2Value number1 operator1 number2) operator2 number3 operator3 number4;
-            // 3: digit1 operator1 (digit2 operator2 digit3) operator3 digit4
-            calc3Value number1 operator1 (calc2Value number2 operator2 number3) operator3 number4;
-            // 4: digit1 operator1 digit2 operator2 (digit3 operator3 digit4)
-            calc3Value number1 operator1 number2 operator2 (calc2Value number3 operator3 number4);
-            // 5: (digit1 operator1 digit2) operator2 (digit3 operator3 digit4)
-            calc2Value (calc2Value number1 operator1 number2) operator2 (calc2Value number3 operator3 number4);
-            // 6: (digit1 operator1 digit2 operator2 digit3) operator3 digit4 is equivalent to 7 or 8
-            //calc2Value (calc3Value number1 operator1 number2 operator2 number3) operator3 number4;
-            // 7: ((digit1 operator1 digit2) operator2 digit3) operator3 digit4
-            calc2Value (calc2Value (calc2Value number1 operator1 number2) operator2 number3) operator3 number4;
-            // 8: (digit1 operator1 (digit2 operator2 digit3)) operator3 digit4
-            calc2Value (calc2Value number1 operator1 (calc2Value number2 operator2 number3)) operator3 number4;
-            // 9: digit1 operator1 (digit2 operator2 digit3 operator3 digit4) is equivalent to 10 or 11
-            //calc2Value number1 operator1 (calc3Value number2 operator2 number3 operator3 number4);
-            // 10: digit1 operator1 ((digit2 operator2 digit3) operator3 digit4)
-            calc2Value number1 operator1 (calc2Value (calc2Value number2 operator2 number3) operator3 number4);
-            // 11: digit1 operator1 (digit2 operator2 (digit3 operator3 digit4))
-            calc2Value number1 operator1 (calc2Value number2 operator2 (calc2Value number3 operator3 number4))
-        ]
+    let calcDigitsValues (digits: int list) (operators: char list) =
+        match digits, operators with
+        | [digit1; digit2; digit3; digit4], [operator1; operator2; operator3] ->
+            let number1 = new RationalNumber32(digit1) |> Some
+            let number2 = new RationalNumber32(digit2) |> Some
+            let number3 = new RationalNumber32(digit3) |> Some
+            let number4 = new RationalNumber32(digit4) |> Some
+            [
+                // 1: digit1 operator1 digit2 operator2 digit3 operator3 digit4
+                calc4Value number1 operator1 number2 operator2 number3 operator3 number4;
+                // 2: (digit1 operator1 digit2) operator2 digit3 operator3 digit4
+                calc3Value (calc2Value number1 operator1 number2) operator2 number3 operator3 number4;
+                // 3: digit1 operator1 (digit2 operator2 digit3) operator3 digit4
+                calc3Value number1 operator1 (calc2Value number2 operator2 number3) operator3 number4;
+                // 4: digit1 operator1 digit2 operator2 (digit3 operator3 digit4)
+                calc3Value number1 operator1 number2 operator2 (calc2Value number3 operator3 number4);
+                // 5: (digit1 operator1 digit2) operator2 (digit3 operator3 digit4)
+                calc2Value (calc2Value number1 operator1 number2) operator2 (calc2Value number3 operator3 number4);
+                // 6: (digit1 operator1 digit2 operator2 digit3) operator3 digit4 is equivalent to 7 or 8
+                //calc2Value (calc3Value number1 operator1 number2 operator2 number3) operator3 number4;
+                // 7: ((digit1 operator1 digit2) operator2 digit3) operator3 digit4
+                calc2Value (calc2Value (calc2Value number1 operator1 number2) operator2 number3) operator3 number4;
+                // 8: (digit1 operator1 (digit2 operator2 digit3)) operator3 digit4
+                calc2Value (calc2Value number1 operator1 (calc2Value number2 operator2 number3)) operator3 number4;
+                // 9: digit1 operator1 (digit2 operator2 digit3 operator3 digit4) is equivalent to 10 or 11
+                //calc2Value number1 operator1 (calc3Value number2 operator2 number3 operator3 number4);
+                // 10: digit1 operator1 ((digit2 operator2 digit3) operator3 digit4)
+                calc2Value number1 operator1 (calc2Value (calc2Value number2 operator2 number3) operator3 number4);
+                // 11: digit1 operator1 (digit2 operator2 (digit3 operator3 digit4))
+                calc2Value number1 operator1 (calc2Value number2 operator2 (calc2Value number3 operator3 number4))
+            ]
+        | _ -> failwith "Unexpected branch of match expression"
 
     let collectValues (storage: bool[]) (values: RationalNumber32 option list) =
         let iterFun (value: RationalNumber32 option) =
@@ -113,9 +116,7 @@ type Problem093() =
     let solveImpl () =
         let operationCombinationStorage = generateOperationCombinations ()
         let storage = new Dictionary<string, bool[]>()
-        let lexicographicalNumberSup = Permutations.GetLexicographicalNumberSup(digits, DigitsCount)
-        for lexicographicalNumber in seq {1I .. lexicographicalNumberSup - 1I} do
-            Permutations.GetPermutation(lexicographicalNumber, DigitsCount, digits) |> processDigits storage operationCombinationStorage
+        Permutations.GeneratePermutations(DigitsCount, digits) |> Seq.iter (fun permutation -> permutation |> processDigits storage operationCombinationStorage)
         (storage |> Seq.maxBy (fun kvPair -> kvPair.Value |> calcLength)).Key
 
     [<TestCase("1258", TimeThresholds.HardTimeLimit)>]

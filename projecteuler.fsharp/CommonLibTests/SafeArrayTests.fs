@@ -6,23 +6,23 @@ open NUnit.Framework.Legacy
 open System
 
 [<TestFixture>]
-type SafeStorageTests() =
+type SafeArrayTests() =
 
     [<Test>]
     member public this.CreateErrors() =
-        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeStorage<int>(5, 0, 0) |> ignore) |> ignore
-        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeStorage<int>(5, 2, 0) |> ignore) |> ignore
-        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeStorage<int>(5, -2, 0) |> ignore) |> ignore
-        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeStorage<int>(-2, -5, 0) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> SafeStorage<int>(0, 5, 0) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> SafeStorage<int>(11, 25, 0) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> SafeStorage<int>(-4, 5, 0) |> ignore) |> ignore
-        Assert.DoesNotThrow(fun() -> SafeStorage<int>(-11, -5, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeArray<int>(5, 0, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeArray<int>(5, 2, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeArray<int>(5, -2, 0) |> ignore) |> ignore
+        Assert.Throws<ArgumentOutOfRangeException>(fun() -> SafeArray<int>(-2, -5, 0) |> ignore) |> ignore
+        Assert.DoesNotThrow(fun() -> SafeArray<int>(0, 5, 0) |> ignore) |> ignore
+        Assert.DoesNotThrow(fun() -> SafeArray<int>(11, 25, 0) |> ignore) |> ignore
+        Assert.DoesNotThrow(fun() -> SafeArray<int>(-4, 5, 0) |> ignore) |> ignore
+        Assert.DoesNotThrow(fun() -> SafeArray<int>(-11, -5, 0) |> ignore) |> ignore
 
     [<Test>]
     member public this.GetValue() =
         // storage of int in 1..3 range
-        let storage1 = SafeStorage<int>(1, 3, 0)
+        let storage1 = SafeArray<int>(1, 3, 0)
         storage1.Storage.[0]<-11
         storage1.Storage.[1]<-12
         storage1.Storage.[2]<-13
@@ -45,7 +45,7 @@ type SafeStorageTests() =
         ClassicAssert.AreEqual(13, storage1.GetValue(3I))
         ClassicAssert.AreEqual(0, storage1.GetValue(4I))
         // storage of int in -3..-1 range
-        let storage2 = SafeStorage<int>(-3, -1, 0)
+        let storage2 = SafeArray<int>(-3, -1, 0)
         storage2.Storage.[0]<-13
         storage2.Storage.[1]<-12
         storage2.Storage.[2]<-11
@@ -68,7 +68,7 @@ type SafeStorageTests() =
         ClassicAssert.AreEqual(0, storage2.GetValue(0I))
         ClassicAssert.AreEqual(0, storage2.GetValue(1I))
         // storage of string in 1..3 range
-        let storage3 = SafeStorage<string>(1, 3, "")
+        let storage3 = SafeArray<string>(1, 3, "")
         storage3.Storage.[0]<-"iddqd"
         storage3.Storage.[1]<-"idkfa"
         storage3.Storage.[2]<-"idclip"
@@ -94,7 +94,7 @@ type SafeStorageTests() =
     [<Test>]
     member public this.SetValue() =
         // storage of int in 1..3 range
-        let storage1 = SafeStorage<int>(1, 3, 0)
+        let storage1 = SafeArray<int>(1, 3, 0)
         ClassicAssert.AreEqual([|0; 0; 0|], storage1.Storage)
         storage1.SetValue(-1, 666)
         storage1.SetValue(-1L, 667)
@@ -110,7 +110,7 @@ type SafeStorageTests() =
         storage1.SetValue(4I, 888)
         ClassicAssert.AreEqual([|11; 12; 13|], storage1.Storage)
         // storage of int in -3..-1 range
-        let storage2 = SafeStorage<int>(-3, -1, 0)
+        let storage2 = SafeArray<int>(-3, -1, 0)
         ClassicAssert.AreEqual([|0; 0; 0|], storage2.Storage)
         storage2.SetValue(-4, 666)
         storage2.SetValue(-4L, 667)
@@ -126,7 +126,7 @@ type SafeStorageTests() =
         storage2.SetValue(1I, 888)
         ClassicAssert.AreEqual([|13; 12; 11|], storage2.Storage)
         // storage of string in 1..3 range
-        let storage3 = SafeStorage<string>(1, 3, "")
+        let storage3 = SafeArray<string>(1, 3, "")
         ClassicAssert.AreEqual([|""; ""; ""|], storage3.Storage)
         storage3.SetValue(-1, "impulse_666")
         storage3.SetValue(-1L, "impulse_667")

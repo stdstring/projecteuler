@@ -1,4 +1,4 @@
-﻿## Concave triangle
+## Concave triangle
 ### Problem 587
 
 A square is drawn around a circle as shown in the diagram below on the left. We shall call the blue shaded region the L-section. A line is drawn from the bottom left of the square to the top right as shown in the diagram on the right. We shall call the orange shaded region a concave triangle.

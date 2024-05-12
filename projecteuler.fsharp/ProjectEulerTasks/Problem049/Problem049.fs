@@ -13,11 +13,32 @@ type Problem049() =
     let knownResult = 148748178147L
 
     let generatePossibleTerms (number: int) =
-        let [d1; d2; d3; d4] = number |> NumbersDigits.GetDigits
-        [[d1; d2; d4; d3]; [d1; d3; d2; d4]; [d1; d3; d4; d2]; [d1; d4; d2; d3]; [d1; d4; d3; d2];
-         [d2; d1; d3; d4]; [d2; d1; d4; d3]; [d2; d3; d1; d4]; [d2; d3; d4; d1]; [d2; d4; d1; d3]; [d2; d4; d3; d1];
-         [d3; d1; d2; d4]; [d3; d1; d4; d2]; [d3; d2; d1; d4]; [d3; d2; d4; d1]; [d3; d4; d1; d2]; [d3; d4; d2; d1];
-         [d4; d1; d2; d3]; [d4; d1; d3; d2]; [d4; d2; d1; d3]; [d4; d2; d3; d1]; [d4; d3; d1; d2]; [d4; d3; d2; d1]] |> List.map (fun digits -> digits |> NumbersDigits.GetNumber |> int)
+        match number |> NumbersDigits.GetDigits with
+        | [d1; d2; d3; d4] ->
+            [[d1; d2; d4; d3];
+             [d1; d3; d2; d4];
+             [d1; d3; d4; d2];
+             [d1; d4; d2; d3];
+             [d1; d4; d3; d2];
+             [d2; d1; d3; d4];
+             [d2; d1; d4; d3];
+             [d2; d3; d1; d4];
+             [d2; d3; d4; d1];
+             [d2; d4; d1; d3];
+             [d2; d4; d3; d1];
+             [d3; d1; d2; d4];
+             [d3; d1; d4; d2];
+             [d3; d2; d1; d4];
+             [d3; d2; d4; d1];
+             [d3; d4; d1; d2];
+             [d3; d4; d2; d1];
+             [d4; d1; d2; d3];
+             [d4; d1; d3; d2];
+             [d4; d2; d1; d3];
+             [d4; d2; d3; d1];
+             [d4; d3; d1; d2];
+             [d4; d3; d2; d1]] |> List.map (fun digits -> digits |> NumbersDigits.GetNumber |> int)
+        | _ -> failwith "Unexpected branch of match expression"
 
     let chooseTerms (primesSet: ISet<int>) (prime: int) =
         let possibleTerms = prime |> generatePossibleTerms

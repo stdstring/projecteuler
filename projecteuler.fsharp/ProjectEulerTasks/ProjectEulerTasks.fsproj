@@ -384,6 +384,8 @@
     <Compile Include="Problem315\Problem315.fs" />
     <None Include="Problem317\description.md" />
     <Compile Include="Problem317\Problem317.fs" />
+    <None Include="Problem336\description.md" />
+    <Compile Include="Problem336\Problem336.fs" />
     <None Include="Problem345\description.md" />
     <Compile Include="Problem345\Problem345.fs" />
     <None Include="Problem346\description.md" />

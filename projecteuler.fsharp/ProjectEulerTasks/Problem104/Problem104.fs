@@ -19,19 +19,17 @@ type Problem104() =
     [<Literal>]
     let MaxPandigital = 987654321
 
-    let alphabet = [1; 2; 3; 4; 5; 6; 7; 8; 9]
-
     let border = 1000000000I
 
-    let getPermutationAsNumber (lexicographicalNumber: bigint) =
-        Permutations.GetPermutation(lexicographicalNumber, alphabet) |> Seq.fold (fun number digit -> number * 10 + digit) 0
+    let rec fillPandigitalStorage (permutation: int[]) (pandigitalStorage: bool[]) =
+        let permutationNumber = permutation |> Seq.fold (fun number digit -> number * 10 + digit) 0
+        pandigitalStorage.[permutationNumber - MinPandigital] <- true
+        match permutation |> Permutations.GenerateNextPermutationInPlace with
+        | None -> pandigitalStorage
+        | Some nextPermutation -> pandigitalStorage |> fillPandigitalStorage nextPermutation
 
     let createPandigitalStorage () =
-        let pandigitalStorage = Array.create (MaxPandigital - MinPandigital + 1) false
-        let alphabet = [1; 2; 3; 4; 5; 6; 7; 8; 9]
-        let lexicographicalNumberSup = alphabet |> Permutations.GetLexicographicalNumberSup
-        seq {0I .. lexicographicalNumberSup - 1I} |> Seq.map getPermutationAsNumber |> Seq.iter (fun number -> pandigitalStorage.[number - MinPandigital] <- true)
-        pandigitalStorage
+        Array.create (MaxPandigital - MinPandigital + 1) false |> fillPandigitalStorage [|1; 2; 3; 4; 5; 6; 7; 8; 9|]
 
     let isPandigital (pandigitalStorage: bool[]) (number: int) =
         match number with
@@ -51,12 +49,18 @@ type Problem104() =
         | _ ->
             let nextFibonacci = data.Current + data.Prev
             let _, topDivisor = data.TopDivisor |> calcQuotientAndTopDivisor nextFibonacci
-            {FibonacciData.Prev = data.Current; FibonacciData.Current = nextFibonacci; FibonacciData.TermNumber = data.TermNumber + 1; FibonacciData.TopDivisor = topDivisor} |> processKnownFibonacciNumbers
+            {FibonacciData.Prev = data.Current;
+             FibonacciData.Current = nextFibonacci;
+             FibonacciData.TermNumber = data.TermNumber + 1;
+             FibonacciData.TopDivisor = topDivisor} |> processKnownFibonacciNumbers
 
     let rec findSuitableFibonacciNumber (pandigitalStorage: bool[]) (data: FibonacciData) =
         let nextFibonacci = data.Current + data.Prev
         let quotient, topDivisor = data.TopDivisor |> calcQuotientAndTopDivisor nextFibonacci
-        let nextData = {FibonacciData.Prev = data.Current; FibonacciData.Current = nextFibonacci; FibonacciData.TermNumber = data.TermNumber + 1; FibonacciData.TopDivisor = topDivisor}
+        let nextData = {FibonacciData.Prev = data.Current;
+                        FibonacciData.Current = nextFibonacci;
+                        FibonacciData.TermNumber = data.TermNumber + 1;
+                        FibonacciData.TopDivisor = topDivisor}
         match quotient |> int |> isPandigital pandigitalStorage with
         | false -> nextData |> findSuitableFibonacciNumber pandigitalStorage
         | true ->
@@ -66,7 +70,9 @@ type Problem104() =
 
     let solveImpl () =
         let pandigitalStorage = createPandigitalStorage ()
-        let foundData = {FibonacciData.Prev = 0I; FibonacciData.Current = 1I; FibonacciData.TermNumber = 1; FibonacciData.TopDivisor = 1I} |> processKnownFibonacciNumbers |> findSuitableFibonacciNumber pandigitalStorage
+        let foundData = {FibonacciData.Prev = 0I; FibonacciData.Current = 1I; FibonacciData.TermNumber = 1; FibonacciData.TopDivisor = 1I}
+                        |> processKnownFibonacciNumbers
+                        |> findSuitableFibonacciNumber pandigitalStorage
         foundData.TermNumber
 
     [<TestCase(329468, TimeThresholds.SoftTimeLimit)>]

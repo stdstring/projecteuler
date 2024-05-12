@@ -2,7 +2,7 @@
 
 open System
 
-type SafeStorage<'TValue>(minNumber: int, maxNumber: int, defaultValue: 'TValue) =
+type SafeArray<'TValue>(minNumber: int, maxNumber: int, defaultValue: 'TValue) =
 
     do if (minNumber > maxNumber) then
         raise (ArgumentOutOfRangeException("minNumber"))

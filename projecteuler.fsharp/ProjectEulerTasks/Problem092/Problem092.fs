@@ -18,20 +18,20 @@ type Problem092() =
     let generateNextStep (current: int) =
         current |> NumbersDigits.GetDigits |> Seq.map (fun digit -> digitSquares.[digit]) |> Seq.sum
 
-    let saveChain (storage: SafeStorage<int>) (result: ChainResult) =
+    let saveChain (storage: SafeArray<int>) (result: ChainResult) =
         result.Chain |> List.iter (fun number -> storage.SetValue(number, result.StopValue))
 
-    let rec processChain (storage: SafeStorage<int>) (chain: int list) (current: int) =
+    let rec processChain (storage: SafeArray<int>) (chain: int list) (current: int) =
         match current |> storage.GetValue with
         | value when value = storage.DefaultValue -> current |> generateNextStep |> processChain storage (current :: chain)
         | value -> {ChainResult.Current = current; ChainResult.StopValue = value; ChainResult.Chain = chain}
 
-    let addNumber (number: int) (storage: SafeStorage<int>) =
+    let addNumber (number: int) (storage: SafeArray<int>) =
         number |> processChain storage [] |> saveChain storage
 
     let solveImpl (maxNumber: int) =
         let expectedStopValue = 89
-        let storage = SafeStorage(1, maxNumber, 0)
+        let storage = SafeArray(1, maxNumber, 0)
         // known values
         [1; 89] |> Seq.iter (fun value -> storage.SetValue(value, value))
         seq { storage.MinNumber .. storage.MaxNumber } |> Seq.iter (fun number -> addNumber number storage)

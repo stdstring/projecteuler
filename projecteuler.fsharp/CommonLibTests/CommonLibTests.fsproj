@@ -24,7 +24,7 @@
     <Compile Include="PermutationsTests.fs" />
     <Compile Include="PythagoreanTriplesGeneratorTests.fs" />
     <Compile Include="RationalTests.fs" />
-    <Compile Include="SafeStorageTests.fs" />
+    <Compile Include="SafeArrayTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,6 @@ type ListUtils =
                 match current with
                 | head :: _ when head = item -> current
                 | _ -> current |> ListUtils.GetCirularShift |> shiftToItemImpl (iteration + 1) count
-                | _ -> failwith "Unexpected branch of match expression"
         match source with
         | [] -> raise (new ArgumentException())
         | head :: [] when head <> item -> raise (new ArgumentException())

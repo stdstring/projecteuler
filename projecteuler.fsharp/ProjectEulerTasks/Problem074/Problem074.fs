@@ -15,7 +15,7 @@ open Problem074Impl
 [<TestFixture>]
 type Problem074() =
 
-    let digitFactorials = seq { 0 .. 9 } |> Seq.map (fun digit -> digit |> Numbers.CalcFactorial |> int) |> Seq.toArray
+    let digitFactorials = seq {0 .. 9} |> Seq.map (fun digit -> digit |> Numbers.CalcFactorial |> int) |> Seq.toArray
 
     let generateNextStep (current: int) =
         current |> NumbersDigits.GetDigits |> Seq.map (fun digit -> digitFactorials.[digit]) |> Seq.sum
@@ -25,7 +25,7 @@ type Problem074() =
         | Some index -> index + 1 |> Some
         | None -> None
 
-    let saveChain (storage: SafeStorage<int>) (result: ChainResult) =
+    let saveChain (storage: SafeArray<int>) (result: ChainResult) =
         match result with
         | ChainResult.LoopDetected (current, loopSize, chain) ->
             chain |> Seq.take loopSize |> Seq.iter (fun number -> storage.SetValue(number, loopSize))
@@ -33,7 +33,7 @@ type Problem074() =
         | ChainResult.SavedValueDetected (current, loopSize, chain) ->
             chain |> Seq.iteri (fun index number -> storage.SetValue(number, loopSize + index + 1))
 
-    let rec processChain (storage: SafeStorage<int>) (chain: int list) (current: int) =
+    let rec processChain (storage: SafeArray<int>) (chain: int list) (current: int) =
         match current |> storage.GetValue with
         | value when value = storage.DefaultValue ->
             match getChainLoop current chain with
@@ -41,11 +41,11 @@ type Problem074() =
             | None -> current |> generateNextStep |> processChain storage (current :: chain)
         | value -> ChainResult.SavedValueDetected (current, value, chain)
 
-    let addNumber (number: int) (storage: SafeStorage<int>) =
+    let addNumber (number: int) (storage: SafeArray<int>) =
         number |> processChain storage [] |> saveChain storage
 
     let solveImpl (maxNumber: int) (expectedChainSize: int) =
-        let storage = SafeStorage(1, maxNumber, 0)
+        let storage = SafeArray(1, maxNumber, 0)
         seq { storage.MinNumber .. storage.MaxNumber } |> Seq.iter (fun number -> addNumber number storage)
         storage.Storage |> Seq.filter (fun value -> value = expectedChainSize) |> Seq.length
 
