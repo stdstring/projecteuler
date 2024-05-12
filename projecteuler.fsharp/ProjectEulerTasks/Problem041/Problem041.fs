@@ -20,19 +20,15 @@ type Problem041() =
         // So we find max prime pandigital number in 1234567 .. 7654321 and 2143 .. 4321 ranges (because 2143 is prime)
         let maxNumber = 7654321
         let sieve = EratosSieve.Create(maxNumber)
-        let rec processPandigitals (lexicographicalNumber: bigint) (digits: int list) =
-            let number = Permutations.GetPermutation(lexicographicalNumber, digits) |> NumbersDigits.GetNumber
-            match lexicographicalNumber, number |> sieve.IsPrime with
-            | _, true -> number |> int |> Some
-            | _ when lexicographicalNumber = 0I -> None
-            | _ -> processPandigitals (lexicographicalNumber - 1I) digits
+        let processPandigitals (digits: int list) =
+            Permutations.GeneratePermutationsRev(digits) |> Seq.map NumbersDigits.GetNumber |> Seq.tryFind sieve.IsPrime
         let digits7 = [1 .. 7]
         let digits4 = [1 .. 4]
-        match digits7 |> processPandigitals (Permutations.GetLexicographicalNumberSup(digits7) - 1I) with
-        | Some number -> number
+        match digits7 |> processPandigitals with
+        | Some number -> number |> int
         | None ->
-            match digits4 |> processPandigitals (Permutations.GetLexicographicalNumberSup(digits4) - 1I) with
-            | Some number -> number
+            match digits4 |> processPandigitals with
+            | Some number -> number |> int
             | None -> raise (InvalidOperationException())
 
     [<TestCase(7652413, TimeThresholds.HardTimeLimit)>]

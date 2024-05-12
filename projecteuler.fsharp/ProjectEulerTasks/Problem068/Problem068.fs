@@ -2,7 +2,6 @@
 
 open NUnit.Framework
 open ProjectEulerTasks.Utils
-open System
 open System.Text
 open CommonLib
 
@@ -29,9 +28,7 @@ type Problem068() =
 
     let solveImpl (stringSize: int) (ringSize: int) (numbersCount: int) =
         let alphabet = [1 .. numbersCount]
-        let lexicographicalNumberSup = Permutations.GetLexicographicalNumberSup(alphabet, ringSize)
-        seq {1I .. lexicographicalNumberSup - 1I} |>
-        Seq.map (fun lexicographicalNumber -> Permutations.GetPermutation(lexicographicalNumber, ringSize, alphabet)) |>
+        Permutations.GeneratePermutations(ringSize, alphabet) |>
         Seq.choose (fun permutation -> permutation |> chooseString stringSize alphabet) |>
         Seq.max
 

@@ -113,9 +113,7 @@ type Problem093() =
     let solveImpl () =
         let operationCombinationStorage = generateOperationCombinations ()
         let storage = new Dictionary<string, bool[]>()
-        let lexicographicalNumberSup = Permutations.GetLexicographicalNumberSup(digits, DigitsCount)
-        for lexicographicalNumber in seq {1I .. lexicographicalNumberSup - 1I} do
-            Permutations.GetPermutation(lexicographicalNumber, DigitsCount, digits) |> processDigits storage operationCombinationStorage
+        Permutations.GeneratePermutations(DigitsCount, digits) |> Seq.iter (fun permutation -> permutation |> processDigits storage operationCombinationStorage)
         (storage |> Seq.maxBy (fun kvPair -> kvPair.Value |> calcLength)).Key
 
     [<TestCase("1258", TimeThresholds.HardTimeLimit)>]

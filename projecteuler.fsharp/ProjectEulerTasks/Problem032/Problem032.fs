@@ -23,26 +23,19 @@ type Problem032() =
 
     let checkResult (result: int) (resultDigits: int list) =
         let alphabetRest = resultDigits |> getAlphabetRest alphabet
-        let rec processFactor (lexicographicalNumber: bigint) (lexicographicalNumberSup: bigint) (size: int) =
-            match lexicographicalNumber with
-            | _ when lexicographicalNumber = lexicographicalNumberSup -> false
-            | _ ->
-                let factorDigits = Permutations.GetPermutation(lexicographicalNumber, size, alphabetRest)
+        let processFactor (size: int) =
+            let predicate = fun factorDigits ->
                 let factor = factorDigits |> NumbersDigits.GetNumber |> int
-                match factorDigits |> getAlphabetRest alphabetRest |> checkFactors result factor with
-                | false -> processFactor (lexicographicalNumber + 1I) lexicographicalNumberSup size
-                | true -> true
-        (processFactor 0I (Permutations.GetLexicographicalNumberSup(alphabetRest, 3)) 3) ||
-        (processFactor 0I (Permutations.GetLexicographicalNumberSup(alphabetRest, 4)) 4)
+                factorDigits |> getAlphabetRest alphabetRest |> checkFactors result factor
+            Permutations.GeneratePermutations(size, alphabetRest) |> Seq.exists predicate
+        (processFactor 3) || (processFactor 4)
 
     let solveImpl () =
         // factorA * factorB = result
         // possible sizes : factorA = 3 digits, factor2 = 2 digits, result = 4 digits; factorA = 4 digits, factor2 = 1 digits, result = 4 digits => result always is 4 digits
         let mutable sum = 0
         let resultSize = 4
-        let lexicographicalNumberSup = Permutations.GetLexicographicalNumberSup(alphabet, resultSize)
-        for lexicographicalNumber in seq {0I .. lexicographicalNumberSup - 1I} do
-            let resultDigits = Permutations.GetPermutation(lexicographicalNumber, resultSize, alphabet)
+        for resultDigits in Permutations.GeneratePermutations(resultSize, alphabet) do
             let result = resultDigits |> NumbersDigits.GetNumber |> int
             if (resultDigits |> checkResult result) then
                 sum <- sum + result
