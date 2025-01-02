@@ -126,6 +126,7 @@ My solutions for tasks from [Project Euler](https://projecteuler.net):
 * [Problem 128. Hexagonal tile differences](https://projecteuler.net/problem=128)
 * [Problem 131. Prime cube partnership](https://projecteuler.net/problem=131)
 * [Problem 135. Same Differences](https://projecteuler.net/problem=135)
+* [Problem 136. Singleton Difference](https://projecteuler.net/problem=136)
 * [Problem 144. Investigating multiple reflections of a laser beam](https://projecteuler.net/problem=144)
 * [Problem 145. How many reversible numbers are there below one-billion?](https://projecteuler.net/problem=145)
 * [Problem 148. Exploring Pascal's triangle](https://projecteuler.net/problem=148)
