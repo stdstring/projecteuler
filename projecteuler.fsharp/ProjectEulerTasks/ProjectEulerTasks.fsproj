@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="4.0.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0">
+    <PackageReference Include="nunit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -328,6 +328,10 @@
     <Compile Include="Problem128\Problem128.fs" />
     <None Include="Problem131\description.md" />
     <Compile Include="Problem131\Problem131.fs" />
+    <None Include="Problem135\description.md" />
+    <Compile Include="Problem135\Problem135.fs" />
+    <None Include="Problem136\description.md" />
+    <Compile Include="Problem136\Problem136.fs" />
     <None Include="Problem144\description.md" />
     <Compile Include="Problem144\Problem144.fs" />
     <None Include="Problem145\description.md" />
@@ -412,7 +416,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="8.0.100" />
+    <PackageReference Update="FSharp.Core" Version="9.0.100" />
   </ItemGroup>
 
 </Project>
